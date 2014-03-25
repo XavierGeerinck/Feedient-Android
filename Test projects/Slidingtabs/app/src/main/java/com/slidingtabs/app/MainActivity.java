@@ -32,7 +32,7 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
-
+    private final static PoliticiFragment politiciFragment = new PoliticiFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +53,10 @@ public class MainActivity extends ActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
+        cleanBackStack(fragmentManager);
         if (position == 1) {
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, new PoliticiFragment())
+                    .replace(R.id.container, politiciFragment)
                     .commit();
         } else {
             fragmentManager.beginTransaction()
@@ -63,6 +64,20 @@ public class MainActivity extends ActionBarActivity
                     .commit();
 
         }
+    }
+
+    private void cleanBackStack(FragmentManager fm) {
+
+        // Clear all back stack.
+        int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
+        for (int i = 0; i < backStackCount; i++) {
+
+            // Get the back stack fragment id.
+            int backStackId = getSupportFragmentManager().getBackStackEntryAt(i).getId();
+
+            fm.popBackStack(backStackId, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+        } /* end of for */
     }
 
     public void onSectionAttached(int number) {
