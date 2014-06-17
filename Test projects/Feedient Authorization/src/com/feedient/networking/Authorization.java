@@ -31,6 +31,7 @@ public class Authorization extends AsyncTask<String, Integer, String> {
     public Authorization(Context context) {
         pd = new ProgressDialog(context);
     }
+
     @Override
     protected void onPreExecute() {
         pd.setMessage("Loading ...");
@@ -45,7 +46,7 @@ public class Authorization extends AsyncTask<String, Integer, String> {
         return getAuthorizationToken(username, password);
     }
 
-    private String getAuthorizationToken(String username, String password){
+    private String getAuthorizationToken(String username, String password) {
         // Create a new HttpClient and Post Header
         HttpClient httpclient = new DefaultHttpClient();
         HttpPost httppost = new HttpPost("https://api.feedient.com/user/authorize");
@@ -73,5 +74,5 @@ public class Authorization extends AsyncTask<String, Integer, String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
         pd.dismiss();
-   }
+    }
 }

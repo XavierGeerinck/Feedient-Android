@@ -32,8 +32,8 @@ public class RestService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-         Log.i("RestService", "Received start id " + startId + ": " + intent);
-         return START_STICKY;
+        Log.i("RestService", "Received start id " + startId + ": " + intent);
+        return START_STICKY;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class RestService extends Service {
         FutureTask<Weather> futureTask = new FutureTask<Weather>(callable);
         ExecutorService executor = Executors.newFixedThreadPool(2);
         executor.execute(futureTask);
-        if(!futureTask.isDone()) {
+        if (!futureTask.isDone()) {
             Intent i = new Intent();
             i.setAction("PROGRESS_UPDATE");
             i.setFlags(1);

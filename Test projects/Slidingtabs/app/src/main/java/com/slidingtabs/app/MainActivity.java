@@ -51,7 +51,7 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
+        // update the login content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
         cleanBackStack(fragmentManager);
         if (position == 1) {
