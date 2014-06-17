@@ -1,7 +1,26 @@
 package com.feedient.models;
 
-/**
- * Created by xanrin on 17/06/14.
- */
 public class UserSession {
+    private String uid;
+    private String token;
+
+    public UserSession() {
+
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }
