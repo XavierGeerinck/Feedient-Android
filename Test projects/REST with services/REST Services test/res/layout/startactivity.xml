@@ -5,12 +5,14 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <Button android:id="@+id/test"
+    <Button
+            android:id="@+id/test"
             android:text="press here"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"/>
 
-    <TextView android:id="@+id/tvTest"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"/>
+    <TextView
+            android:id="@+id/tvTest"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"/>
 </LinearLayout>

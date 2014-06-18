@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Feedient-Android</string>
+    <string name="app_name">Feedient</string>
     <string name="Login">Login</string>
 </resources>

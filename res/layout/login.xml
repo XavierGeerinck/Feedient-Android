@@ -5,10 +5,12 @@
               android:layout_height="fill_parent"
               android:padding="40dp"
         >
+
     <EditText
             android:id="@+id/txtLoginEmail"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"/>
+
     <EditText
             android:id="@+id/txtLoginPassword"
             android:layout_width="fill_parent"
