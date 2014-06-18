@@ -1,27 +1,26 @@
 package com.feedient.activities;
 
-import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ListView;
 import android.widget.Toast;
-import com.feedient.R;
 import com.feedient.adapters.FeedientRestAdapter;
+import com.feedient.adapters.ItemArrayAdapter;
 import com.feedient.data.AssetsPropertyReader;
 import com.feedient.interfaces.FeedientService;
+import com.feedient.models.feed.FeedResult;
 import com.feedient.models.UserProvider;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Properties;
 
-public class ViewAllFeedsActivity extends Activity {
+public class ViewAllFeedsActivity extends ListActivity {
     private SharedPreferences sharedPreferences;
     private FeedientService feedientService;
     private AssetsPropertyReader assetsPropertyReader;
@@ -33,7 +32,7 @@ public class ViewAllFeedsActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_all_feeds);
+        //setContentView(R.layout.view_all_feeds); // @todo: When loading, set a loading icon
 
         assetsPropertyReader = new AssetsPropertyReader(this);
         properties = assetsPropertyReader.getProperties("shared_preferences.properties");
@@ -41,13 +40,26 @@ public class ViewAllFeedsActivity extends Activity {
 
         feedientService = new FeedientRestAdapter(this).getService();
 
-        String accessToken = sharedPreferences.getString(properties.getProperty("prefs.key.token"), "NO_ACCESS_TOKEN_FOUND");
+        final String accessToken = sharedPreferences.getString(properties.getProperty("prefs.key.token"), "NO_ACCESS_TOKEN_FOUND");
         feedientService.getProviders(accessToken, new Callback<List<UserProvider>>() {
             @Override
             public void success(List<UserProvider> userProviders, Response response) {
-                for (UserProvider up : userProviders) {
-                    Toast.makeText(getApplicationContext(), "UserProvider: " + up.getProviderAccount().getName(), Toast.LENGTH_LONG).show();
-                }
+                String providerId = userProviders.get(0).getId();
+
+                feedientService.getFeed(accessToken, providerId, new Callback<FeedResult>() {
+
+                    @Override
+                    public void success(FeedResult feedResult, Response response) {
+
+                        Log.e("Feedient", "Changed the list adapter, it contains: " + feedResult.getFeedPosts().size() + " posts!");
+                        setListAdapter(new ItemArrayAdapter(ViewAllFeedsActivity.this, feedResult));
+                    }
+
+                    @Override
+                    public void failure(RetrofitError retrofitError) {
+
+                    }
+                });
             }
 
             @Override

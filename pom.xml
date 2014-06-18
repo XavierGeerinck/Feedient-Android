@@ -14,5 +14,12 @@
             <artifactId>retrofit</artifactId>
             <version>1.6.0</version>
         </dependency>
+
+        <!-- Load Images Async -->
+        <dependency>
+            <groupId>com.nostra13.universalimageloader</groupId>
+            <artifactId>universal-image-loader</artifactId>
+            <version>1.9.2</version>
+        </dependency>
     </dependencies>
 </project>

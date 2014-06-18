@@ -1,5 +1,6 @@
 package com.feedient.interfaces;
 
+import com.feedient.models.feed.FeedResult;
 import com.feedient.models.UserProvider;
 import com.feedient.models.UserSession;
 import retrofit.Callback;
@@ -14,4 +15,7 @@ public interface FeedientService {
 
     @GET("/provider")
     void getProviders(@Header("Bearer") String accessToken, Callback<List<UserProvider>> cb);
+
+    @GET("/provider/{providerId}/feed")
+    void getFeed(@Header("Bearer") String accessToken, @Path("providerId") String providerId, Callback<FeedResult> cb);
 }
