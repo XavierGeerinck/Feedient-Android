@@ -40,6 +40,9 @@ public class ViewAllFeedsActivity extends ListActivity implements Observer {
         viewAllFeeds.addObserver(this);
         viewAllFeeds.loadFeeds();
 
+
+        viewAllFeeds.loadSocket();
+
         itemArrayAdapter = new ItemArrayAdapter(this, viewAllFeeds.getFeedPosts());
         setListAdapter(itemArrayAdapter);
     }
@@ -47,7 +50,12 @@ public class ViewAllFeedsActivity extends ListActivity implements Observer {
     @Override
     public void update(Observable observable, Object o) {
         // Notify our list that there are updates
-        itemArrayAdapter.notifyDataSetChanged();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                itemArrayAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     public ItemArrayAdapter getItemArrayAdapter() {
