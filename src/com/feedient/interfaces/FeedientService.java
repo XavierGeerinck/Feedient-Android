@@ -1,9 +1,9 @@
 package com.feedient.interfaces;
 
-import com.feedient.models.feed.FeedPost;
-import com.feedient.models.feed.FeedResult;
-import com.feedient.models.UserProvider;
-import com.feedient.models.UserSession;
+import com.feedient.models.json.schema.FeedPost;
+import com.feedient.models.json.feed.FeedResult;
+import com.feedient.models.json.UserProvider;
+import com.feedient.models.json.UserSession;
 import retrofit.Callback;
 import retrofit.http.*;
 

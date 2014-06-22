@@ -1,4 +1,4 @@
-package com.feedient.models.feed;
+package com.feedient.models.json.schema;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -19,6 +19,11 @@ public class User {
     private String profileLink;
 
     public User() {
+        id = "";
+        name = "";
+        nameFormatted = "";
+        imageLink = "";
+        profileLink = "";
     }
 
     public String getId() {

@@ -1,11 +1,12 @@
-package com.feedient.models;
+package com.feedient.models.json;
 
 public class UserSession {
     private String uid;
     private String token;
 
     public UserSession() {
-
+        uid = "";
+        token = "";
     }
 
     public String getUid() {

@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.feedient.R;
 import com.feedient.helpers.ImageLoaderHelper;
-import com.feedient.models.feed.FeedPost;
+import com.feedient.models.json.schema.FeedPost;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;

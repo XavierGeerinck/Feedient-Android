@@ -13,7 +13,7 @@ import com.feedient.R;
 import com.feedient.adapters.FeedientRestAdapter;
 import com.feedient.data.AssetsPropertyReader;
 import com.feedient.interfaces.FeedientService;
-import com.feedient.models.UserSession;
+import com.feedient.models.json.UserSession;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;

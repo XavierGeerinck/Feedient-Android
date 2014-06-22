@@ -1,4 +1,4 @@
-package com.feedient.models;
+package com.feedient.models.json;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -7,7 +7,7 @@ public class ProviderAuthentication {
     private String accessToken;
 
     public ProviderAuthentication() {
-
+        accessToken = "";
     }
 
     public String getAccessToken() {

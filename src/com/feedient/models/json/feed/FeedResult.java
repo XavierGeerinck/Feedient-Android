@@ -1,7 +1,9 @@
-package com.feedient.models.feed;
+package com.feedient.models.json.feed;
 
+import com.feedient.models.json.schema.FeedPost;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FeedResult {
@@ -12,7 +14,8 @@ public class FeedResult {
     private List<FeedPost> feedPosts;
 
     public FeedResult() {
-
+        providerId = "";
+        feedPosts = new ArrayList<FeedPost>();
     }
 
     public String getProviderId() {

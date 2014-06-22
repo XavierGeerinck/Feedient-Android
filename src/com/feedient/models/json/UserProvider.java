@@ -1,4 +1,4 @@
-package com.feedient.models;
+package com.feedient.models.json;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -18,6 +18,10 @@ public class UserProvider {
     private ProviderAccount providerAccount;
 
     public UserProvider() {
+        id = "";
+        order = 0;
+        dateAdded = new Date();
+        providerAccount = new ProviderAccount();
     }
 
     public String getId() {

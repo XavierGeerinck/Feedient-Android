@@ -1,4 +1,4 @@
-package com.feedient.models.feed;
+package com.feedient.models.json.schema;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -10,6 +10,8 @@ public class ActionsPerformed {
     private boolean favorited;
 
     public ActionsPerformed() {
+        retweeted = false;
+        favorited = false;
     }
 
     public boolean isRetweeted() {

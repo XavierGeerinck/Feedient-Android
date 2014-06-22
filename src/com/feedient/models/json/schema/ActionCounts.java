@@ -1,4 +1,4 @@
-package com.feedient.models.feed;
+package com.feedient.models.json.schema;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -10,6 +10,8 @@ public class ActionCounts {
     private int favorited;
 
     public ActionCounts() {
+        retweets = 0;
+        favorited = 0;
     }
 
     public int getRetweets() {

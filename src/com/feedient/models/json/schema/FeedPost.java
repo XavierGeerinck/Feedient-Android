@@ -1,4 +1,4 @@
-package com.feedient.models.feed;
+package com.feedient.models.json.schema;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -12,6 +12,9 @@ public class FeedPost {
     @SerializedName("user")
     private User user;
 
+    @SerializedName("provider")
+    private Provider provider;
+
     @SerializedName("content")
     private Content content;
 
@@ -19,6 +22,12 @@ public class FeedPost {
     private Twitter twitter;
 
     public FeedPost() {
+        id = "";
+        postLink = "";
+        user = new User();
+        content = new Content();
+        twitter = new Twitter();
+        provider = new Provider();
     }
 
     public String getId() {
@@ -59,5 +68,13 @@ public class FeedPost {
 
     public void setTwitter(Twitter twitter) {
         this.twitter = twitter;
+    }
+
+    public Provider getProvider() {
+        return provider;
+    }
+
+    public void setProvider(Provider provider) {
+        this.provider = provider;
     }
 }

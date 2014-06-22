@@ -1,4 +1,4 @@
-package com.feedient.models.feed;
+package com.feedient.models.json.schema;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -7,6 +7,7 @@ public class Twitter {
     private String inReplyToStatusIdStr;
 
     public Twitter() {
+        inReplyToStatusIdStr = "";
     }
 
     public String getInReplyToStatusIdStr() {

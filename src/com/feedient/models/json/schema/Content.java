@@ -1,4 +1,4 @@
-package com.feedient.models.feed;
+package com.feedient.models.json.schema;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -24,6 +24,12 @@ public class Content {
     private Entity entities;
 
     public Content() {
+        message = "";
+        dateCreated = new Date();
+        actionCounts = new ActionCounts();
+        actionsPerformed = new ActionsPerformed();
+        isConversation = false;
+        entities = new Entity();
     }
 
     public String getMessage() {
