@@ -1,28 +1,12 @@
 package com.feedient.activities;
 
 import android.app.ListActivity;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import com.feedient.adapters.FeedientRestAdapter;
 import com.feedient.adapters.ItemArrayAdapter;
-import com.feedient.data.AssetsPropertyReader;
-import com.feedient.interfaces.FeedientService;
-import com.feedient.interfaces.IViewAllFeeds;
 import com.feedient.models.ViewAllFeeds;
-import com.feedient.models.json.schema.FeedPost;
-import com.feedient.models.json.UserProvider;
-import com.feedient.tasks.SocketTask;
-import org.json.JSONArray;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Properties;
 
 public class ViewAllFeedsActivity extends ListActivity implements Observer {
     private ItemArrayAdapter itemArrayAdapter;

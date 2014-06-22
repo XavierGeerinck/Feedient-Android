@@ -77,4 +77,27 @@ public class FeedPost {
     public void setProvider(Provider provider) {
         this.provider = provider;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FeedPost feedPost = (FeedPost) o;
+
+        if (feedPost.getId().equals(((FeedPost) o).getId())) return true;
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + (postLink != null ? postLink.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (provider != null ? provider.hashCode() : 0);
+        result = 31 * result + (content != null ? content.hashCode() : 0);
+        result = 31 * result + (twitter != null ? twitter.hashCode() : 0);
+        return result;
+    }
 }

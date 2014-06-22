@@ -4,17 +4,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 import com.feedient.adapters.FeedientRestAdapter;
-import com.feedient.adapters.ItemArrayAdapter;
 import com.feedient.adapters.retrofit.ISODateAdapter;
 import com.feedient.data.AssetsPropertyReader;
 import com.feedient.interfaces.FeedientService;
-import com.feedient.interfaces.IViewAllFeeds;
 import com.feedient.models.json.UserProvider;
 import com.feedient.models.json.schema.FeedPost;
+import com.feedient.models.json.schema.Notification;
 import com.feedient.models.json.socket.SocketResponse;
-import com.feedient.tasks.SocketTask;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.koushikdutta.async.callback.CompletedCallback;
 import com.koushikdutta.async.http.AsyncHttpClient;
 import com.koushikdutta.async.http.WebSocket;
 import org.json.JSONArray;
@@ -94,39 +93,66 @@ public class ViewAllFeeds extends Observable {
         AsyncHttpClient.getDefaultInstance().websocket(websocketUrl, null, new AsyncHttpClient.WebSocketConnectCallback() {
             @Override
             public void onCompleted(Exception e, WebSocket webSocket) {
-            if (e != null) {
-                Log.e("Feedient", e.getMessage());
-                return;
-            }
-
-            final Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new ISODateAdapter()).create();
-
-            webSocket.setStringCallback(new WebSocket.StringCallback() {
-                public void onStringAvailable(String s) {
-                    Log.e("Feedient", s);
-                    SocketResponse socketResponse = gson.fromJson(s, SocketResponse.class);
-                    _handleSocketResponse(socketResponse);
+                if (e != null) {
+                    Log.e("Feedient", e.getMessage());
+                    return;
                 }
-            });
 
-            // Authenticate
-            authenticateSocket(webSocket, accessToken);
+                final Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new ISODateAdapter()).create();
+
+                webSocket.setStringCallback(new WebSocket.StringCallback() {
+                    public void onStringAvailable(String s) {
+                        Log.e("Feedient", s);
+                        SocketResponse socketResponse = gson.fromJson(s, SocketResponse.class);
+                        _handleSocketResponse(socketResponse);
+                    }
+                });
+
+                webSocket.setEndCallback(new CompletedCallback() {
+                    @Override
+                    public void onCompleted(Exception e) {
+                        Log.e("Feedient", "Closed");
+                        Log.e("Feedient", e.getMessage());
+                    }
+                });
+
+                webSocket.setClosedCallback(new CompletedCallback() {
+                    @Override
+                    public void onCompleted(Exception e) {
+                        Log.e("Feedient", "Closed");
+                        Log.e("Feedient", e.getMessage());
+                    }
+                });
+
+
+                // Authenticate
+                authenticateSocket(webSocket, accessToken);
             }
         });
     }
 
     private void _handleSocketResponse(SocketResponse socketResponse) {
         if (socketResponse != null && socketResponse.getType() != null) {
-            // If it is a post, add it to the list
+            // If it is a post, add it to the list if we don't have it yet
             if (socketResponse.getType().equals("post")) {
                 for (FeedPost fp : socketResponse.getContent().getPosts()) {
-                    feedPosts.add(0, fp);
-                    _triggerObservers();
+                    if (!feedPosts.contains(fp)) {
+                        Log.e("Feedient", "Added 1 post");
+                        feedPosts.add(0, fp);
+                    }
                 }
+
+                _triggerObservers();
             }
             // If it is a notification, show a toast
             else if (socketResponse.getType().equals("notification")) {
-                newNotifications += socketResponse.getContent().getNotifications().size();
+                for (Notification n : socketResponse.getContent().getNotifications()) {
+                    if (n.getRead() != 1) {
+                        Log.e("Feedient", "Added 1 notification");
+                        newNotifications++;
+                    }
+                }
+
                 _triggerObservers();
             }
         }
