@@ -11,12 +11,16 @@ import com.feedient.adapters.FeedientRestAdapter;
 import com.feedient.adapters.ItemArrayAdapter;
 import com.feedient.data.AssetsPropertyReader;
 import com.feedient.interfaces.FeedientService;
+import com.feedient.models.feed.FeedPost;
 import com.feedient.models.feed.FeedResult;
 import com.feedient.models.UserProvider;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -44,15 +48,18 @@ public class ViewAllFeedsActivity extends ListActivity {
         feedientService.getProviders(accessToken, new Callback<List<UserProvider>>() {
             @Override
             public void success(List<UserProvider> userProviders, Response response) {
-                String providerId = userProviders.get(0).getId();
+                // Get the providerIds
+                JSONArray providerIds = new JSONArray();
+                for (UserProvider up : userProviders) {
+                    providerIds.put(up.getId());
+                }
 
-                feedientService.getFeed(accessToken, providerId, new Callback<FeedResult>() {
-
+                // Get all the feeds
+                feedientService.getFeeds(accessToken, providerIds.toString(), new Callback<List<FeedPost>>() {
                     @Override
-                    public void success(FeedResult feedResult, Response response) {
-
-                        Log.e("Feedient", "Changed the list adapter, it contains: " + feedResult.getFeedPosts().size() + " posts!");
-                        setListAdapter(new ItemArrayAdapter(ViewAllFeedsActivity.this, feedResult));
+                    public void success(List<FeedPost> feedPosts, Response response) {
+                        Log.e("Feedient", "Changed the list adapter, it contains: " + feedPosts.size() + " posts!");
+                        setListAdapter(new ItemArrayAdapter(ViewAllFeedsActivity.this, feedPosts));
                     }
 
                     @Override

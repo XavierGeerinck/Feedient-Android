@@ -9,13 +9,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.feedient.R;
 import com.feedient.helpers.ImageLoaderHelper;
-import com.feedient.models.feed.FeedResult;
 import com.feedient.models.feed.FeedPost;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.util.List;
+
 public class ItemArrayAdapter extends ArrayAdapter<FeedPost> {
     private final Context context;
-    private final FeedResult feedResult;
+    private final List<FeedPost> feedPosts;
     private final ImageLoader imageLoader;
 
     // ViewHolder pattern (http://developer.android.com/training/improving-layouts/smooth-scrolling.html#ViewHolder)
@@ -25,11 +26,11 @@ public class ItemArrayAdapter extends ArrayAdapter<FeedPost> {
     }
 
 
-    public ItemArrayAdapter(Context context, FeedResult feedResult) {
-        super(context, R.layout.view_all_feeds, feedResult.getFeedPosts());
+    public ItemArrayAdapter(Context context, List<FeedPost> feedPosts) {
+        super(context, R.layout.view_all_feeds, feedPosts);
 
         this.context = context;
-        this.feedResult = feedResult;
+        this.feedPosts = feedPosts;
         this.imageLoader = ImageLoaderHelper.getImageLoader(context);
     }
 
@@ -53,7 +54,7 @@ public class ItemArrayAdapter extends ArrayAdapter<FeedPost> {
             viewHolder = (ViewHolderItem)convertView.getTag();
         }
 
-        FeedPost feedPost = feedResult.getFeedPosts().get(position);
+        FeedPost feedPost = feedPosts.get(position);
 
         if (feedPost != null) {
             viewHolder.txtMessage.setText(feedPost.getContent().getMessage());
