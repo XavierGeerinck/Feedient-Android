@@ -1,4 +1,0 @@
-Feedient-Android
-================
-
-Feedient Android
