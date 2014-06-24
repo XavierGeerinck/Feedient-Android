@@ -2,6 +2,9 @@ package com.feedient.activities;
 
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
+import com.feedient.R;
 import com.feedient.adapters.ItemArrayAdapter;
 import com.feedient.models.ViewAllFeeds;
 
@@ -23,9 +26,6 @@ public class ViewAllFeedsActivity extends ListActivity implements Observer {
         viewAllFeeds = new ViewAllFeeds(this);
         viewAllFeeds.addObserver(this);
         viewAllFeeds.loadFeeds();
-
-
-        viewAllFeeds.loadSocket();
 
         itemArrayAdapter = new ItemArrayAdapter(this, viewAllFeeds.getFeedPosts());
         setListAdapter(itemArrayAdapter);

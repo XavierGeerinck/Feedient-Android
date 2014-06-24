@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="txt_message">#343434</color>
+    <color name="txt_date_posted">#1ead91</color>
+</resources>
