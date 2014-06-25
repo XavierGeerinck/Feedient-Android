@@ -8,6 +8,7 @@ import com.feedient.android.data.AssetsPropertyReader;
 import com.feedient.android.interfaces.FeedientService;
 import com.feedient.android.models.json.UserProvider;
 import com.feedient.android.models.json.schema.FeedPost;
+import com.google.gson.Gson;
 import org.json.JSONArray;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -20,6 +21,7 @@ public class ViewAllFeeds extends Observable {
 
     private int newNotifications;
     private List<FeedPost> feedPosts;
+    private List<UserProvider> userProviders;
 
     private AssetsPropertyReader assetsPropertyReader;
     private Properties properties;
@@ -52,6 +54,8 @@ public class ViewAllFeeds extends Observable {
                     providerIds.put(up.getId());
                 }
 
+                ViewAllFeeds.this.userProviders = userProviders;
+
                 // Get all the feeds
                 feedientService.getFeeds(accessToken, providerIds.toString(), new Callback<List<FeedPost>>() {
                     @Override
@@ -79,18 +83,49 @@ public class ViewAllFeeds extends Observable {
     }
 
     /**
-     * Loads the posts of the user since date X
-     * @param sinceDate
+     * Loads the new posts of the user
      */
-    public void loadFeeds(Date sinceDate) {
+    public void loadNewPosts() {
+        NewPostsSchema newPostsSchema = new NewPostsSchema();
 
+        // Get the last posts for every provider, and add the since key
+        for (UserProvider up : userProviders) {
+            // Set Provider Id
+            NewPostsProvider npp = new NewPostsProvider();
+            npp.setProviderId(up.getId());
+
+            // Set Since
+            FeedPost fp = feedPosts.get(0);
+            npp.setSince(fp.getPagination().getSince());
+
+            newPostsSchema.getNewPostsProviders().add(npp);
+        }
+
+        Log.e("Feedient", new JSONArray(newPostsSchema.getNewPostsProviders()).toString());
+        final String accessToken = sharedPreferences.getString(properties.getProperty("prefs.key.token"), "NO_ACCESS_TOKEN_FOUND");
+        feedientService.getNewerPosts(accessToken, new JSONArray(newPostsSchema.getNewPostsProviders()).toString(), new Callback<List<FeedPost>>() {
+            @Override
+            public void success(List<FeedPost> feedPosts, Response response) {
+                for (FeedPost fp : feedPosts) {
+                    ViewAllFeeds.this.feedPosts.add(fp);
+                }
+
+                // We got list items added, trigger observers
+                _triggerObservers();
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+
+            }
+        });
     }
 
     /**
      * Loads the posts that are older the date X
      * @param lastDate
      */
-    public void loadOlderFeeds(Date lastDate) {
+    public void loadOlderPosts(Date lastDate) {
 
     }
 
@@ -113,5 +148,13 @@ public class ViewAllFeeds extends Observable {
 
     public void setFeedPosts(List<FeedPost> feedPosts) {
         this.feedPosts = feedPosts;
+    }
+
+    public List<UserProvider> getUserProviders() {
+        return userProviders;
+    }
+
+    public void setUserProviders(List<UserProvider> userProviders) {
+        this.userProviders = userProviders;
     }
 }

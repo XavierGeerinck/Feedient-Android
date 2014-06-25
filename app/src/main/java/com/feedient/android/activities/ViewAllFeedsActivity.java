@@ -8,8 +8,12 @@ import android.view.View;
 import android.widget.ListView;
 import com.feedient.android.R;
 import com.feedient.android.adapters.ItemArrayAdapter;
+import com.feedient.android.models.NewPostsProvider;
+import com.feedient.android.models.NewPostsSchema;
 import com.feedient.android.models.ViewAllFeeds;
 
+import com.feedient.android.models.json.UserProvider;
+import com.feedient.android.models.json.schema.FeedPost;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
@@ -67,6 +71,9 @@ public class ViewAllFeedsActivity extends Activity implements Observer, OnRefres
 
     @Override
     public void onRefreshStarted(View view) {
-        viewAllFeeds.loadFeeds();
+
+
+        viewAllFeeds.loadNewPosts();
+        mPullToRefreshLayout.setRefreshing(false);
     }
 }

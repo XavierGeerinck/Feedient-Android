@@ -21,6 +21,9 @@ public class FeedPost {
     @SerializedName("twitter")
     private Twitter twitter;
 
+    @SerializedName("pagination")
+    private Pagination pagination;
+
     public FeedPost() {
         id = "";
         postLink = "";
@@ -28,6 +31,7 @@ public class FeedPost {
         content = new Content();
         twitter = new Twitter();
         provider = new Provider();
+        pagination = new Pagination();
     }
 
     public String getId() {
@@ -76,6 +80,14 @@ public class FeedPost {
 
     public void setProvider(Provider provider) {
         this.provider = provider;
+    }
+
+    public Pagination getPagination() {
+        return pagination;
+    }
+
+    public void setPagination(Pagination pagination) {
+        this.pagination = pagination;
     }
 
     @Override

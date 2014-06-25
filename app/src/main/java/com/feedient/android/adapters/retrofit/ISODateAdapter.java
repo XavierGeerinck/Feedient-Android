@@ -20,9 +20,11 @@ import java.util.Locale;
 public class ISODateAdapter implements JsonSerializer<Date>, JsonDeserializer<Date> {
 
     private final DateFormat iso8601Format;
+    private final DateFormat javascriptDateFormat;
 
     public ISODateAdapter() {
         this.iso8601Format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.US);
+        this.javascriptDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.US);
     }
 
     public JsonElement serialize(Date src, Type typeOfSrc, JsonSerializationContext context) {
@@ -51,7 +53,11 @@ public class ISODateAdapter implements JsonSerializer<Date>, JsonDeserializer<Da
         try {
             return iso8601Format.parse(json.getAsString());
         } catch (ParseException e) {
-            throw new JsonSyntaxException(json.getAsString(), e);
+            try {
+                return javascriptDateFormat.parse(json.getAsString());
+            } catch (ParseException ex) {
+                throw new JsonSyntaxException(json.getAsString(), e);
+            }
         }
     }
 }

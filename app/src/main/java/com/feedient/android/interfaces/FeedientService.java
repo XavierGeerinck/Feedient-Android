@@ -1,9 +1,11 @@
 package com.feedient.android.interfaces;
 
+import com.feedient.android.models.NewPostsSchema;
 import com.feedient.android.models.json.schema.FeedPost;
 import com.feedient.android.models.json.feed.FeedResult;
 import com.feedient.android.models.json.UserProvider;
 import com.feedient.android.models.json.UserSession;
+import org.json.JSONArray;
 import retrofit.Callback;
 import retrofit.http.*;
 
@@ -23,4 +25,8 @@ public interface FeedientService {
     @FormUrlEncoded
     @POST("/providers/feed")
     void getFeeds(@Header("Bearer") String accessToken, @Field("providers") String providers, Callback<List<FeedPost>> cb);
+
+    @FormUrlEncoded
+    @POST("/providers/feed/new")
+    void getNewerPosts(@Header("Bearer") String accessToken, @Field("objects") String objects, Callback<List<FeedPost>> cb);
 }
