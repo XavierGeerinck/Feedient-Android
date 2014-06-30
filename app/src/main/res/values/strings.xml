@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">Feedient</string>
     <string name="Login">Login</string>
+    <string name="action_settings">Settings</string>
 </resources>

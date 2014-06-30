@@ -2,6 +2,9 @@ package com.feedient.android.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import com.feedient.android.R;
@@ -42,6 +45,28 @@ public class ViewAllFeedsActivity extends Activity implements Observer, OnRefres
                 .allChildrenArePullable()
                 .listener(this)
                 .setup(mPullToRefreshLayout);
+
+        // Start auto update
+        viewAllFeeds.initAutoUpdateTimer();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Add the settings to the menu
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_activity_actions, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                // Open settings
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

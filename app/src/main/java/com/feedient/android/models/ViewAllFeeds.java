@@ -3,6 +3,7 @@ package com.feedient.android.models;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.os.Handler;
 import android.util.Log;
 import com.feedient.android.adapters.FeedientRestAdapter;
 import com.feedient.android.data.AssetsPropertyReader;
@@ -25,6 +26,7 @@ import java.util.*;
 public class ViewAllFeeds extends Observable {
     private Context context;
 
+    private final long timerInterval;
     private int newNotifications;
     private List<FeedPost> feedPosts;
     private Map<String, String> paginationKeys; // <userProviderId, since>
@@ -32,6 +34,7 @@ public class ViewAllFeeds extends Observable {
 
     private AssetsPropertyReader assetsPropertyReader;
     private Properties properties;
+    private Properties configProperties;
     private SharedPreferences sharedPreferences;
     private FeedientService feedientService;
 
@@ -46,10 +49,13 @@ public class ViewAllFeeds extends Observable {
 
         assetsPropertyReader = new AssetsPropertyReader(context);
         properties = assetsPropertyReader.getProperties("shared_preferences.properties");
+        configProperties = assetsPropertyReader.getProperties("config.properties");
         sharedPreferences = context.getSharedPreferences(properties.getProperty("prefs.name"), Context.MODE_PRIVATE);
         feedientService = new FeedientRestAdapter(context).getService();
 
         isRefreshing = false;
+
+        timerInterval = Long.parseLong(configProperties.getProperty("auto_update_interval"));
     }
 
     /**
@@ -156,6 +162,17 @@ public class ViewAllFeeds extends Observable {
      */
     public void loadOlderPosts(Date lastDate) {
 
+    }
+
+    public void initAutoUpdateTimer() {
+        final Handler h = new Handler();
+        h.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadNewPosts();
+                h.postDelayed(this, timerInterval);
+            }
+        }, timerInterval);
     }
 
     private void _triggerObservers() {
