@@ -127,8 +127,9 @@ public class ViewAllFeeds extends Observable {
             @Override
             public void success(FeedPostList feedPostList, Response response) {
                 Log.e("Feedient", "New posts: " + feedPostList.getFeedPosts().size());
-                // Add posts to the beginning
-                for (FeedPost fp : feedPostList.getFeedPosts()) {
+                // Add posts to the beginning (Start at the end of the array for ordering)
+                for (int i = feedPostList.getFeedPosts().size(); i > 0; i--) {
+                    FeedPost fp = feedPostList.getFeedPosts().get(i);
                     ViewAllFeeds.this.feedPosts.add(0, fp);
                 }
 
