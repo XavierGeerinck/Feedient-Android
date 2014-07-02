@@ -10,11 +10,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 import com.feedient.android.R;
 import com.feedient.android.adapters.DrawerItemAdapter;
 import com.feedient.android.adapters.ItemArrayAdapter;
-import com.feedient.android.models.ProviderDrawer;
-import com.feedient.android.models.ViewAllFeeds;
+import com.feedient.android.models.MainModel;
 
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
@@ -23,16 +23,17 @@ import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 import java.util.Observable;
 import java.util.Observer;
 
-public class ViewAllFeedsActivity extends Activity implements Observer, OnRefreshListener {
+public class MainActivity extends Activity implements Observer, OnRefreshListener {
     private ItemArrayAdapter mItemArrayAdapter;
     private DrawerItemAdapter mDrawerItemAdapter;
-    private ViewAllFeeds mViewAllFeedsModel;
-    private ProviderDrawer mProviderDrawer;
+    private MainModel mMainModel;
     private PullToRefreshLayout mPullToRefreshLayout;
     private ListView mListView;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
+    private TextView mTxtDrawerUserRole;
+    private TextView mTxtDrawerUserEmail;
 
     /**
      * Called when the activity is first created.
@@ -40,20 +41,20 @@ public class ViewAllFeedsActivity extends Activity implements Observer, OnRefres
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_all_feeds); // @todo: When loading, set a loading icon
+        setContentView(R.layout.view_main); // @todo: When loading, set a loading icon
 
         // Init observers
-        mViewAllFeedsModel = new ViewAllFeeds(this);
-        mViewAllFeedsModel.addObserver(this);
-        mViewAllFeedsModel.loadFeeds();
-
-        mProviderDrawer = new ProviderDrawer(this);
-        mProviderDrawer.addObserver(this);
+        mMainModel = new MainModel(this);
+        mMainModel.addObserver(this);
+        mMainModel.loadUser();
+        mMainModel.loadFeeds();
 
         // Init the views
-        mListView       = (ListView)findViewById(R.id.list);
-        mDrawerLayout   = (DrawerLayout)findViewById(R.id.drawer_layout);
-        mDrawerList     = (ListView)findViewById(R.id.drawer_provider_list);
+        mListView           = (ListView)findViewById(R.id.list);
+        mDrawerLayout       = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mDrawerList         = (ListView)findViewById(R.id.drawer_provider_list);
+        mTxtDrawerUserEmail = (TextView)findViewById(R.id.txt_user_email);
+        mTxtDrawerUserRole  = (TextView)findViewById(R.id.txt_user_role);
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_navigation_drawer, R.string.drawer_open, R.string.drawer_close) {
             public void onDrawerClosed(View view) {
@@ -63,7 +64,7 @@ public class ViewAllFeedsActivity extends Activity implements Observer, OnRefres
 
             public void onDrawerOpened(View view) {
                 super.onDrawerOpened(view);
-                getActionBar().setTitle("Providers");
+                getActionBar().setTitle("Settings");
             }
         };
 
@@ -72,11 +73,11 @@ public class ViewAllFeedsActivity extends Activity implements Observer, OnRefres
         getActionBar().setHomeButtonEnabled(true);
 
         // Set the adapter for our feed
-        mItemArrayAdapter = new ItemArrayAdapter(this, mViewAllFeedsModel.getFeedPosts());
+        mItemArrayAdapter = new ItemArrayAdapter(this, mMainModel.getFeedPosts());
         mListView.setAdapter(mItemArrayAdapter);
 
         // Set the adapter for our drawer list
-        mDrawerItemAdapter = new DrawerItemAdapter(this, mViewAllFeedsModel.getUserProviders());
+        mDrawerItemAdapter = new DrawerItemAdapter(this, mMainModel.getUserProviders());
         mDrawerList.setAdapter(mDrawerItemAdapter);
 
         mPullToRefreshLayout = (PullToRefreshLayout)findViewById(R.id.swipe_container);
@@ -86,7 +87,7 @@ public class ViewAllFeedsActivity extends Activity implements Observer, OnRefres
                 .setup(mPullToRefreshLayout);
 
         // Start auto update
-        //mViewAllFeedsModel.initAutoUpdateTimer();
+        //mMainModel.initAutoUpdateTimer();
     }
 
     @Override
@@ -133,7 +134,10 @@ public class ViewAllFeedsActivity extends Activity implements Observer, OnRefres
             public void run() {
                 mItemArrayAdapter.notifyDataSetChanged();
                 mDrawerItemAdapter.notifyDataSetChanged();
-                mPullToRefreshLayout.setRefreshing(mViewAllFeedsModel.isRefreshing());
+                mPullToRefreshLayout.setRefreshing(mMainModel.isRefreshing());
+                mTxtDrawerUserEmail.setText(mMainModel.getAccount().getEmail());
+                mTxtDrawerUserRole.setText(mMainModel.getAccount().getRole());
+
             }
         });
     }
@@ -148,6 +152,6 @@ public class ViewAllFeedsActivity extends Activity implements Observer, OnRefres
 
     @Override
     public void onRefreshStarted(View view) {
-        mViewAllFeedsModel.loadNewPosts();
+        mMainModel.loadNewPosts();
     }
 }

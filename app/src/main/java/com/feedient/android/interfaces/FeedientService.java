@@ -1,5 +1,6 @@
 package com.feedient.android.interfaces;
 
+import com.feedient.android.models.json.Account;
 import com.feedient.android.models.json.feed.FeedPostList;
 import com.feedient.android.models.json.request.NewFeedPost;
 import com.feedient.android.models.json.schema.FeedPost;
@@ -13,6 +14,9 @@ import retrofit.http.*;
 import java.util.List;
 
 public interface FeedientService {
+    @GET("/user")
+    void getAccount(@Header("Bearer") String accessToken, Callback<Account> cb);
+
     @FormUrlEncoded
     @POST("/user/authorize")
     void authorizeUser(@Field("email") String email, @Field("password") String password, Callback<UserSession> cb);

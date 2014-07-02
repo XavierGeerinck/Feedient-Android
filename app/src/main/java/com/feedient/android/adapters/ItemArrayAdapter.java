@@ -30,7 +30,7 @@ public class ItemArrayAdapter extends ArrayAdapter<FeedPost> {
     }
 
     public ItemArrayAdapter(Context context, List<FeedPost> feedPosts) {
-        super(context, R.layout.view_all_feeds, feedPosts);
+        super(context, R.layout.view_main, feedPosts);
 
         this.context = context;
         this.feedPosts = feedPosts;
@@ -44,7 +44,7 @@ public class ItemArrayAdapter extends ArrayAdapter<FeedPost> {
         if (convertView == null) {
             // Inflate the layout
             LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.feed_list_row, null);
+            convertView = inflater.inflate(R.layout.feed_list_item, null);
 
             // Set up the ViewHolder
             viewHolder = new ViewHolderItem();

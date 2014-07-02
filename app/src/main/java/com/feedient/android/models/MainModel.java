@@ -2,28 +2,25 @@ package com.feedient.android.models;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Handler;
 import android.util.Log;
 import com.feedient.android.adapters.FeedientRestAdapter;
 import com.feedient.android.data.AssetsPropertyReader;
 import com.feedient.android.interfaces.FeedientService;
+import com.feedient.android.models.json.Account;
 import com.feedient.android.models.json.UserProvider;
 import com.feedient.android.models.json.feed.BulkPagination;
 import com.feedient.android.models.json.feed.FeedPostList;
 import com.feedient.android.models.json.request.NewFeedPost;
 import com.feedient.android.models.json.schema.FeedPost;
-import com.google.gson.Gson;
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 import java.util.*;
 
-public class ViewAllFeeds extends Observable {
+public class MainModel extends Observable {
     private Context context;
 
     private final long timerInterval;
@@ -31,6 +28,7 @@ public class ViewAllFeeds extends Observable {
     private List<FeedPost> feedPosts;
     private Map<String, String> paginationKeys; // <userProviderId, since>
     private List<UserProvider> userProviders;
+    private Account account;
 
     private AssetsPropertyReader assetsPropertyReader;
     private Properties properties;
@@ -40,12 +38,13 @@ public class ViewAllFeeds extends Observable {
 
     private boolean isRefreshing;
 
-    public ViewAllFeeds(Context context) {
+    public MainModel(Context context) {
         this.context = context;
 
         feedPosts = new ArrayList<FeedPost>();
         paginationKeys = new HashMap<String, String>();
         userProviders = new ArrayList<UserProvider>();
+        account = new Account();
         newNotifications = 0;
 
         assetsPropertyReader = new AssetsPropertyReader(context);
@@ -59,6 +58,24 @@ public class ViewAllFeeds extends Observable {
         timerInterval = Long.parseLong(configProperties.getProperty("auto_update_interval"));
     }
 
+    public void loadUser() {
+        final String accessToken = sharedPreferences.getString(properties.getProperty("prefs.key.token"), "NO_ACCESS_TOKEN_FOUND");
+        feedientService.getAccount(accessToken, new Callback<Account>() {
+            @Override
+            public void success(Account account, Response response) {
+                MainModel.this.account.setId(account.getId());
+                MainModel.this.account.setEmail(account.getEmail());
+                MainModel.this.account.setLanguage(account.getLanguage());
+                MainModel.this.account.setRole(account.getRole());
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.e("Feedient", retrofitError.getMessage());
+            }
+        });
+    }
+
     /**
      * Loads the last X posts of the user
      */
@@ -70,10 +87,9 @@ public class ViewAllFeeds extends Observable {
                 // Get the providerIds
                 List<String> providerIds = new ArrayList<String>();
                 for (UserProvider up : userProviders) {
+                    MainModel.this.userProviders.add(up);
                     providerIds.add(up.getId());
                 }
-
-                ViewAllFeeds.this.userProviders = userProviders;
 
                 // Get all the feeds
                 feedientService.getFeeds(accessToken, providerIds, new Callback<FeedPostList>() {
@@ -81,7 +97,7 @@ public class ViewAllFeeds extends Observable {
                     public void success(FeedPostList feedPostList, Response response) {
                         // Set the posts
                         for (FeedPost fp : feedPostList.getFeedPosts()) {
-                            ViewAllFeeds.this.feedPosts.add(fp);
+                            MainModel.this.feedPosts.add(fp);
                         }
 
                         // Set the paginations
@@ -137,7 +153,7 @@ public class ViewAllFeeds extends Observable {
                 // Add posts to the beginning (Start at the end of the array for ordering)
                 for (int i = feedPostList.getFeedPosts().size() - 1; i >= 0; i--) {
                     FeedPost fp = feedPostList.getFeedPosts().get(i);
-                    ViewAllFeeds.this.feedPosts.add(0, fp);
+                    MainModel.this.feedPosts.add(0, fp);
                 }
 
                 // Set the paginations
@@ -221,5 +237,13 @@ public class ViewAllFeeds extends Observable {
 
     public void setRefreshing(boolean isRefreshing) {
         this.isRefreshing = isRefreshing;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 }

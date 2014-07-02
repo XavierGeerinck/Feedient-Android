@@ -62,20 +62,20 @@
                         android:layout_centerVertical="true" />
 
                 <TextView
-                        android:id="@+id/txt_user_name"
+                        android:id="@+id/txt_user_email"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Jesper Lindstrom"
+                        android:text="raxezdev@gmail.com"
                         android:textSize="18sp"
                         android:textColor="#FFFFFF"
                         android:layout_above="@+id/dummy"
                         android:layout_centerVertical="true"/>
 
                 <TextView
-                        android:id="@+id/txt_user_email"
+                        android:id="@+id/txt_user_role"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="raxezdev@gmail.com"
+                        android:text="NORMAL"
                         android:textSize="14sp"
                         android:textColor="#FFFFFF"
                         android:layout_below="@+id/dummy"/>

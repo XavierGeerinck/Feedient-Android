@@ -81,7 +81,7 @@ public class LoginActivity extends Activity {
 
     public void openViewAllFeedsActivity() {
         // Load the ViewAllFeeds activity
-        Intent intent = new Intent(LoginActivity.this, ViewAllFeedsActivity.class);
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
     }
 }
