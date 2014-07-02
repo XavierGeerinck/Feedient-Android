@@ -45,6 +45,7 @@ public class ViewAllFeeds extends Observable {
 
         feedPosts = new ArrayList<FeedPost>();
         paginationKeys = new HashMap<String, String>();
+        userProviders = new ArrayList<UserProvider>();
         newNotifications = 0;
 
         assetsPropertyReader = new AssetsPropertyReader(context);

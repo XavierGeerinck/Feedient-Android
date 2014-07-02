@@ -1,15 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout
+<android.support.v4.widget.DrawerLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/swipe_container"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/drawer_layout">
 
-    <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/list">
-    </ListView>
-</uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>
+    <!-- Main View -->
+    <uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/swipe_container"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/list">
+        </ListView>
+    </uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>
+
+    <!-- Drawer Content -->
+    <!-- Drawer View has to have android:layout_gravity="start" set -->
+    <!-- Drawer should be max 320 -->
+    <LinearLayout
+            android:id="@+id/left_drawer"
+            android:layout_height="match_parent"
+            android:layout_width="280dp"
+            android:orientation="vertical"
+            android:layout_gravity="start"
+            android:background="#FEFEFE">
+
+        <!-- Header -->
+        <LinearLayout android:id="@+id/thumbnail"
+                      android:layout_width="280dp"
+                      android:layout_height="wrap_content"
+                      android:padding="10dp"
+                      android:layout_marginRight="5dp"
+                      android:background="#212322">
+
+            <!-- Feedient Icon -->
+            <ImageView
+                    android:id="@+id/img_provider_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/avatar_image"/>
+
+
+            <!-- Name + Email -->
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="15dp">
+
+                <!-- Create dummy imageView to center 2 elements -->
+                <ImageView
+                        android:id="@+id/dummy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true" />
+
+                <TextView
+                        android:id="@+id/txt_user_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Jesper Lindstrom"
+                        android:textSize="18sp"
+                        android:textColor="#FFFFFF"
+                        android:layout_above="@+id/dummy"
+                        android:layout_centerVertical="true"/>
+
+                <TextView
+                        android:id="@+id/txt_user_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="raxezdev@gmail.com"
+                        android:textSize="14sp"
+                        android:textColor="#FFFFFF"
+                        android:layout_below="@+id/dummy"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <!-- Providers List -->
+        <ListView
+                android:id="@+id/drawer_provider_list"
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:choiceMode="singleChoice"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="0dp"/>
+    </LinearLayout>
+
+</android.support.v4.widget.DrawerLayout>
