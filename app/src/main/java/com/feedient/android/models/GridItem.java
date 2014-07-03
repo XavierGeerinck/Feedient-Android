@@ -2,21 +2,15 @@ package com.feedient.android.models;
 
 import android.widget.IconTextView;
 
+import com.feedient.android.interfaces.IProviderModel;
+
 public class GridItem {
     private String title;
-    private String faIconText;
+    private IProviderModel providerModel;
 
-    public GridItem(String title, String faIconText) {
+    public GridItem(String title, IProviderModel providerModel) {
         this.title = title;
-        this.faIconText = faIconText;
-    }
-
-    public String getFaIconText() {
-        return faIconText;
-    }
-
-    public void setFaIconText(String faIconText) {
-        this.faIconText = faIconText;
+        this.providerModel = providerModel;
     }
 
     public String getTitle() {
@@ -25,5 +19,13 @@ public class GridItem {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public IProviderModel getProviderModel() {
+        return providerModel;
+    }
+
+    public void setProviderModel(IProviderModel providerModel) {
+        this.providerModel = providerModel;
     }
 }

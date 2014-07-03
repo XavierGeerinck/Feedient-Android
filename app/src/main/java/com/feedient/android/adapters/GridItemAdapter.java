@@ -18,10 +18,18 @@ import java.util.List;
 public class GridItemAdapter extends BaseAdapter {
     private final List<GridItem> items;
     private final Context context;
+    private final LayoutInflater layoutInflater;
 
     public GridItemAdapter(Context context, List<GridItem> items) {
         this.context = context;
         this.items = items;
+        this.layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    // ViewHolder pattern (http://developer.android.com/training/improving-layouts/smooth-scrolling.html#ViewHolder)
+    static class ViewHolderItem {
+        TextView iconTextView;
+        TextView title;
     }
 
     @Override
@@ -40,27 +48,30 @@ public class GridItemAdapter extends BaseAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        GridItem item = items.get(position);
-        View view = convertView;
-        if (view == null) {
-            LayoutInflater inflater = LayoutInflater.from(context);
-            view = inflater.inflate(R.layout.grid_item, parent, false);
-            view.setClickable(true);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        ViewHolderItem viewHolder;
 
-                }
-            });
+        if (convertView == null) {
+            convertView = layoutInflater.inflate(R.layout.grid_item, null);
 
-            TextView iconTextView = (TextView)view.findViewById(R.id.grid_item_icon);
-            TextView title = (TextView)view.findViewById(R.id.grid_item_title);
+            // Set up the ViewHolder
+            viewHolder = new ViewHolderItem();
+            viewHolder.iconTextView = (TextView)convertView.findViewById(R.id.grid_item_icon);
+            viewHolder.title = (TextView)convertView.findViewById(R.id.grid_item_title);
 
-            title.setText(item.getTitle());
-            iconTextView.setText(item.getFaIconText());
-            Iconify.addIcons(iconTextView);
+            // Store the holder
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolderItem)convertView.getTag();
         }
 
-        return view;
+        GridItem item = items.get(position);
+
+        if (item != null) {
+            viewHolder.title.setText(item.getTitle());
+            viewHolder.iconTextView.setText(item.getProviderModel().getIcon());
+            Iconify.addIcons(viewHolder.iconTextView);
+        }
+
+        return convertView;
     }
 }

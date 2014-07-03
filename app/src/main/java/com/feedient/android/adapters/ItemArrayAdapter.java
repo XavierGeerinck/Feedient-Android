@@ -20,6 +20,7 @@ public class ItemArrayAdapter extends ArrayAdapter<FeedPost> {
     private final Context context;
     private final List<FeedPost> feedPosts;
     private final ImageLoader imageLoader;
+    private final LayoutInflater layoutInflater;
 
     // ViewHolder pattern (http://developer.android.com/training/improving-layouts/smooth-scrolling.html#ViewHolder)
     static class ViewHolderItem {
@@ -35,6 +36,7 @@ public class ItemArrayAdapter extends ArrayAdapter<FeedPost> {
         this.context = context;
         this.feedPosts = feedPosts;
         this.imageLoader = ImageLoaderHelper.getImageLoader(context);
+        this.layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -42,9 +44,7 @@ public class ItemArrayAdapter extends ArrayAdapter<FeedPost> {
         ViewHolderItem viewHolder;
 
         if (convertView == null) {
-            // Inflate the layout
-            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.feed_list_item, null);
+            convertView = layoutInflater.inflate(R.layout.feed_list_item, null);
 
             // Set up the ViewHolder
             viewHolder = new ViewHolderItem();

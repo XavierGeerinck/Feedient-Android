@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -27,6 +28,10 @@ import com.feedient.android.models.MainModel;
 
 import com.feedient.android.models.json.UserProvider;
 import com.feedient.android.models.providers.Facebook;
+import com.feedient.android.models.providers.Instagram;
+import com.feedient.android.models.providers.Tumblr;
+import com.feedient.android.models.providers.Twitter;
+import com.feedient.android.models.providers.YouTube;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -181,25 +186,34 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
     public void onClickAddUserProvider(View v) {
         // Show popup to pick provider
         View customView = LayoutInflater.from(this).inflate(R.layout.dialog_grid, null);
-        List<GridItem> items = new ArrayList<GridItem>();
-        items.add(new GridItem("Facebook", "{fa-facebook-square}"));
-        items.add(new GridItem("Twitter", "{fa-twitter}"));
-        ((GridView)customView.findViewById(R.id.gridview)).setAdapter(new GridItemAdapter(this, items));
+        final List<GridItem> items = new ArrayList<GridItem>();
+        items.add(new GridItem("Facebook", new Facebook()));
+        items.add(new GridItem("Twitter", new Twitter()));
+        items.add(new GridItem("Instagram", new Instagram()));
+        items.add(new GridItem("Youtube", new YouTube()));
+        items.add(new GridItem("Tumblr", new Tumblr()));
+        GridView gridView = (GridView)customView.findViewById(R.id.gridview);
+        gridView.setAdapter(new GridItemAdapter(this, items));
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Log.e("Feedient", "TESTTEST");
+                // Open the chosen provider
+                Intent i = new Intent(getApplicationContext(), OAuthActivity.class);
+
+                i.putExtra("OAUTH_URL", items.get(position).getProviderModel().getOauthUrl());
+                i.putExtra("OAUTH_REDIRECT_URI", items.get(position).getProviderModel().getOauthCallbackUrl());
+                i.putExtra("OAUTH_FRAGMENTS", items.get(position).getProviderModel().getOauthFragments());
+                i.putExtra("OAUTH_PROVIDER_NAME", items.get(position).getProviderModel().getName());
+
+                startActivityForResult(i, 1);
+            }
+        });
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add Provider");
         builder.setView(customView);
         builder.show();
-//
-//        // Open the chosen provider
-//        Intent i = new Intent(this, OAuthActivity.class);
-//
-//        i.putExtra("OAUTH_URL", Facebook.OAUTH_URL);
-//        i.putExtra("OAUTH_REDIRECT_URI", Facebook.OAUTH_CALLBACK_URL);
-//        i.putExtra("OAUTH_FRAGMENTS", Facebook.OAUTH_FRAGMENTS);
-//        i.putExtra("OAUTH_PROVIDER_NAME", Facebook.NAME);
-//
-//        startActivityForResult(i, 1);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

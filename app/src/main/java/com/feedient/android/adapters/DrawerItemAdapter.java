@@ -22,6 +22,7 @@ public class DrawerItemAdapter extends ArrayAdapter<UserProvider> {
     private final Context context;
     private final List<UserProvider> userProviders;
     private final ImageLoader imageLoader;
+    private final LayoutInflater layoutInflater;
 
     // ViewHolder pattern (http://developer.android.com/training/improving-layouts/smooth-scrolling.html#ViewHolder)
     public static class ViewHolderItem {
@@ -38,6 +39,7 @@ public class DrawerItemAdapter extends ArrayAdapter<UserProvider> {
         this.context = context;
         this.userProviders = userProviders;
         this.imageLoader = ImageLoaderHelper.getImageLoader(context);
+        this.layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -45,9 +47,7 @@ public class DrawerItemAdapter extends ArrayAdapter<UserProvider> {
         ViewHolderItem viewHolder;
 
         if (convertView == null) {
-            // Inflate the layout
-            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.drawer_list_item, null);
+            convertView = layoutInflater.inflate(R.layout.drawer_list_item, null);
 
             // Set up the ViewHolder
             viewHolder = new ViewHolderItem();

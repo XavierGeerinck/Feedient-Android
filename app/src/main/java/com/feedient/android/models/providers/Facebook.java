@@ -32,6 +32,26 @@ public class Facebook implements IProviderModel {
         return ICON;
     }
 
+    public String getName() {
+        return NAME;
+    }
+
+    public String getAppId() {
+        return APP_ID;
+    }
+
+    public String getOauthCallbackUrl() {
+        return OAUTH_CALLBACK_URL;
+    }
+
+    public String getOauthUrl() {
+        return OAUTH_URL;
+    }
+
+    public String[] getOauthFragments() {
+        return OAUTH_FRAGMENTS;
+    }
+
     @Override
     public void addProvider(String accessToken, FeedientService feedientService, JSONObject jo) throws JSONException {
         feedientService.addProviderFacebook(accessToken, NAME, jo.getString("oauth_code"), new Callback<RemoveUserProvider>() {
