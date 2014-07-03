@@ -152,6 +152,10 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         mDrawerItemAdapter.remove(up);
     }
 
+    public void onClickAddUserProvider(View v) {
+        Log.e("Feedient", "Add User Provider On Click");
+    }
+
     public ItemArrayAdapter getmItemArrayAdapter() {
         return mItemArrayAdapter;
     }

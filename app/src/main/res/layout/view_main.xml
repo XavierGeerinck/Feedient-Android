@@ -30,7 +30,9 @@
             android:layout_width="280dp"
             android:orientation="vertical"
             android:layout_gravity="start"
-            android:background="#FEFEFE">
+            android:background="#FEFEFE"
+            android:divider="?android:dividerHorizontal"
+            android:showDividers="middle">
 
         <!-- Header -->
         <LinearLayout android:id="@+id/thumbnail"
@@ -90,6 +92,42 @@
                 android:choiceMode="singleChoice"
                 android:divider="@android:color/transparent"
                 android:dividerHeight="0dp"/>
+
+        <!-- Add User Provider -->
+        <RelativeLayout
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:onClick="onClickAddUserProvider">
+
+            <!-- Icon -->
+            <IconTextView
+                android:id="@+id/txt_provider_icon"
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:textSize="22sp"
+                android:textColor="#626262"
+                android:text="{fa-plus}"/>
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/txt_provider_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/txt_provider_icon"
+                android:text="Add User Provider"
+                android:textColor="#626262"
+                android:typeface="sans"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginLeft="15dp"/>
+
+        </RelativeLayout>
     </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>

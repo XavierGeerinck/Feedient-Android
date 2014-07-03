@@ -92,6 +92,8 @@ public class MainModel extends Observable {
                     providerIds.add(up.getId());
                 }
 
+                _triggerObservers();
+
                 // Get all the feeds
                 feedientService.getFeeds(accessToken, providerIds, new Callback<FeedPostList>() {
                     @Override
