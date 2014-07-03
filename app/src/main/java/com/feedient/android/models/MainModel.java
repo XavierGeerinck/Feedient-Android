@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.util.Log;
 import com.feedient.android.adapters.FeedientRestAdapter;
 import com.feedient.android.data.AssetsPropertyReader;
+import com.feedient.android.helpers.ProviderHelper;
 import com.feedient.android.interfaces.FeedientService;
 import com.feedient.android.models.json.Account;
 import com.feedient.android.models.json.UserProvider;
@@ -15,6 +16,8 @@ import com.feedient.android.models.json.request.NewFeedPost;
 import com.feedient.android.models.json.response.RemoveUserProvider;
 import com.feedient.android.models.json.schema.FeedPost;
 import org.json.JSONException;
+import org.json.JSONObject;
+
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -263,5 +266,14 @@ public class MainModel extends Observable {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public void addProvider(String providerName, JSONObject jo) {
+        final String accessToken = sharedPreferences.getString(properties.getProperty("prefs.key.token"), "NO_ACCESS_TOKEN_FOUND");
+        try {
+            ProviderHelper.providerNameToClass(providerName).addProvider(accessToken, feedientService, jo);
+        } catch (JSONException e) {
+            Log.e("Feedient", e.getMessage());
+        }
     }
 }

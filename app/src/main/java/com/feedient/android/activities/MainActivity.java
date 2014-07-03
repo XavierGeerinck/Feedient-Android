@@ -3,27 +3,40 @@ package com.feedient.android.activities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.feedient.android.R;
 import com.feedient.android.adapters.DrawerItemAdapter;
+import com.feedient.android.adapters.GridItemAdapter;
 import com.feedient.android.adapters.ItemArrayAdapter;
+import com.feedient.android.models.GridItem;
 import com.feedient.android.models.MainModel;
 
 import com.feedient.android.models.json.UserProvider;
+import com.feedient.android.models.providers.Facebook;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -166,7 +179,49 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
     }
 
     public void onClickAddUserProvider(View v) {
-        Log.e("Feedient", "Add User Provider On Click");
+        // Show popup to pick provider
+        View customView = LayoutInflater.from(this).inflate(R.layout.dialog_grid, null);
+        List<GridItem> items = new ArrayList<GridItem>();
+        items.add(new GridItem("Facebook", "{fa-facebook-square}"));
+        items.add(new GridItem("Twitter", "{fa-twitter}"));
+        ((GridView)customView.findViewById(R.id.gridview)).setAdapter(new GridItemAdapter(this, items));
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Add Provider");
+        builder.setView(customView);
+        builder.show();
+//
+//        // Open the chosen provider
+//        Intent i = new Intent(this, OAuthActivity.class);
+//
+//        i.putExtra("OAUTH_URL", Facebook.OAUTH_URL);
+//        i.putExtra("OAUTH_REDIRECT_URI", Facebook.OAUTH_CALLBACK_URL);
+//        i.putExtra("OAUTH_FRAGMENTS", Facebook.OAUTH_FRAGMENTS);
+//        i.putExtra("OAUTH_PROVIDER_NAME", Facebook.NAME);
+//
+//        startActivityForResult(i, 1);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK){
+                String json = data.getStringExtra("data");
+                String providerName = data.getStringExtra("provider");
+
+                JSONObject jo = null;
+                try {
+                    jo = new JSONObject(json);
+                } catch (JSONException e) {
+                    Log.e("Feedient", e.getMessage());
+                }
+
+                mMainModel.addProvider(providerName, jo);
+            }
+
+            if (resultCode == RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
     }
 
     public ItemArrayAdapter getmItemArrayAdapter() {

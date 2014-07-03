@@ -38,4 +38,8 @@ public interface FeedientService {
 
     @DELETE("/provider/{id}")
     void removeUserProvider(@Header("Bearer") String accessToken, @Path("id") String providerId, Callback<RemoveUserProvider> cb);
+
+    @FormUrlEncoded
+    @POST("/provider/{name}/callback")
+    void addProviderFacebook(@Header("Bearer")String accessToken, @Path("name")String providerName, @Field("oauth_code")String oauthCode, Callback<RemoveUserProvider> cb);
 }
