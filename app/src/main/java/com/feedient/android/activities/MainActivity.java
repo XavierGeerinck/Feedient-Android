@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -145,13 +146,10 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         });
     }
 
-    public void removeProviderOnClickHandler(View v) {
-//
-//        Log.e("Feedient", v.getTag().toString());
-//        ViewHolderItem up = (ViewHolderItem)v.getTag();
-//        Log.e("Feedient", up.txtProviderUserName.getText().toString());
-////        mMainModel.removeUserProvider(up);
-////        mDrawerItemAdapter.remove(up);
+    public void removeUserProviderOnClick(View v) {
+        UserProvider up = (UserProvider)v.getTag();
+        mMainModel.removeUserProvider(up);
+        mDrawerItemAdapter.remove(up);
     }
 
     public ItemArrayAdapter getmItemArrayAdapter() {

@@ -3,6 +3,7 @@ package com.feedient.android.interfaces;
 import com.feedient.android.models.json.Account;
 import com.feedient.android.models.json.feed.FeedPostList;
 import com.feedient.android.models.json.request.NewFeedPost;
+import com.feedient.android.models.json.response.RemoveUserProvider;
 import com.feedient.android.models.json.schema.FeedPost;
 import com.feedient.android.models.json.feed.FeedResult;
 import com.feedient.android.models.json.UserProvider;
@@ -36,5 +37,5 @@ public interface FeedientService {
     void getNewerPosts(@Header("Bearer") String accessToken, @Field("objects") List<NewFeedPost> objects, Callback<FeedPostList> cb);
 
     @DELETE("/provider/{id}")
-    void removeUserProvider(@Header("Bearer") String accessToken, @Path("id") String providerId, Callback<String> cb);
+    void removeUserProvider(@Header("Bearer") String accessToken, @Path("id") String providerId, Callback<RemoveUserProvider> cb);
 }

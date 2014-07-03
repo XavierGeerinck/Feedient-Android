@@ -33,11 +33,14 @@
 
     <!-- Provider Remove Button -->
     <ImageButton
-            android:id="@+id/btn_provider_remove"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_alignParentRight="true"
-            android:text="X"
-            android:onClick="removeProviderOnClickHandler"/>
+        android:id="@+id/img_btn_provider_remove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"
+        android:src="@drawable/ic_action_remove"
+        android:background="@null"
+        android:onClick="removeUserProviderOnClick"/>
 
 </RelativeLayout>

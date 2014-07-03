@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.feedient.android.R;
@@ -23,10 +24,12 @@ public class DrawerItemAdapter extends ArrayAdapter<UserProvider> {
     private final ImageLoader imageLoader;
 
     // ViewHolder pattern (http://developer.android.com/training/improving-layouts/smooth-scrolling.html#ViewHolder)
-    static class ViewHolderItem {
+    public static class ViewHolderItem {
+        UserProvider userProvider;
         ImageView imgProviderIcon;
         TextView txtProviderIcon;
         TextView txtProviderUserName;
+        ImageButton imgBtnRemoveProvider;
     }
 
     public DrawerItemAdapter(Context context, List<UserProvider> userProviders) {
@@ -48,9 +51,13 @@ public class DrawerItemAdapter extends ArrayAdapter<UserProvider> {
 
             // Set up the ViewHolder
             viewHolder = new ViewHolderItem();
+            viewHolder.userProvider = userProviders.get(position);
             viewHolder.imgProviderIcon = (ImageView)convertView.findViewById(R.id.img_provider_icon);
             viewHolder.txtProviderUserName = (TextView)convertView.findViewById(R.id.txt_provider_user_name);
             viewHolder.txtProviderIcon = (TextView)convertView.findViewById(R.id.txt_provider_icon);
+            viewHolder.imgBtnRemoveProvider = (ImageButton)convertView.findViewById(R.id.img_btn_provider_remove);
+            viewHolder.imgBtnRemoveProvider.setTag(viewHolder.userProvider);
+
 
             // Store the holder
             convertView.setTag(viewHolder);
@@ -58,21 +65,19 @@ public class DrawerItemAdapter extends ArrayAdapter<UserProvider> {
             viewHolder = (ViewHolderItem)convertView.getTag();
         }
 
-        UserProvider userProvider = userProviders.get(position);
-
-        if (userProvider != null) {
-            IProviderModel providerModel = ProviderHelper.providerNameToClass(userProvider.getProviderAccount().getName());
+        if (viewHolder.userProvider != null) {
+            IProviderModel providerModel = ProviderHelper.providerNameToClass(viewHolder.userProvider.getProviderAccount().getName());
 
             if (providerModel != null) {
                 viewHolder.txtProviderIcon.setText("{" + providerModel.getIcon() + "}");
             }
 
-            if (userProvider.getProviderAccount().getUsername() != null) {
-                viewHolder.txtProviderUserName.setText(userProvider.getProviderAccount().getUsername());
+            if (viewHolder.userProvider.getProviderAccount().getUsername() != null) {
+                viewHolder.txtProviderUserName.setText(viewHolder.userProvider.getProviderAccount().getUsername());
             }
 
-            if (userProvider.getProviderAccount().getFullName() != null) {
-                viewHolder.txtProviderUserName.setText(userProvider.getProviderAccount().getFullName());
+            if (viewHolder.userProvider.getProviderAccount().getFullName() != null) {
+                viewHolder.txtProviderUserName.setText(viewHolder.userProvider.getProviderAccount().getFullName());
             }
 
             Iconify.addIcons(viewHolder.txtProviderIcon);

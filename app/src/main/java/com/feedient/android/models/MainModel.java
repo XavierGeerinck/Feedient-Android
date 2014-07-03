@@ -12,6 +12,7 @@ import com.feedient.android.models.json.UserProvider;
 import com.feedient.android.models.json.feed.BulkPagination;
 import com.feedient.android.models.json.feed.FeedPostList;
 import com.feedient.android.models.json.request.NewFeedPost;
+import com.feedient.android.models.json.response.RemoveUserProvider;
 import com.feedient.android.models.json.schema.FeedPost;
 import org.json.JSONException;
 import retrofit.Callback;
@@ -209,10 +210,10 @@ public class MainModel extends Observable {
 
     public void removeUserProvider(UserProvider up) {
         final String accessToken = sharedPreferences.getString(properties.getProperty("prefs.key.token"), "NO_ACCESS_TOKEN_FOUND");
-        feedientService.removeUserProvider(accessToken, up.getId(), new Callback<String>() {
+        feedientService.removeUserProvider(accessToken, up.getId(), new Callback<RemoveUserProvider>() {
             @Override
-            public void success(String s, Response response) {
-                Log.e("Feedient", s);
+            public void success(RemoveUserProvider rup, Response response) {
+                Log.e("Feedient", "Remove User Provider: " + rup.isSuccess());
             }
 
             @Override
