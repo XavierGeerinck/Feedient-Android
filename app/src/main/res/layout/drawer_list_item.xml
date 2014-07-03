@@ -9,34 +9,19 @@
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp">
 
-    <!--&lt;!&ndash;  ListRow Left side Thumbnail image &ndash;&gt;-->
-    <!--<LinearLayout android:id="@+id/thumbnail"-->
-                  <!--android:layout_width="wrap_content"-->
-                  <!--android:layout_height="wrap_content"-->
-                  <!--android:padding="3dip"-->
-                  <!--android:layout_alignParentLeft="true"-->
-                  <!--android:layout_marginRight="5dip">-->
-
-        <!--<ImageView-->
-                <!--android:id="@+id/img_provider_icon"-->
-                <!--android:layout_width="50dip"-->
-                <!--android:layout_height="50dip"-->
-                <!--android:src="@drawable/avatar_image"/>-->
-
-    <!--</LinearLayout>-->
-
-    <!-- Provider Name -->
+    <!-- Provider Icon -->
     <TextView
             android:id="@+id/txt_provider_icon"
             android:layout_width="20dp"
-            android:layout_height="match_parent"
+            android:layout_height="fill_parent"
             android:textSize="22sp"
             android:textColor="#626262"/>
 
+    <!-- Provider User Name -->
     <TextView
             android:id="@+id/txt_provider_user_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_toRightOf="@id/txt_provider_icon"
             android:text="FeedientApp"
             android:textColor="#626262"
@@ -45,5 +30,14 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginLeft="15dp"/>
+
+    <!-- Provider Remove Button -->
+    <ImageButton
+            android:id="@+id/btn_provider_remove"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="true"
+            android:text="X"
+            android:onClick="removeProviderOnClickHandler"/>
 
 </RelativeLayout>

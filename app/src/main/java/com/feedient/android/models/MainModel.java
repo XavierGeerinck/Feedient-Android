@@ -207,6 +207,21 @@ public class MainModel extends Observable {
         return null;
     }
 
+    public void removeUserProvider(UserProvider up) {
+        final String accessToken = sharedPreferences.getString(properties.getProperty("prefs.key.token"), "NO_ACCESS_TOKEN_FOUND");
+        feedientService.removeUserProvider(accessToken, up.getId(), new Callback<String>() {
+            @Override
+            public void success(String s, Response response) {
+                Log.e("Feedient", s);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.e("Feedient", retrofitError.getMessage());
+            }
+        });
+    }
+
     public int getNewNotifications() {
         return newNotifications;
     }

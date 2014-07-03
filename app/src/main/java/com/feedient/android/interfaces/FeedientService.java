@@ -34,4 +34,7 @@ public interface FeedientService {
     @FormUrlEncoded
     @POST("/providers/feed/new")
     void getNewerPosts(@Header("Bearer") String accessToken, @Field("objects") List<NewFeedPost> objects, Callback<FeedPostList> cb);
+
+    @DELETE("/provider/{id}")
+    void removeUserProvider(@Header("Bearer") String accessToken, @Path("id") String providerId, Callback<String> cb);
 }

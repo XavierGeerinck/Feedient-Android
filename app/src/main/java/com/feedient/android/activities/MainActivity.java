@@ -5,10 +5,12 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.feedient.android.R;
@@ -16,6 +18,7 @@ import com.feedient.android.adapters.DrawerItemAdapter;
 import com.feedient.android.adapters.ItemArrayAdapter;
 import com.feedient.android.models.MainModel;
 
+import com.feedient.android.models.json.UserProvider;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
@@ -140,6 +143,15 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
 
             }
         });
+    }
+
+    public void removeProviderOnClickHandler(View v) {
+//
+//        Log.e("Feedient", v.getTag().toString());
+//        ViewHolderItem up = (ViewHolderItem)v.getTag();
+//        Log.e("Feedient", up.txtProviderUserName.getText().toString());
+////        mMainModel.removeUserProvider(up);
+////        mDrawerItemAdapter.remove(up);
     }
 
     public ItemArrayAdapter getmItemArrayAdapter() {
