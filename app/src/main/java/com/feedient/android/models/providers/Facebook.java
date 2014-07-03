@@ -16,7 +16,7 @@ public class Facebook implements IProviderModel {
     public static final String TEXT_COLOR = "#3b5998";
     public static final String ICON = "fa-facebook-square";
     public static final String APP_ID = "454088611354529";
-    public static final String OAUTH_CALLBACK_URL = "http://test.feedient.com/app/callback/facebook";
+    public static final String OAUTH_CALLBACK_URL = "https://feedient.com/app/callback/facebook";
     public static final String OAUTH_URL = "https://facebook.com/v2.0/dialog/oauth?client_id=" + APP_ID + "&display=popup&scope=read_stream,manage_notifications,publish_actions,publish_stream,user_photos,friends_photos,friends_likes,friends_videos,friends_status,friends_relationship_details,user_photos&redirect_uri=" + OAUTH_CALLBACK_URL;
     public static final String[] OAUTH_FRAGMENTS = { "oauth_code" };
 

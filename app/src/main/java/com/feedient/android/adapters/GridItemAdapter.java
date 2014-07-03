@@ -68,7 +68,7 @@ public class GridItemAdapter extends BaseAdapter {
 
         if (item != null) {
             viewHolder.title.setText(item.getTitle());
-            viewHolder.iconTextView.setText(item.getProviderModel().getIcon());
+            viewHolder.iconTextView.setText("{" + item.getProviderModel().getIcon() + "}");
             Iconify.addIcons(viewHolder.iconTextView);
         }
 

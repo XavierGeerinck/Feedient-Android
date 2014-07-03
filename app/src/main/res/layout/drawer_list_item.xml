@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:paddingTop="15dp"
+    android:paddingBottom="15dp">
 
     <!-- Provider Icon -->
     <TextView
-            android:id="@+id/txt_provider_icon"
-            android:layout_width="20dp"
-            android:layout_height="fill_parent"
-            android:textSize="22sp"
-            android:textColor="#626262"/>
+        android:id="@+id/txt_provider_icon"
+        android:layout_width="20dp"
+        android:layout_height="fill_parent"
+        android:textSize="22sp"
+        android:textColor="#626262"/>
 
     <!-- Provider User Name -->
     <TextView
-            android:id="@+id/txt_provider_user_name"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_toRightOf="@id/txt_provider_icon"
-            android:text="FeedientApp"
-            android:textColor="#626262"
-            android:typeface="sans"
-            android:gravity="center"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginLeft="15dp"/>
+        android:id="@+id/txt_provider_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_toRightOf="@id/txt_provider_icon"
+        android:text="FeedientApp"
+        android:textColor="#626262"
+        android:typeface="sans"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginLeft="15dp"/>
 
     <!-- Provider Remove Button -->
     <ImageButton
