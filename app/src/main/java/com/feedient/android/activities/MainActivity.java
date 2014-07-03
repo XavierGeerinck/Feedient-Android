@@ -146,7 +146,7 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         });
     }
 
-    public void removeUserProviderOnClick(View v) {
+    public void onClickRemoveUserProvider(View v) {
         UserProvider up = (UserProvider)v.getTag();
         mMainModel.removeUserProvider(up);
         mDrawerItemAdapter.remove(up);

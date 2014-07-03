@@ -41,6 +41,6 @@
         android:layout_marginRight="5dp"
         android:src="@drawable/ic_action_remove"
         android:background="@null"
-        android:onClick="removeUserProviderOnClick"/>
+        android:onClick="onClickRemoveUserProvider"/>
 
 </RelativeLayout>
