@@ -1,6 +1,8 @@
 package com.feedient.android.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -10,8 +12,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.feedient.android.R;
@@ -146,10 +146,23 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         });
     }
 
-    public void onClickRemoveUserProvider(View v) {
-        UserProvider up = (UserProvider)v.getTag();
-        mMainModel.removeUserProvider(up);
-        mDrawerItemAdapter.remove(up);
+    public void onClickRemoveUserProvider(final View v) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.dialog_remove_user_provider_title)
+                .setMessage(R.string.dialog_remove_user_provider_message)
+                .setPositiveButton(R.string.choice_remove, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        UserProvider up = (UserProvider)v.getTag();
+                        mMainModel.removeUserProvider(up);
+                        mDrawerItemAdapter.remove(up);
+                    }
+                })
+                .setNegativeButton(R.string.choice_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                })
+                .show();
     }
 
     public void onClickAddUserProvider(View v) {

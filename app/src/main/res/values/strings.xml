@@ -6,6 +6,12 @@
     <string name="drawer_open">Open Drawer</string>
     <string name="drawer_close">Close Drawer</string>
 
+    <string name="choice_remove">Remove</string>
+    <string name="choice_cancel">Cancel</string>
+
+    <string name="dialog_remove_user_provider_message">Are you sure you want to remove this userprovider?</string>
+    <string name="dialog_remove_user_provider_title">Delete Confirmation</string>
+
     <!--
         FontAwesome 4.1.0
         Regex for more
