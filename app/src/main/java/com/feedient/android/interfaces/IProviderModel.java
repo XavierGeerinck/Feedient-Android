@@ -13,5 +13,7 @@ public interface IProviderModel {
     public String getAppId();
     public String getName();
 
+    public Class getOauthActivityClass();
+
     void addProvider(String accessToken, FeedientService feedientService, JSONObject jo) throws JSONException;
 }

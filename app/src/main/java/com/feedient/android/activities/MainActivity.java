@@ -2,10 +2,11 @@ package com.feedient.android.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -32,6 +33,8 @@ import com.feedient.android.models.providers.Instagram;
 import com.feedient.android.models.providers.Tumblr;
 import com.feedient.android.models.providers.Twitter;
 import com.feedient.android.models.providers.YouTube;
+import com.feedient.oauth.OAuthDialog;
+import com.feedient.oauth.webview.WebViewCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,7 +44,10 @@ import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -185,6 +191,10 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
 
     public void onClickAddUserProvider(View v) {
         // Show popup to pick provider
+        // Second dialog
+        // Close the dialog for picking the provider
+
+
         View customView = LayoutInflater.from(this).inflate(R.layout.dialog_grid, null);
         final List<GridItem> items = new ArrayList<GridItem>();
         items.add(new GridItem("Facebook", new Facebook()));
@@ -197,23 +207,37 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Log.e("Feedient", "TESTTEST");
-                // Open the chosen provider
-                Intent i = new Intent(getApplicationContext(), OAuthActivity.class);
+                OAuthDialog dialog = new OAuthDialog(MainActivity.this, items.get(position).getProviderModel().getOauthUrl(), items.get(position).getProviderModel().getOauthCallbackUrl(), new WebViewCallback() {
+                    @Override
+                    public void onGotTokens(Dialog oAuthDialog, HashMap<String, String> tokens) {
+                        Log.e("Feedient", "Tokens Received");
+                        Iterator it = tokens.entrySet().iterator();
+                        while (it.hasNext()) {
+                            Map.Entry pairs = (Map.Entry)it.next();
+                            Log.e("Feedient", pairs.getKey().toString() + " : " + pairs.getValue().toString());
+                        }
 
-                i.putExtra("OAUTH_URL", items.get(position).getProviderModel().getOauthUrl());
-                i.putExtra("OAUTH_REDIRECT_URI", items.get(position).getProviderModel().getOauthCallbackUrl());
-                i.putExtra("OAUTH_FRAGMENTS", items.get(position).getProviderModel().getOauthFragments());
-                i.putExtra("OAUTH_PROVIDER_NAME", items.get(position).getProviderModel().getName());
+                        // close dialog
+                        oAuthDialog.dismiss();
+                    }
+                });
 
-                startActivityForResult(i, 1);
+                dialog.setTitle("Add Provider");
+                dialog.show();
+                //finish();
             }
         });
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add Provider");
         builder.setView(customView);
-        builder.show();
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void _openAddOauthDialog(String oAuthUrl, String oAuthCallbackUrl) {
+
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

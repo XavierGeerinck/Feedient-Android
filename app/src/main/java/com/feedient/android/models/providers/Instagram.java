@@ -1,5 +1,7 @@
 package com.feedient.android.models.providers;
 
+import com.feedient.android.activities.OAuth2Activity;
+import com.feedient.android.activities.OAuthActivity;
 import com.feedient.android.interfaces.FeedientService;
 import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.models.json.response.RemoveUserProvider;
@@ -24,30 +26,42 @@ public class Instagram implements IProviderModel {
 
     }
 
+    @Override
     public String getTextColor() {
         return TEXT_COLOR;
     }
 
+    @Override
     public String getIcon() {
         return ICON;
     }
 
+    @Override
     public String getName() {
         return NAME;
     }
 
+    @Override
+    public Class getOauthActivityClass() {
+        return OAuth2Activity.class;
+    }
+
+    @Override
     public String getAppId() {
         return APP_ID;
     }
 
+    @Override
     public String getOauthCallbackUrl() {
         return OAUTH_CALLBACK_URL;
     }
 
+    @Override
     public String getOauthUrl() {
         return OAUTH_URL;
     }
 
+    @Override
     public String[] getOauthFragments() {
         return OAUTH_FRAGMENTS;
     }
