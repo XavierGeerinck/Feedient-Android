@@ -1,5 +1,7 @@
 package com.feedient.android.models.providers;
 
+import android.content.Context;
+
 import com.feedient.android.activities.OAuthActivity;
 import com.feedient.android.interfaces.FeedientService;
 import com.feedient.android.interfaces.IProviderModel;
@@ -65,7 +67,6 @@ public class Tumblr implements IProviderModel {
         return OAUTH_FRAGMENTS;
     }
 
-    @Override
     public void addProvider(String accessToken, FeedientService feedientService, JSONObject jo) throws JSONException {
         feedientService.addProviderFacebook(accessToken, NAME, jo.getString("oauth_code"), new Callback<RemoveUserProvider>() {
             @Override
@@ -78,5 +79,10 @@ public class Tumblr implements IProviderModel {
 
             }
         });
+    }
+
+    @Override
+    public void popup(Context context, final FeedientService feedientService, String accessToken) {
+
     }
 }

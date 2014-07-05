@@ -8,6 +8,7 @@ import com.feedient.android.adapters.FeedientRestAdapter;
 import com.feedient.android.data.AssetsPropertyReader;
 import com.feedient.android.helpers.ProviderHelper;
 import com.feedient.android.interfaces.FeedientService;
+import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.models.json.Account;
 import com.feedient.android.models.json.UserProvider;
 import com.feedient.android.models.json.feed.BulkPagination;
@@ -268,12 +269,9 @@ public class MainModel extends Observable {
         this.account = account;
     }
 
-    public void addProvider(String providerName, JSONObject jo) {
+    public void addProvider(IProviderModel provider) {
         final String accessToken = sharedPreferences.getString(properties.getProperty("prefs.key.token"), "NO_ACCESS_TOKEN_FOUND");
-        try {
-            ProviderHelper.providerNameToClass(providerName).addProvider(accessToken, feedientService, jo);
-        } catch (JSONException e) {
-            Log.e("Feedient", e.getMessage());
-        }
+
+        provider.popup(context, feedientService, accessToken);
     }
 }

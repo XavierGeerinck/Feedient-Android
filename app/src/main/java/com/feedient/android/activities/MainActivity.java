@@ -202,64 +202,27 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         items.add(new GridItem("Instagram", new Instagram()));
         items.add(new GridItem("Youtube", new YouTube()));
         items.add(new GridItem("Tumblr", new Tumblr()));
-        GridView gridView = (GridView)customView.findViewById(R.id.gridview);
-        gridView.setAdapter(new GridItemAdapter(this, items));
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                OAuthDialog dialog = new OAuthDialog(MainActivity.this, items.get(position).getProviderModel().getOauthUrl(), items.get(position).getProviderModel().getOauthCallbackUrl(), new WebViewCallback() {
-                    @Override
-                    public void onGotTokens(Dialog oAuthDialog, HashMap<String, String> tokens) {
-                        Log.e("Feedient", "Tokens Received");
-                        Iterator it = tokens.entrySet().iterator();
-                        while (it.hasNext()) {
-                            Map.Entry pairs = (Map.Entry)it.next();
-                            Log.e("Feedient", pairs.getKey().toString() + " : " + pairs.getValue().toString());
-                        }
-
-                        // close dialog
-                        oAuthDialog.dismiss();
-                    }
-                });
-
-                dialog.setTitle("Add Provider");
-                dialog.show();
-                //finish();
-            }
-        });
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add Provider");
         builder.setView(customView);
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
+        final AlertDialog pickProviderDialog = builder.create();
+        pickProviderDialog.show();
 
-    private void _openAddOauthDialog(String oAuthUrl, String oAuthCallbackUrl) {
+        GridView gridView = (GridView)customView.findViewById(R.id.gridview);
+        gridView.setAdapter(new GridItemAdapter(this, items));
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                // call the OAuth popup
+                mMainModel.addProvider(items.get(position).getProviderModel());
 
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
-            if(resultCode == RESULT_OK){
-                String json = data.getStringExtra("data");
-                String providerName = data.getStringExtra("provider");
-
-                JSONObject jo = null;
-                try {
-                    jo = new JSONObject(json);
-                } catch (JSONException e) {
-                    Log.e("Feedient", e.getMessage());
-                }
-
-                mMainModel.addProvider(providerName, jo);
+                // Close the other dialog
+                pickProviderDialog.dismiss();
             }
+        });
 
-            if (resultCode == RESULT_CANCELED) {
-                //Write your code if there's no result
-            }
-        }
     }
 
     public ItemArrayAdapter getmItemArrayAdapter() {

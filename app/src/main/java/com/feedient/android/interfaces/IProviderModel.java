@@ -1,5 +1,7 @@
 package com.feedient.android.interfaces;
 
+import android.content.Context;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,5 +17,7 @@ public interface IProviderModel {
 
     public Class getOauthActivityClass();
 
-    void addProvider(String accessToken, FeedientService feedientService, JSONObject jo) throws JSONException;
+    //public void addProvider(String accessToken, FeedientService feedientService, JSONObject jo) throws JSONException;
+
+    public void popup(Context context, final FeedientService feedientService, String accessToken);
 }

@@ -1,13 +1,23 @@
 package com.feedient.android.models.providers;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.util.Log;
+
 import com.feedient.android.activities.OAuth2Activity;
 import com.feedient.android.activities.OAuthActivity;
 import com.feedient.android.interfaces.FeedientService;
 import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.models.json.response.RemoveUserProvider;
+import com.feedient.oauth.OAuthDialog;
+import com.feedient.oauth.webview.WebViewCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -66,9 +76,8 @@ public class Facebook implements IProviderModel {
         return OAUTH_FRAGMENTS;
     }
 
-    @Override
-    public void addProvider(String accessToken, FeedientService feedientService, JSONObject jo) throws JSONException {
-        feedientService.addProviderFacebook(accessToken, NAME, jo.getString("oauth_code"), new Callback<RemoveUserProvider>() {
+    public void addProvider(String accessToken, FeedientService feedientService, String oAuthCode) {
+        feedientService.addProviderFacebook(accessToken, NAME, oAuthCode, new Callback<RemoveUserProvider>() {
             @Override
             public void success(RemoveUserProvider removeUserProvider, Response response) {
 
@@ -79,5 +88,22 @@ public class Facebook implements IProviderModel {
 
             }
         });
+    }
+
+    @Override
+    public void popup(Context context, final FeedientService feedientService, final String accessToken) {
+        // Create + open the OAuthDialog
+        OAuthDialog dialog = new OAuthDialog(context, OAUTH_URL, OAUTH_CALLBACK_URL, new WebViewCallback() {
+            @Override
+            public void onGotTokens(Dialog oAuthDialog, HashMap<String, String> tokens) {
+                addProvider(accessToken, feedientService, tokens.get("code"));
+
+                // close dialogs
+                oAuthDialog.dismiss();
+            }
+        });
+
+        dialog.setTitle("Add Provider");
+        dialog.show();
     }
 }
