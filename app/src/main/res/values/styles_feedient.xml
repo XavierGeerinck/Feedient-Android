@@ -29,6 +29,15 @@
         <item name="android:actionModeBackground">@drawable/cab_background_top_feedient</item>
         <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_feedient</item>
         <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Feedient</item>
+        <item name="android:alertDialogStyle">@style/DialogTheme.Feedient</item>
+    </style>
+
+    <style name="DialogTheme.Feedient" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:itemTextAppearance">@android:style/TextAppearance.Large.Inverse</item>
+        <item name="android:textAppearanceListItem">@android:style/TextAppearance.Large.Inverse</item>
+        <item name="android:textAppearanceListItemSmall">@android:style/TextAppearance.Large.Inverse</item>
     </style>
 
     <style name="ActionBar.Solid.Feedient" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">

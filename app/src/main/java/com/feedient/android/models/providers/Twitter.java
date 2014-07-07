@@ -4,19 +4,14 @@ import android.app.Dialog;
 import android.content.Context;
 import android.util.Log;
 
-import com.feedient.android.adapters.FeedientRestAdapter;
 import com.feedient.android.interfaces.FeedientService;
 import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.models.json.response.AddProvider;
 import com.feedient.oauth.OAuthDialog;
 import com.feedient.oauth.models.GetRequestToken;
-import com.feedient.android.models.json.response.RemoveUserProvider;
 import com.feedient.oauth.interfaces.IGetRequestTokenCallback;
 import com.feedient.oauth.interfaces.IOAuth1Provider;
 import com.feedient.oauth.webview.WebViewCallback;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -110,8 +105,6 @@ public class Twitter implements IProviderModel, IOAuth1Provider {
 
                 dialog.setTitle("Add Provider");
                 dialog.show();
-
-                Log.e("Feedient", "Got request token: " + requestToken.getoAuthToken());
             }
         });
 

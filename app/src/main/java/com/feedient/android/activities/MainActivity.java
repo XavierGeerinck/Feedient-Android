@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
@@ -204,7 +205,6 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         items.add(new GridItem("Tumblr", new Tumblr(this, mMainModel.getFeedientService(), accessToken)));
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Add Provider");
         builder.setView(customView);
 
         final AlertDialog pickProviderDialog = builder.create();
