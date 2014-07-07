@@ -4,17 +4,17 @@ import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.models.providers.*;
 
 public class ProviderHelper {
-    public static IProviderModel providerNameToClass(String providerName) {
+    public static Class providerNameToClass(String providerName) {
         if (providerName.equalsIgnoreCase("facebook")) {
-            return new Facebook();
+            return Facebook.class;
         }  else if (providerName.equalsIgnoreCase("twitter")) {
-            return new Twitter();
+            return Twitter.class;
         }  else if (providerName.equalsIgnoreCase("instagram")) {
-            return new Instagram();
+            return Instagram.class;
         }  else if (providerName.equalsIgnoreCase("youtube")) {
-            return new YouTube();
+            return YouTube.class;
         } else if (providerName.equalsIgnoreCase("tumblr")) {
-            return new Tumblr();
+            return Tumblr.class;
         }
 
         return null;

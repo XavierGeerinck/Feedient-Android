@@ -16,6 +16,14 @@ import com.feedient.android.models.json.feed.FeedPostList;
 import com.feedient.android.models.json.request.NewFeedPost;
 import com.feedient.android.models.json.response.RemoveUserProvider;
 import com.feedient.android.models.json.schema.FeedPost;
+import com.feedient.android.models.providers.Facebook;
+import com.feedient.android.models.providers.Instagram;
+import com.feedient.android.models.providers.Tumblr;
+import com.feedient.android.models.providers.Twitter;
+import com.feedient.android.models.providers.YouTube;
+import com.feedient.oauth.interfaces.IOAuth1Provider;
+import com.feedient.oauth.interfaces.IOAuth2Provider;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -33,6 +41,7 @@ public class MainModel extends Observable {
     private List<FeedPost> feedPosts;
     private Map<String, String> paginationKeys; // <userProviderId, since>
     private List<UserProvider> userProviders;
+    private HashMap<String, IProviderModel> providers;
     private Account account;
 
     private AssetsPropertyReader assetsPropertyReader;
@@ -40,6 +49,7 @@ public class MainModel extends Observable {
     private Properties configProperties;
     private SharedPreferences sharedPreferences;
     private FeedientService feedientService;
+    private String accessToken;
 
     private boolean isRefreshing;
 
@@ -58,13 +68,24 @@ public class MainModel extends Observable {
         sharedPreferences = context.getSharedPreferences(properties.getProperty("prefs.name"), Context.MODE_PRIVATE);
         feedientService = new FeedientRestAdapter(context).getService();
 
+        accessToken = sharedPreferences.getString(properties.getProperty("prefs.key.token"), "NO_ACCESS_TOKEN_FOUND");
         isRefreshing = false;
 
         timerInterval = Long.parseLong(configProperties.getProperty("auto_update_interval"));
+
+        initProviders();
+    }
+
+    private void initProviders() {
+        providers = new HashMap<String, IProviderModel>();
+        providers.put("facebook", new Facebook(context, getFeedientService(), accessToken));
+        providers.put("twitter", new Twitter(context, getFeedientService(), accessToken));
+        providers.put("instagram", new Instagram(context, getFeedientService(), accessToken));
+        providers.put("youtube", new YouTube(context, getFeedientService(), accessToken));
+        providers.put("tumblr", new Tumblr(context, getFeedientService(), accessToken));
     }
 
     public void loadUser() {
-        final String accessToken = sharedPreferences.getString(properties.getProperty("prefs.key.token"), "NO_ACCESS_TOKEN_FOUND");
         feedientService.getAccount(accessToken, new Callback<Account>() {
             @Override
             public void success(Account account, Response response) {
@@ -85,7 +106,6 @@ public class MainModel extends Observable {
      * Loads the last X posts of the user
      */
     public void loadFeeds() {
-        final String accessToken = sharedPreferences.getString(properties.getProperty("prefs.key.token"), "NO_ACCESS_TOKEN_FOUND");
         feedientService.getProviders(accessToken, new Callback<List<UserProvider>>() {
             @Override
             public void success(List<UserProvider> userProviders, Response response) {
@@ -152,7 +172,6 @@ public class MainModel extends Observable {
             }
         }
 
-        final String accessToken = sharedPreferences.getString(properties.getProperty("prefs.key.token"), "NO_ACCESS_TOKEN_FOUND");
         feedientService.getNewerPosts(accessToken, newFeedPosts, new Callback<FeedPostList>() {
             @Override
             public void success(FeedPostList feedPostList, Response response) {
@@ -215,7 +234,6 @@ public class MainModel extends Observable {
     }
 
     public void removeUserProvider(UserProvider up) {
-        final String accessToken = sharedPreferences.getString(properties.getProperty("prefs.key.token"), "NO_ACCESS_TOKEN_FOUND");
         feedientService.removeUserProvider(accessToken, up.getId(), new Callback<RemoveUserProvider>() {
             @Override
             public void success(RemoveUserProvider rup, Response response) {
@@ -270,8 +288,18 @@ public class MainModel extends Observable {
     }
 
     public void addProvider(IProviderModel provider) {
-        final String accessToken = sharedPreferences.getString(properties.getProperty("prefs.key.token"), "NO_ACCESS_TOKEN_FOUND");
+        provider.popup(context, accessToken);
+    }
 
-        provider.popup(context, feedientService, accessToken);
+    public FeedientService getFeedientService() {
+        return feedientService;
+    }
+
+    public HashMap<String, IProviderModel> getProviders() {
+        return providers;
+    }
+
+    public String getAccessToken() {
+        return sharedPreferences.getString(properties.getProperty("prefs.key.token"), "NO_ACCESS_TOKEN_FOUND");
     }
 }

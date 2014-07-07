@@ -105,7 +105,7 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         mListView.setAdapter(mItemArrayAdapter);
 
         // Set the adapter for our drawer list
-        mDrawerItemAdapter = new DrawerItemAdapter(this, mMainModel.getUserProviders());
+        mDrawerItemAdapter = new DrawerItemAdapter(this, mMainModel.getUserProviders(), mMainModel.getProviders());
         mDrawerList.setAdapter(mDrawerItemAdapter);
 
         mPullToRefreshLayout = (PullToRefreshLayout)findViewById(R.id.swipe_container);
@@ -194,14 +194,14 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         // Second dialog
         // Close the dialog for picking the provider
 
-
+        String accessToken = mMainModel.getAccessToken();
         View customView = LayoutInflater.from(this).inflate(R.layout.dialog_grid, null);
         final List<GridItem> items = new ArrayList<GridItem>();
-        items.add(new GridItem("Facebook", new Facebook()));
-        items.add(new GridItem("Twitter", new Twitter()));
-        items.add(new GridItem("Instagram", new Instagram()));
-        items.add(new GridItem("Youtube", new YouTube()));
-        items.add(new GridItem("Tumblr", new Tumblr()));
+        items.add(new GridItem("Facebook", new Facebook(this, mMainModel.getFeedientService(), accessToken)));
+        items.add(new GridItem("Twitter", new Twitter(this, mMainModel.getFeedientService(), accessToken)));
+        items.add(new GridItem("Instagram", new Instagram(this, mMainModel.getFeedientService(), accessToken)));
+        items.add(new GridItem("Youtube", new YouTube(this, mMainModel.getFeedientService(), accessToken)));
+        items.add(new GridItem("Tumblr", new Tumblr(this, mMainModel.getFeedientService(), accessToken)));
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add Provider");
@@ -222,7 +222,6 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
                 pickProviderDialog.dismiss();
             }
         });
-
     }
 
     public ItemArrayAdapter getmItemArrayAdapter() {

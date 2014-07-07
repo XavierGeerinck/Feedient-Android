@@ -13,14 +13,18 @@ import com.feedient.android.helpers.ImageLoaderHelper;
 import com.feedient.android.helpers.ProviderHelper;
 import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.models.json.UserProvider;
+import com.feedient.oauth.interfaces.IOAuth1Provider;
 import com.joanzapata.android.iconify.Iconify;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.List;
 
 public class DrawerItemAdapter extends ArrayAdapter<UserProvider> {
     private final Context context;
     private final List<UserProvider> userProviders;
+    private final HashMap<String, IProviderModel> providers;
     private final ImageLoader imageLoader;
     private final LayoutInflater layoutInflater;
 
@@ -33,10 +37,11 @@ public class DrawerItemAdapter extends ArrayAdapter<UserProvider> {
         ImageButton imgBtnRemoveProvider;
     }
 
-    public DrawerItemAdapter(Context context, List<UserProvider> userProviders) {
+    public DrawerItemAdapter(Context context, List<UserProvider> userProviders, HashMap<String, IProviderModel> providers) {
         super(context, R.layout.view_main, userProviders);
 
         this.context = context;
+        this.providers = providers;
         this.userProviders = userProviders;
         this.imageLoader = ImageLoaderHelper.getImageLoader(context);
         this.layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -66,10 +71,10 @@ public class DrawerItemAdapter extends ArrayAdapter<UserProvider> {
         }
 
         if (viewHolder.userProvider != null) {
-            IProviderModel providerModel = ProviderHelper.providerNameToClass(viewHolder.userProvider.getProviderAccount().getName());
 
-            if (providerModel != null) {
-                viewHolder.txtProviderIcon.setText("{" + providerModel.getIcon() + "}");
+
+            if (viewHolder.userProvider.getProviderAccount() != null) {
+                viewHolder.txtProviderIcon.setText("{" + providers.get(viewHolder.userProvider.getProviderAccount().getName().toLowerCase()).getIcon() + "}");
             }
 
             if (viewHolder.userProvider.getProviderAccount().getUsername() != null) {

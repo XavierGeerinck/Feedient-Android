@@ -2,11 +2,10 @@ package com.feedient.android.models.providers;
 
 import android.content.Context;
 
-import com.feedient.android.activities.OAuth2Activity;
-import com.feedient.android.activities.OAuthActivity;
 import com.feedient.android.interfaces.FeedientService;
 import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.models.json.response.RemoveUserProvider;
+import com.feedient.oauth.interfaces.IOAuth2Provider;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,7 +14,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class YouTube implements IProviderModel {
+public class YouTube implements IProviderModel, IOAuth2Provider {
     public static final String NAME = "youtube";
     public static final String TEXT_COLOR = "#b31217";
     public static final String ICON = "fa-youtube-square";
@@ -24,8 +23,14 @@ public class YouTube implements IProviderModel {
     public static final String OAUTH_URL = "https://accounts.google.com/o/oauth2/auth?client_id=" + APP_ID + "&response_type=code&scope=https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube&access_type=offline&approval_prompt=force&redirect_uri=" + OAUTH_CALLBACK_URL;
     public static final String[] OAUTH_FRAGMENTS = { "oauth_code" };
 
-    public YouTube() {
+    private Context context;
+    private FeedientService feedientService;
+    private String accessToken;
 
+    public YouTube(Context context, FeedientService feedientService, String accessToken) {
+        this.context = context;
+        this.feedientService = feedientService;
+        this.accessToken = accessToken;
     }
 
     @Override
@@ -41,11 +46,6 @@ public class YouTube implements IProviderModel {
     @Override
     public String getName() {
         return NAME;
-    }
-
-    @Override
-    public Class getOauthActivityClass() {
-        return OAuth2Activity.class;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class YouTube implements IProviderModel {
         return OAUTH_FRAGMENTS;
     }
 
-    public void addProvider(String accessToken, FeedientService feedientService, JSONObject jo) throws JSONException {
+    public void addProvider(String accessToken, JSONObject jo) throws JSONException {
         feedientService.addProviderFacebook(accessToken, NAME, jo.getString("oauth_code"), new Callback<RemoveUserProvider>() {
             @Override
             public void success(RemoveUserProvider removeUserProvider, Response response) {
@@ -83,7 +83,7 @@ public class YouTube implements IProviderModel {
     }
 
     @Override
-    public void popup(Context context, final FeedientService feedientService, String accessToken) {
+    public void popup(Context context, final String accessToken) {
 
     }
 }

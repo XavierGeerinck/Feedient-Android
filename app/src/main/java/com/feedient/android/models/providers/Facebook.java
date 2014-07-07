@@ -2,28 +2,22 @@ package com.feedient.android.models.providers;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.util.Log;
 
-import com.feedient.android.activities.OAuth2Activity;
-import com.feedient.android.activities.OAuthActivity;
 import com.feedient.android.interfaces.FeedientService;
 import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.models.json.response.RemoveUserProvider;
 import com.feedient.oauth.OAuthDialog;
+import com.feedient.oauth.interfaces.IGetRequestTokenCallback;
+import com.feedient.oauth.interfaces.IOAuth2Provider;
 import com.feedient.oauth.webview.WebViewCallback;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class Facebook implements IProviderModel {
+public class Facebook implements IProviderModel, IOAuth2Provider {
     public static final String NAME = "facebook";
     public static final String TEXT_COLOR = "#3b5998";
     public static final String ICON = "fa-facebook-square";
@@ -32,13 +26,14 @@ public class Facebook implements IProviderModel {
     public static final String OAUTH_URL = "https://facebook.com/v2.0/dialog/oauth?client_id=" + APP_ID + "&display=popup&scope=read_stream,manage_notifications,publish_actions,publish_stream,user_photos,friends_photos,friends_likes,friends_videos,friends_status,friends_relationship_details,user_photos&redirect_uri=" + OAUTH_CALLBACK_URL;
     public static final String[] OAUTH_FRAGMENTS = { "oauth_code" };
 
-    public Facebook() {
+    private Context context;
+    private FeedientService feedientService;
+    private String accessToken;
 
-    }
-
-    @Override
-    public Class getOauthActivityClass() {
-        return OAuth2Activity.class;
+    public Facebook(Context context, FeedientService feedientService, String accessToken) {
+        this.context = context;
+        this.feedientService = feedientService;
+        this.accessToken = accessToken;
     }
 
     @Override
@@ -91,7 +86,7 @@ public class Facebook implements IProviderModel {
     }
 
     @Override
-    public void popup(Context context, final FeedientService feedientService, final String accessToken) {
+    public void popup(Context context, final String accessToken) {
         // Create + open the OAuthDialog
         OAuthDialog dialog = new OAuthDialog(context, OAUTH_URL, OAUTH_CALLBACK_URL, new WebViewCallback() {
             @Override

@@ -3,12 +3,13 @@ package com.feedient.android.interfaces;
 import com.feedient.android.models.json.Account;
 import com.feedient.android.models.json.feed.FeedPostList;
 import com.feedient.android.models.json.request.NewFeedPost;
+import com.feedient.android.models.json.response.AddProvider;
+import com.feedient.oauth.models.GetRequestToken;
 import com.feedient.android.models.json.response.RemoveUserProvider;
-import com.feedient.android.models.json.schema.FeedPost;
 import com.feedient.android.models.json.feed.FeedResult;
 import com.feedient.android.models.json.UserProvider;
 import com.feedient.android.models.json.UserSession;
-import org.json.JSONObject;
+
 import retrofit.Callback;
 import retrofit.http.*;
 
@@ -42,4 +43,11 @@ public interface FeedientService {
     @FormUrlEncoded
     @POST("/provider/{name}/callback")
     void addProviderFacebook(@Header("Bearer")String accessToken, @Path("name")String providerName, @Field("oauth_code")String oauthCode, Callback<RemoveUserProvider> cb);
+
+    @FormUrlEncoded
+    @POST("/provider/{name}/callback")
+    void addOAuth1Provider(@Header("Bearer")String accessToken, @Path("name")String providerName, @Field("oauth_secret")String oAuthSecret, @Field("oauth_token")String oAuthToken, @Field("oauth_verifier")String oAuthVerifier, Callback<AddProvider> cb);
+
+    @GET("/provider/{name}/request_token")
+    void getRequestToken(@Header("Bearer")String accessToken, @Path("name")String providerName, Callback<GetRequestToken> cb);
 }

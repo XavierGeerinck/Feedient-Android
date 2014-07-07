@@ -2,10 +2,11 @@ package com.feedient.android.models.providers;
 
 import android.content.Context;
 
-import com.feedient.android.activities.OAuthActivity;
 import com.feedient.android.interfaces.FeedientService;
 import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.models.json.response.RemoveUserProvider;
+import com.feedient.oauth.interfaces.IGetRequestTokenCallback;
+import com.feedient.oauth.interfaces.IOAuth1Provider;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,7 +15,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class Tumblr implements IProviderModel {
+public class Tumblr implements IProviderModel, IOAuth1Provider {
     public static final String NAME = "tumblr";
     public static final String TEXT_COLOR = "#35465c";
     public static final String ICON = "fa-tumblr";
@@ -23,8 +24,14 @@ public class Tumblr implements IProviderModel {
     public static final String OAUTH_URL = "http://www.tumblr.com/oauth/authorize?oauth_token="; //@todo: Needs Request Token
     public static final String[] OAUTH_FRAGMENTS = { "oauth_token", "oauth_verifier" };
 
-    public Tumblr() {
+    private Context context;
+    private FeedientService feedientService;
+    private String accessToken;
 
+    public Tumblr(Context context, FeedientService feedientService, String accessToken) {
+        this.context = context;
+        this.feedientService = feedientService;
+        this.accessToken = accessToken;
     }
 
     @Override
@@ -40,11 +47,6 @@ public class Tumblr implements IProviderModel {
     @Override
     public String getName() {
         return NAME;
-    }
-
-    @Override
-    public Class getOauthActivityClass() {
-        return OAuthActivity.class;
     }
 
     @Override
@@ -82,7 +84,12 @@ public class Tumblr implements IProviderModel {
     }
 
     @Override
-    public void popup(Context context, final FeedientService feedientService, String accessToken) {
+    public void popup(Context context, final String accessToken) {
+
+    }
+
+    @Override
+    public void getRequestToken(IGetRequestTokenCallback callback) {
 
     }
 }
