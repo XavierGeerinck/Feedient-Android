@@ -12,6 +12,9 @@
     <string name="dialog_remove_user_provider_message">Are you sure you want to remove this userprovider?</string>
     <string name="dialog_remove_user_provider_title">Delete Confirmation</string>
     <string name="dialog_txt_choose_provider">Choose A Provider</string>
+    <string name="dialog_sign_out_title">Sign out confirmation</string>
+    <string name="dialog_sign_out_message">Are you sure you wish to sign out?</string>
+    <string name="choice_confirm">Yes</string>
 
     <!--
         FontAwesome 4.1.0

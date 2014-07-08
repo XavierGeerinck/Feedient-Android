@@ -128,6 +128,42 @@
                 android:layout_marginLeft="15dp"/>
 
         </RelativeLayout>
+
+        <!-- Logout -->
+        <RelativeLayout
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:onClick="onClickLogout">
+
+            <!-- Icon -->
+            <IconTextView
+                android:id="@+id/txt_logout_icon"
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:textSize="22sp"
+                android:textColor="#626262"
+                android:text="{fa-sign-out}"/>
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/txr_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/txt_logout_icon"
+                android:text="Sign out"
+                android:textColor="#626262"
+                android:typeface="sans"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginLeft="15dp"/>
+
+        </RelativeLayout>
     </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>

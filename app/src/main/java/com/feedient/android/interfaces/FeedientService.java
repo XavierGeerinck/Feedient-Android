@@ -2,8 +2,8 @@ package com.feedient.android.interfaces;
 
 import com.feedient.android.models.json.Account;
 import com.feedient.android.models.json.feed.FeedPostList;
-import com.feedient.android.models.json.request.NewFeedPost;
 import com.feedient.android.models.json.response.AddProvider;
+import com.feedient.android.models.json.response.Logout;
 import com.feedient.oauth.models.GetRequestToken;
 import com.feedient.android.models.json.response.RemoveUserProvider;
 import com.feedient.android.models.json.feed.FeedResult;
@@ -52,4 +52,7 @@ public interface FeedientService {
 
     @GET("/provider/{name}/request_token")
     void getRequestToken(@Header("Bearer")String accessToken, @Path("name")String providerName, Callback<GetRequestToken> cb);
+
+    @GET("/logout")
+    void logout(@Header("Bearer")String accessToken, Callback<Logout> cb);
 }

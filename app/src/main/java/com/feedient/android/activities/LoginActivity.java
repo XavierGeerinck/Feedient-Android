@@ -36,7 +36,7 @@ public class LoginActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        setContentView(R.layout.view_login);
 
         assetsPropertyReader = new AssetsPropertyReader(this);
         properties = assetsPropertyReader.getProperties("shared_preferences.properties");
@@ -57,8 +57,6 @@ public class LoginActivity extends Activity {
     }
 
     public void login(View view) {
-        Toast.makeText(getApplicationContext(), "Calling URL with: " + email.getText().toString(), Toast.LENGTH_LONG).show();
-
         feedientService.authorizeUser(email.getText().toString(), password.getText().toString(), new Callback<UserSession>() {
             @Override
             public void success(UserSession userSession, Response response) {
@@ -66,7 +64,7 @@ public class LoginActivity extends Activity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString(properties.getProperty("prefs.key.token"), userSession.getToken());
                 editor.putString(properties.getProperty("prefs.key.uid"), userSession.getUid());
-                editor.commit();
+                editor.apply();
 
                 openViewAllFeedsActivity();
             }
@@ -80,8 +78,8 @@ public class LoginActivity extends Activity {
     }
 
     public void openViewAllFeedsActivity() {
-        // Load the ViewAllFeeds activity
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
+        finish(); // close current intent
     }
 }

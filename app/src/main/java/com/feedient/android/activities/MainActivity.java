@@ -30,6 +30,7 @@ import com.feedient.android.models.GridItem;
 import com.feedient.android.models.MainModel;
 
 import com.feedient.android.models.json.UserProvider;
+import com.feedient.android.models.json.response.Logout;
 import com.feedient.android.models.providers.Facebook;
 import com.feedient.android.models.providers.Instagram;
 import com.feedient.android.models.providers.Tumblr;
@@ -41,6 +42,9 @@ import com.feedient.oauth.webview.WebViewCallback;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
@@ -162,14 +166,44 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                checkLoggedIn();
+
                 mItemArrayAdapter.notifyDataSetChanged();
                 mDrawerItemAdapter.notifyDataSetChanged();
                 mPullToRefreshLayout.setRefreshing(mMainModel.isRefreshing());
                 mTxtDrawerUserEmail.setText(mMainModel.getAccount().getEmail());
                 mTxtDrawerUserRole.setText(mMainModel.getAccount().getRole());
-
             }
         });
+    }
+
+    private void checkLoggedIn() {
+        if (mMainModel.getAccessToken() == null || mMainModel.getAccessToken().equals("")) {
+            openLoginActivity();
+        }
+    }
+
+    public void onClickLogout(final View v) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.dialog_sign_out_title)
+                .setMessage(R.string.dialog_sign_out_message)
+                .setPositiveButton(R.string.choice_confirm, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    mMainModel.logout();
+                    }
+                })
+                .setNegativeButton(R.string.choice_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                })
+                .show();
+    }
+
+    private void openLoginActivity() {
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish(); // close current intent
     }
 
     public void onClickRemoveUserProvider(final View v) {

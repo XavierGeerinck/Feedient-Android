@@ -13,6 +13,7 @@ import com.feedient.android.models.json.UserProvider;
 import com.feedient.android.models.json.feed.BulkPagination;
 import com.feedient.android.models.json.feed.FeedPostList;
 import com.feedient.android.models.json.request.NewFeedPost;
+import com.feedient.android.models.json.response.Logout;
 import com.feedient.android.models.json.response.RemoveUserProvider;
 import com.feedient.android.models.json.schema.FeedPost;
 import com.feedient.android.models.providers.Facebook;
@@ -65,7 +66,7 @@ public class MainModel extends Observable {
         sharedPreferences = context.getSharedPreferences(properties.getProperty("prefs.name"), Context.MODE_PRIVATE);
         feedientService = new FeedientRestAdapter(context).getService();
 
-        accessToken = sharedPreferences.getString(properties.getProperty("prefs.key.token"), "NO_ACCESS_TOKEN_FOUND");
+        accessToken = sharedPreferences.getString(properties.getProperty("prefs.key.token"), "");
         isRefreshing = false;
 
         timerInterval = Long.parseLong(configProperties.getProperty("auto_update_interval"));
@@ -94,7 +95,8 @@ public class MainModel extends Observable {
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                Log.e("Feedient", retrofitError.getMessage());
+                accessToken = "";
+                _triggerObservers();
             }
         });
     }
@@ -214,6 +216,30 @@ public class MainModel extends Observable {
         }, timerInterval);
     }
 
+    public void logout() {
+        feedientService.logout(this.accessToken, new Callback<Logout>() {
+            @Override
+            public void success(Logout logout, Response response) {
+                _removeAccessToken();
+                _triggerObservers();
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                _removeAccessToken();
+                _triggerObservers();
+                Log.e("Feedient", "Could not remove accessToken from server");
+            }
+        });
+    }
+
+    private void _removeAccessToken() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(properties.getProperty("prefs.key.token"));
+        editor.apply();
+        accessToken = "";
+    }
+
     private void _triggerObservers() {
         setChanged();
         notifyObservers();
@@ -266,6 +292,6 @@ public class MainModel extends Observable {
     }
 
     public String getAccessToken() {
-        return sharedPreferences.getString(properties.getProperty("prefs.key.token"), "NO_ACCESS_TOKEN_FOUND");
+        return sharedPreferences.getString(properties.getProperty("prefs.key.token"), "");
     }
 }
