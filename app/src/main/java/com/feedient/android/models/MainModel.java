@@ -21,6 +21,7 @@ import com.feedient.android.models.providers.Tumblr;
 import com.feedient.android.models.providers.Twitter;
 import com.feedient.android.models.providers.YouTube;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 
 import retrofit.Callback;
@@ -105,17 +106,17 @@ public class MainModel extends Observable {
         feedientService.getProviders(accessToken, new Callback<List<UserProvider>>() {
             @Override
             public void success(List<UserProvider> userProviders, Response response) {
-                List<String> listUserProviders = new ArrayList<String>();
+                JSONArray userProviderIds = new JSONArray();
 
                 for (UserProvider up : userProviders) {
-                    listUserProviders.add(up.getId());
+                    userProviderIds.put(up.getId());
                     MainModel.this.userProviders.add(up);
                 }
 
                 _triggerObservers();
 
                 // Get all the feeds
-                feedientService.getFeeds(accessToken, listUserProviders, new Callback<FeedPostList>() {
+                feedientService.getFeeds(accessToken, userProviderIds, new Callback<FeedPostList>() {
                     @Override
                     public void success(FeedPostList feedPostList, Response response) {
                         // Set the posts
@@ -153,16 +154,15 @@ public class MainModel extends Observable {
         isRefreshing = true;
         _triggerObservers();
 
-        List<NewFeedPost> newFeedPosts = new ArrayList<NewFeedPost>();
+        JSONArray newFeedPosts = new JSONArray();
 
         // Get the last posts for every provider, and add the since key
         for (UserProvider up : userProviders) {
             String userProviderId = up.getId();
             String since = paginationKeys.get(up.getId());
 
-            Log.e("Feedient", "Since: " + since);
             try {
-                newFeedPosts.add(new NewFeedPost(userProviderId, since));
+                newFeedPosts.put(new NewFeedPost(userProviderId, since));
             } catch (JSONException e) {
                 Log.e("Feedient", e.getMessage());
             }

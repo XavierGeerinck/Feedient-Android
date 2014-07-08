@@ -10,6 +10,8 @@ import com.feedient.android.models.json.feed.FeedResult;
 import com.feedient.android.models.json.UserProvider;
 import com.feedient.android.models.json.UserSession;
 
+import org.json.JSONArray;
+
 import retrofit.Callback;
 import retrofit.http.*;
 
@@ -31,11 +33,11 @@ public interface FeedientService {
 
     @FormUrlEncoded
     @POST("/providers/feed")
-    void getFeeds(@Header("Bearer")String accessToken, @Field("providers")List<String> providers, Callback<FeedPostList> cb);
+    void getFeeds(@Header("Bearer")String accessToken, @Field("providers")JSONArray providers, Callback<FeedPostList> cb);
 
     @FormUrlEncoded
     @POST("/providers/feed/new")
-    void getNewerPosts(@Header("Bearer")String accessToken, @Field("objects")List<NewFeedPost> objects, Callback<FeedPostList> cb);
+    void getNewerPosts(@Header("Bearer")String accessToken, @Field("objects")JSONArray objects, Callback<FeedPostList> cb);
 
     @DELETE("/provider/{id}")
     void removeUserProvider(@Header("Bearer")String accessToken, @Path("id")String providerId, Callback<RemoveUserProvider> cb);

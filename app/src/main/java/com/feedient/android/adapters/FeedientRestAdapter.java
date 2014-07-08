@@ -3,16 +3,15 @@ package com.feedient.android.adapters;
 import android.content.Context;
 
 import com.feedient.android.adapters.gson.ISODateAdapter;
-import com.feedient.android.adapters.gson.List1ElementAsArrayAdapter;
 import com.feedient.android.data.AssetsPropertyReader;
 import com.feedient.android.interfaces.FeedientService;
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Properties;
 
 public class FeedientRestAdapter {
@@ -28,8 +27,8 @@ public class FeedientRestAdapter {
 
         // Custom GSON Converter to accept javascript dates
         GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
         gsonBuilder.registerTypeAdapter(Date.class, new ISODateAdapter()); // Correct date parsing
-        gsonBuilder.registerTypeAdapter(List.class, new List1ElementAsArrayAdapter()); // Correct List Deserializing parsing
 
         Gson gson = gsonBuilder.create();
 
