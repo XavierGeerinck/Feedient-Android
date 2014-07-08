@@ -26,7 +26,6 @@ public class Twitter implements IProviderModel, IOAuth1Provider {
     public static final String APP_ID = "D3VvaK6rZpJ43H3Wreirg";
     public static final String OAUTH_CALLBACK_URL = "http://test.feedient.com/app/callback/twitter";
     public static final String OAUTH_URL = "https://api.twitter.com/oauth/authorize?oauth_token=";
-    public static final String[] OAUTH_FRAGMENTS = { "oauth_token", "oauth_verifier" };
 
     private FeedientService feedientService;
     private Context context;
@@ -66,11 +65,6 @@ public class Twitter implements IProviderModel, IOAuth1Provider {
     @Override
     public String getOauthUrl() {
         return OAUTH_URL;
-    }
-
-    @Override
-    public String[] getOauthFragments() {
-        return OAUTH_FRAGMENTS;
     }
 
     public void addProvider(String accessToken, FeedientService feedientService, String requestSecret, String oAuthToken, String oAuthVerifier) {

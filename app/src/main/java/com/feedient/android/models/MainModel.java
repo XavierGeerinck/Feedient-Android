@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.util.Log;
 import com.feedient.android.adapters.FeedientRestAdapter;
 import com.feedient.android.data.AssetsPropertyReader;
-import com.feedient.android.helpers.ProviderHelper;
 import com.feedient.android.interfaces.FeedientService;
 import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.models.json.Account;
@@ -21,11 +20,8 @@ import com.feedient.android.models.providers.Instagram;
 import com.feedient.android.models.providers.Tumblr;
 import com.feedient.android.models.providers.Twitter;
 import com.feedient.android.models.providers.YouTube;
-import com.feedient.oauth.interfaces.IOAuth1Provider;
-import com.feedient.oauth.interfaces.IOAuth2Provider;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -109,17 +105,17 @@ public class MainModel extends Observable {
         feedientService.getProviders(accessToken, new Callback<List<UserProvider>>() {
             @Override
             public void success(List<UserProvider> userProviders, Response response) {
-                // Get the providerIds
-                List<String> providerIds = new ArrayList<String>();
+                List<String> listUserProviders = new ArrayList<String>();
+
                 for (UserProvider up : userProviders) {
+                    listUserProviders.add(up.getId());
                     MainModel.this.userProviders.add(up);
-                    providerIds.add(up.getId());
                 }
 
                 _triggerObservers();
 
                 // Get all the feeds
-                feedientService.getFeeds(accessToken, providerIds, new Callback<FeedPostList>() {
+                feedientService.getFeeds(accessToken, listUserProviders, new Callback<FeedPostList>() {
                     @Override
                     public void success(FeedPostList feedPostList, Response response) {
                         // Set the posts
@@ -223,16 +219,6 @@ public class MainModel extends Observable {
         notifyObservers();
     }
 
-    public FeedPost getLastPostProvider(String providerId) {
-        for (FeedPost fp : feedPosts) {
-            if (fp.getProvider().getId().equals(providerId)) {
-                return fp;
-            }
-        }
-
-        return null;
-    }
-
     public void removeUserProvider(UserProvider up) {
         feedientService.removeUserProvider(accessToken, up.getId(), new Callback<RemoveUserProvider>() {
             @Override
@@ -247,28 +233,12 @@ public class MainModel extends Observable {
         });
     }
 
-    public int getNewNotifications() {
-        return newNotifications;
-    }
-
-    public void setNewNotifications(int newNotifications) {
-        this.newNotifications = newNotifications;
-    }
-
     public List<FeedPost> getFeedPosts() {
         return feedPosts;
     }
 
-    public void setFeedPosts(List<FeedPost> feedPosts) {
-        this.feedPosts = feedPosts;
-    }
-
     public List<UserProvider> getUserProviders() {
         return userProviders;
-    }
-
-    public void setUserProviders(List<UserProvider> userProviders) {
-        this.userProviders = userProviders;
     }
 
     public boolean isRefreshing() {
@@ -281,10 +251,6 @@ public class MainModel extends Observable {
 
     public Account getAccount() {
         return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
     }
 
     public void addProvider(IProviderModel provider) {

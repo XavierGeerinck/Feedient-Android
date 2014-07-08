@@ -25,6 +25,7 @@ import com.feedient.android.R;
 import com.feedient.android.adapters.DrawerItemAdapter;
 import com.feedient.android.adapters.GridItemAdapter;
 import com.feedient.android.adapters.ItemArrayAdapter;
+import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.models.GridItem;
 import com.feedient.android.models.MainModel;
 
@@ -191,18 +192,12 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
     }
 
     public void onClickAddUserProvider(View v) {
-        // Show popup to pick provider
-        // Second dialog
-        // Close the dialog for picking the provider
-
-        String accessToken = mMainModel.getAccessToken();
         View customView = LayoutInflater.from(this).inflate(R.layout.dialog_grid, null);
         final List<GridItem> items = new ArrayList<GridItem>();
-        items.add(new GridItem("Facebook", new Facebook(this, mMainModel.getFeedientService(), accessToken)));
-        items.add(new GridItem("Twitter", new Twitter(this, mMainModel.getFeedientService(), accessToken)));
-        items.add(new GridItem("Instagram", new Instagram(this, mMainModel.getFeedientService(), accessToken)));
-        items.add(new GridItem("Youtube", new YouTube(this, mMainModel.getFeedientService(), accessToken)));
-        items.add(new GridItem("Tumblr", new Tumblr(this, mMainModel.getFeedientService(), accessToken)));
+
+        for (IProviderModel provider : mMainModel.getProviders().values()) {
+            items.add(new GridItem(provider.getName(), provider));
+        }
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(customView);
@@ -222,14 +217,6 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
                 pickProviderDialog.dismiss();
             }
         });
-    }
-
-    public ItemArrayAdapter getmItemArrayAdapter() {
-        return mItemArrayAdapter;
-    }
-
-    public void setmItemArrayAdapter(ItemArrayAdapter mItemArrayAdapter) {
-        this.mItemArrayAdapter = mItemArrayAdapter;
     }
 
     @Override

@@ -2,9 +2,11 @@ package com.feedient.android.models.providers;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.util.Log;
 
 import com.feedient.android.interfaces.FeedientService;
 import com.feedient.android.interfaces.IProviderModel;
+import com.feedient.android.models.json.response.AddProvider;
 import com.feedient.android.models.json.response.RemoveUserProvider;
 import com.feedient.oauth.OAuthDialog;
 import com.feedient.oauth.interfaces.IOAuth2Provider;
@@ -23,7 +25,6 @@ public class Instagram implements IProviderModel, IOAuth2Provider {
     public static final String APP_ID = "23320322e2744f9a85f30e807b8f860b";
     public static final String OAUTH_CALLBACK_URL = "http://test.feedient.com/app/callback/instagram";
     public static final String OAUTH_URL = "https://api.instagram.com/oauth/authorize?client_id=" + APP_ID + "&response_type=code&scope=basic+comments+relationships+likes&redirect_uri=" + OAUTH_CALLBACK_URL;
-    public static final String[] OAUTH_FRAGMENTS = { "oauth_code" };
 
     private FeedientService feedientService;
     private Context context;
@@ -65,16 +66,11 @@ public class Instagram implements IProviderModel, IOAuth2Provider {
         return OAUTH_URL;
     }
 
-    @Override
-    public String[] getOauthFragments() {
-        return OAUTH_FRAGMENTS;
-    }
-
     public void addProvider(String accessToken, FeedientService feedientService, String oAuthCode) {
-        feedientService.addProviderFacebook(accessToken, NAME, oAuthCode, new Callback<RemoveUserProvider>() {
+        feedientService.addOAuth2Provider(accessToken, NAME, oAuthCode, new Callback<AddProvider>() {
             @Override
-            public void success(RemoveUserProvider removeUserProvider, Response response) {
-
+            public void success(AddProvider addProvider, Response response) {
+                Log.e("Feedient", "isSuccess: " + addProvider.isSuccess());
             }
 
             @Override
