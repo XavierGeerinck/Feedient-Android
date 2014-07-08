@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
 import com.feedient.android.adapters.FeedientRestAdapter;
+import com.feedient.android.cards.FeedItemCard;
 import com.feedient.android.data.AssetsPropertyReader;
 import com.feedient.android.interfaces.FeedientService;
 import com.feedient.android.interfaces.IProviderModel;
@@ -25,6 +26,7 @@ import com.feedient.android.models.providers.YouTube;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import it.gmariotti.cardslib.library.internal.Card;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -36,7 +38,7 @@ public class MainModel extends Observable {
 
     private final long timerInterval;
     private int newNotifications;
-    private List<FeedPost> feedPosts;
+    private List<Card> feedPostCards;
     private Map<String, String> paginationKeys; // <userProviderId, since>
     private List<UserProvider> userProviders;
     private HashMap<String, IProviderModel> providers;
@@ -54,7 +56,7 @@ public class MainModel extends Observable {
     public MainModel(Context context) {
         this.context = context;
 
-        feedPosts = new ArrayList<FeedPost>();
+        feedPostCards = new ArrayList<Card>();
         paginationKeys = new HashMap<String, String>();
         userProviders = new ArrayList<UserProvider>();
         account = new Account();
@@ -123,7 +125,7 @@ public class MainModel extends Observable {
                     public void success(FeedPostList feedPostList, Response response) {
                         // Set the posts
                         for (FeedPost fp : feedPostList.getFeedPosts()) {
-                            MainModel.this.feedPosts.add(fp);
+                            MainModel.this.feedPostCards.add(new FeedItemCard(context, fp));
                         }
 
                         // Set the paginations
@@ -177,7 +179,7 @@ public class MainModel extends Observable {
                 // Add posts to the beginning (Start at the end of the array for ordering)
                 for (int i = feedPostList.getFeedPosts().size() - 1; i >= 0; i--) {
                     FeedPost fp = feedPostList.getFeedPosts().get(i);
-                    MainModel.this.feedPosts.add(0, fp);
+                    MainModel.this.feedPostCards.add(0, new FeedItemCard(context, fp));
                 }
 
                 // Set the paginations
@@ -259,8 +261,8 @@ public class MainModel extends Observable {
         });
     }
 
-    public List<FeedPost> getFeedPosts() {
-        return feedPosts;
+    public List<Card> getFeedPostCards() {
+        return feedPostCards;
     }
 
     public List<UserProvider> getUserProviders() {

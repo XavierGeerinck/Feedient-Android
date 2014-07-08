@@ -1,6 +1,5 @@
 package com.feedient.android.interfaces;
 
-import com.feedient.android.adapters.ItemArrayAdapter;
 import com.feedient.android.models.json.schema.FeedPost;
 
 import java.util.List;

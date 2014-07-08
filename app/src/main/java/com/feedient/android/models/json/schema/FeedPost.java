@@ -2,6 +2,8 @@ package com.feedient.android.models.json.schema;
 
 import com.google.gson.annotations.SerializedName;
 
+import it.gmariotti.cardslib.library.internal.Card;
+
 public class FeedPost {
     @SerializedName("id")
     private String id;

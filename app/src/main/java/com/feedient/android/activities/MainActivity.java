@@ -2,21 +2,17 @@ package com.feedient.android.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
@@ -24,45 +20,29 @@ import android.widget.TextView;
 import com.feedient.android.R;
 import com.feedient.android.adapters.DrawerItemAdapter;
 import com.feedient.android.adapters.GridItemAdapter;
-import com.feedient.android.adapters.ItemArrayAdapter;
 import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.models.GridItem;
 import com.feedient.android.models.MainModel;
 
 import com.feedient.android.models.json.UserProvider;
-import com.feedient.android.models.json.response.Logout;
-import com.feedient.android.models.providers.Facebook;
-import com.feedient.android.models.providers.Instagram;
-import com.feedient.android.models.providers.Tumblr;
-import com.feedient.android.models.providers.Twitter;
-import com.feedient.android.models.providers.YouTube;
-import com.feedient.oauth.OAuthDialog;
-import com.feedient.oauth.webview.WebViewCallback;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
+import it.gmariotti.cardslib.library.view.CardListView;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
 public class MainActivity extends Activity implements Observer, OnRefreshListener {
-    private ItemArrayAdapter mItemArrayAdapter;
+    private CardArrayAdapter mCardArrayAdapter;
     private DrawerItemAdapter mDrawerItemAdapter;
     private MainModel mMainModel;
     private PullToRefreshLayout mPullToRefreshLayout;
-    private ListView mListView;
+    private CardListView mCardListView;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -84,7 +64,7 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         mMainModel.loadFeeds();
 
         // Init the views
-        mListView           = (ListView)findViewById(R.id.list);
+        mCardListView       = (CardListView)findViewById(R.id.list);
         mDrawerLayout       = (DrawerLayout)findViewById(R.id.drawer_layout);
         mDrawerList         = (ListView)findViewById(R.id.drawer_provider_list);
         mTxtDrawerUserEmail = (TextView)findViewById(R.id.txt_user_email);
@@ -107,8 +87,8 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         getActionBar().setHomeButtonEnabled(true);
 
         // Set the adapter for our feed
-        mItemArrayAdapter = new ItemArrayAdapter(this, mMainModel.getFeedPosts());
-        mListView.setAdapter(mItemArrayAdapter);
+        mCardArrayAdapter = new CardArrayAdapter(this, mMainModel.getFeedPostCards());
+        mCardListView.setAdapter(mCardArrayAdapter);
 
         // Set the adapter for our drawer list
         mDrawerItemAdapter = new DrawerItemAdapter(this, mMainModel.getUserProviders(), mMainModel.getProviders());
@@ -168,7 +148,7 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
             public void run() {
                 checkLoggedIn();
 
-                mItemArrayAdapter.notifyDataSetChanged();
+                mCardArrayAdapter.notifyDataSetChanged();
                 mDrawerItemAdapter.notifyDataSetChanged();
                 mPullToRefreshLayout.setRefreshing(mMainModel.isRefreshing());
                 mTxtDrawerUserEmail.setText(mMainModel.getAccount().getEmail());
