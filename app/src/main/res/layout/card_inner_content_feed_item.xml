@@ -4,20 +4,23 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="5dip">
+    android:padding="0dp">
 
     <!--  Header -->
     <RelativeLayout android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp">
 
         <LinearLayout
             android:id="@+id/thumbnail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="3dip"
             android:layout_alignParentLeft="true"
-            android:layout_marginRight="5dip">
+            android:layout_marginRight="10dp">
 
             <ImageView
                 android:id="@+id/img_thumbnail_user"
@@ -27,29 +30,34 @@
 
         </LinearLayout>
 
-        <!-- Posted By User -->
-        <TextView
-            android:id="@+id/txt_user_posted_by"
+        <RelativeLayout
+            android:id="@+id/details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="\@thebillkidy"
-            android:textColor="#040404"
-            android:typeface="sans"
-            android:textSize="12dip"
-            android:textStyle="bold"
-            android:layout_toRightOf="@id/thumbnail"/>
+            android:layout_toRightOf="@id/thumbnail">
 
-        <!-- Date Posted -->
-        <TextView
-            android:id="@+id/txt_date_posted"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="25/06/2014 22:05"
-            android:textSize="10dip"
-            android:textColor="@color/txt_date_posted"
-            android:textStyle="bold"
-            android:layout_below="@id/txt_user_posted_by"
-            android:layout_toRightOf="@id/thumbnail"/>
+            <!-- Posted By User -->
+            <TextView
+                android:id="@+id/txt_user_posted_by"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="\@thebillkidy"
+                android:textColor="#040404"
+                android:typeface="sans"
+                android:textSize="12dip"
+                android:textStyle="bold"/>
+
+            <!-- Date Posted -->
+            <TextView
+                android:id="@+id/txt_date_posted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="25/06/2014 22:05"
+                android:textSize="10dip"
+                android:textColor="@color/txt_date_posted"
+                android:textStyle="bold"
+                android:layout_below="@id/txt_user_posted_by"/>
+        </RelativeLayout>
 
     </RelativeLayout>
 
@@ -57,10 +65,13 @@
     <LinearLayout android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="3dip"
         android:layout_alignParentLeft="true"
         android:layout_marginRight="5dip"
-        android:layout_below="@id/header">
+        android:layout_below="@id/header"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp">
 
         <!-- Message -->
         <TextView
@@ -72,17 +83,74 @@
             android:textSize="12dip"
             android:layout_marginTop="1dip"
             android:layout_toRightOf="@+id/thumbnail"
-            android:text="Just gona stand there and ..." />
+            android:text="Just gona stand there and ..."/>
 
     </LinearLayout>
 
-    <!--<LinearLayout android:id="@+id/footer"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:padding="3dip"-->
-        <!--android:layout_alignParentLeft="true"-->
-        <!--android:layout_marginRight="5dip">-->
+    <!-- Content - Media -->
+    <LinearLayout android:id="@+id/content_media"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="5dip"
+        android:layout_below="@id/content">
 
-    <!--</LinearLayout>-->
+        <!-- Picture -->
+        <ImageView
+            android:id="@+id/img_message"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <!-- Social Actions -->
+    <RelativeLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/content_media"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp">
+
+        <IconButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_border_feedient"
+            android:id="@+id/btn_twitter_favorite"
+            android:text="{fa-star}"
+            android:textColor="#737373"
+            android:textSize="18sp"
+            android:layout_marginRight="10dp"
+            android:minHeight="1dp"
+            android:minWidth="1dp"/>
+
+        <IconButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_border_feedient"
+            android:id="@+id/btn_twitter_retweet"
+            android:layout_toRightOf="@id/btn_twitter_favorite"
+            android:text="{fa-retweet}"
+            android:textColor="#737373"
+            android:textSize="18sp"
+            android:layout_marginRight="10dp"
+            android:minHeight="1dp"
+            android:minWidth="1dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_border_feedient"
+            android:text="Comment"
+            android:layout_alignParentRight="true"
+            android:textColor="#737373"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:minHeight="1dp"
+            android:minWidth="1dp"/>
+
+    </RelativeLayout>
 
 </RelativeLayout>

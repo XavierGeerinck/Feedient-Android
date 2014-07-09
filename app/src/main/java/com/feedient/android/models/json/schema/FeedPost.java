@@ -20,6 +20,9 @@ public class FeedPost {
     @SerializedName("content")
     private Content content;
 
+    @SerializedName("entities")
+    private Entities entities;
+
     @SerializedName("twitter")
     private Twitter twitter;
 

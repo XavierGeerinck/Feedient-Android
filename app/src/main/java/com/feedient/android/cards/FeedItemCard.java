@@ -26,6 +26,7 @@ public class FeedItemCard extends Card {
 
     // Android Components
     private ImageView imgThumbnailUser;
+    private ImageView imgContent;
     private TextView txtUserPostedBy;
     private TextView txtMessage;
     private TextView txtDatePosted;
@@ -52,6 +53,7 @@ public class FeedItemCard extends Card {
         super.setupInnerViewElements(parent, view);
 
         imgThumbnailUser = (ImageView)parent.findViewById(R.id.img_thumbnail_user);
+        imgContent = (ImageView)parent.findViewById(R.id.img_message);
         txtUserPostedBy = (TextView)parent.findViewById(R.id.txt_user_posted_by);
         txtMessage = (TextView)parent.findViewById(R.id.txt_message);
         txtDatePosted = (TextView)parent.findViewById(R.id.txt_date_posted);
@@ -59,6 +61,8 @@ public class FeedItemCard extends Card {
         txtDatePosted.setText(DATE_FORMAT.format(feedPost.getContent().getDateCreated()));
         txtMessage.setText(feedPost.getContent().getMessage());
         txtUserPostedBy.setText(feedPost.getUser().getName());
+
+        //if (feedPost.getContent().getEntities())
 
         // Load the image async
         imageLoader.displayImage(feedPost.getUser().getImageLink(), imgThumbnailUser);
