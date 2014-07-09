@@ -2,4 +2,5 @@
 <resources>
     <color name="txt_message">#343434</color>
     <color name="txt_date_posted">#1ead91</color>
+    <color name="text_shadow">#7F000000</color>
 </resources>

@@ -32,18 +32,17 @@ public class FeedItemCard extends Card {
     private TextView txtDatePosted;
 
     // Default constructor
-    public FeedItemCard(Context context, int innerLayout) {
+    public FeedItemCard(Context context, int innerLayout, ImageLoader imageLoader) {
         super(context, innerLayout);
-
-        this.imageLoader = ImageLoaderHelper.getImageLoader(context);
+        this.imageLoader = imageLoader;
     }
 
-    public FeedItemCard(Context context) {
-        this(context, R.layout.card_inner_content_feed_item);
+    public FeedItemCard(Context context, ImageLoader imageLoader) {
+        this(context, R.layout.card_inner_content_feed_item, imageLoader);
     }
 
-    public FeedItemCard(Context context, FeedPost feedPost) {
-        this(context, R.layout.card_inner_content_feed_item);
+    public FeedItemCard(Context context, FeedPost feedPost, ImageLoader imageLoader) {
+        this(context, R.layout.card_inner_content_feed_item, imageLoader);
 
         this.feedPost = feedPost;
     }
@@ -53,7 +52,9 @@ public class FeedItemCard extends Card {
         super.setupInnerViewElements(parent, view);
 
         imgThumbnailUser = (ImageView)parent.findViewById(R.id.img_thumbnail_user);
+        imgThumbnailUser.setImageDrawable(null);
         imgContent = (ImageView)parent.findViewById(R.id.img_message);
+        imgContent.setImageDrawable(null);
         txtUserPostedBy = (TextView)parent.findViewById(R.id.txt_user_posted_by);
         txtMessage = (TextView)parent.findViewById(R.id.txt_message);
         txtDatePosted = (TextView)parent.findViewById(R.id.txt_date_posted);
@@ -62,7 +63,12 @@ public class FeedItemCard extends Card {
         txtMessage.setText(feedPost.getContent().getMessage());
         txtUserPostedBy.setText(feedPost.getUser().getName());
 
-        //if (feedPost.getContent().getEntities())
+        // ENTITIES PARSING
+        // Pictures
+        if (feedPost.getContent().getEntities().getPictures().size() > 0) {
+            imageLoader.cancelDisplayTask(imgContent);
+            imageLoader.displayImage(feedPost.getContent().getEntities().getPictures().get(0).getSmallPictureUrl(), imgContent);
+        }
 
         // Load the image async
         imageLoader.displayImage(feedPost.getUser().getImageLink(), imgThumbnailUser);

@@ -21,7 +21,7 @@ public class Content {
     private boolean isConversation;
 
     @SerializedName("entities")
-    private Entity entities;
+    private Entities entities;
 
     public Content() {
         message = "";
@@ -29,7 +29,7 @@ public class Content {
         actionCounts = new ActionCounts();
         actionsPerformed = new ActionsPerformed();
         isConversation = false;
-        entities = new Entity();
+        entities = new Entities();
     }
 
     public String getMessage() {
@@ -72,11 +72,11 @@ public class Content {
         this.isConversation = isConversation;
     }
 
-    public Entity getEntities() {
+    public Entities getEntities() {
         return entities;
     }
 
-    public void setEntities(Entity entities) {
+    public void setEntities(Entities entities) {
         this.entities = entities;
     }
 }

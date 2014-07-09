@@ -7,16 +7,15 @@
     android:padding="0dp">
 
     <!--  Header -->
-    <RelativeLayout android:id="@+id/header"
+    <RelativeLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp">
+        android:paddingLeft="20dp"
+        android:paddingTop="20dp">
 
         <LinearLayout
-            android:id="@+id/thumbnail"
+            android:id="@+id/container_thumbnail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -24,17 +23,17 @@
 
             <ImageView
                 android:id="@+id/img_thumbnail_user"
-                android:layout_width="50dip"
-                android:layout_height="50dip"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:src="@drawable/avatar_image"/>
 
         </LinearLayout>
 
         <RelativeLayout
-            android:id="@+id/details"
+            android:id="@+id/container_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/thumbnail">
+            android:layout_toRightOf="@id/container_thumbnail">
 
             <!-- Posted By User -->
             <TextView
@@ -44,7 +43,7 @@
                 android:text="\@thebillkidy"
                 android:textColor="#040404"
                 android:typeface="sans"
-                android:textSize="12dip"
+                android:textSize="12sp"
                 android:textStyle="bold"/>
 
             <!-- Date Posted -->
@@ -52,25 +51,65 @@
                 android:id="@+id/txt_date_posted"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="25/06/2014 22:05"
-                android:textSize="10dip"
+                android:text="5 minutes ago"
+                android:textSize="10sp"
                 android:textColor="@color/txt_date_posted"
                 android:textStyle="bold"
                 android:layout_below="@id/txt_user_posted_by"/>
         </RelativeLayout>
 
+        <!-- Provider Box -->
+        <!-- Note: marginRight="-1dp" so that the 1px goes invisible -->
+        <LinearLayout
+            android:id="@+id/container_provider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/provider_border_feedient"
+            android:minWidth="20dp"
+            android:layout_marginRight="-1dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="8dp"
+            >
+
+            <!-- Provider Icon -->
+            <IconTextView
+                android:id="@+id/txt_provider_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="{fa-twitter}"
+                android:textColor="#55acee"
+                android:typeface="sans"
+                android:textSize="12sp"
+                android:textStyle="bold"/>
+
+            <!-- Provider User Name -->
+            <TextView
+                android:id="@+id/txt_provider_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="\@thebillkidy"
+                android:textColor="#C1C1C1"
+                android:typeface="sans"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_alignRight="@id/txt_provider_icon"/>
+        </LinearLayout>
+
     </RelativeLayout>
 
     <!-- Content -->
-    <LinearLayout android:id="@+id/content"
+    <LinearLayout
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_marginRight="5dip"
         android:layout_below="@id/header"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:paddingTop="10dp">
 
         <!-- Message -->
@@ -88,18 +127,18 @@
     </LinearLayout>
 
     <!-- Content - Media -->
-    <LinearLayout android:id="@+id/content_media"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/content_media"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginRight="5dip"
         android:layout_below="@id/content">
 
         <!-- Picture -->
         <ImageView
             android:id="@+id/img_message"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="fill_parent"
+            android:src="@drawable/loading"/>
 
     </LinearLayout>
 
@@ -110,9 +149,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/content_media"
         android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp">
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="20dp">
 
         <IconButton
             android:layout_width="wrap_content"
