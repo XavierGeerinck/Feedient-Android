@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.feedient.android.R;
 import com.feedient.android.adapters.DrawerItemAdapter;
 import com.feedient.android.adapters.FeedPostArrayAdapter;
-import com.feedient.android.adapters.FeedientCardArrayAdapter;
 import com.feedient.android.adapters.GridItemAdapter;
 import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.models.GridItem;
@@ -29,8 +28,6 @@ import com.feedient.android.models.MainModel;
 
 import com.feedient.android.models.json.UserProvider;
 
-import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
-import it.gmariotti.cardslib.library.view.CardListView;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;

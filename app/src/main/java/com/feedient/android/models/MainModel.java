@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
 import com.feedient.android.adapters.FeedientRestAdapter;
-import com.feedient.android.cards.FeedItemCard;
 import com.feedient.android.data.AssetsPropertyReader;
 import com.feedient.android.interfaces.FeedientService;
 import com.feedient.android.interfaces.IProviderModel;
@@ -26,7 +25,6 @@ import com.feedient.android.models.providers.YouTube;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import it.gmariotti.cardslib.library.internal.Card;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
