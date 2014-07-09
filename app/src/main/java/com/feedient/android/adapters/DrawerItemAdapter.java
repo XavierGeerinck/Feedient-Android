@@ -9,15 +9,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.feedient.android.R;
-import com.feedient.android.helpers.ImageLoaderHelper;
-import com.feedient.android.helpers.ProviderHelper;
 import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.models.json.UserProvider;
-import com.feedient.oauth.interfaces.IOAuth1Provider;
 import com.joanzapata.android.iconify.Iconify;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,7 +20,6 @@ public class DrawerItemAdapter extends ArrayAdapter<UserProvider> {
     private final Context context;
     private final List<UserProvider> userProviders;
     private final HashMap<String, IProviderModel> providers;
-    private final ImageLoader imageLoader;
     private final LayoutInflater layoutInflater;
 
     // ViewHolder pattern (http://developer.android.com/training/improving-layouts/smooth-scrolling.html#ViewHolder)
@@ -43,7 +37,6 @@ public class DrawerItemAdapter extends ArrayAdapter<UserProvider> {
         this.context = context;
         this.providers = providers;
         this.userProviders = userProviders;
-        this.imageLoader = ImageLoaderHelper.getImageLoader(context);
         this.layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -62,7 +55,6 @@ public class DrawerItemAdapter extends ArrayAdapter<UserProvider> {
             viewHolder.txtProviderIcon = (TextView)convertView.findViewById(R.id.txt_provider_icon);
             viewHolder.imgBtnRemoveProvider = (ImageButton)convertView.findViewById(R.id.img_btn_provider_remove);
             viewHolder.imgBtnRemoveProvider.setTag(viewHolder.userProvider);
-
 
             // Store the holder
             convertView.setTag(viewHolder);

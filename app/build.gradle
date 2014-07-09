@@ -35,7 +35,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     // You must install or update the Support Repository through the SDK manager to use this dependency.
     compile 'com.squareup.retrofit:retrofit:1.6.0' // HTTP Library
-    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.2' // Async Image loading
+    compile 'com.squareup.picasso:picasso:2.3.2' // Picasso Async Image Loading
     compile 'com.github.chrisbanes.actionbarpulltorefresh:library:+' // Pull to refresh
     compile 'com.joanzapata.android:android-iconify:1.0.6' // Fontawesome icons
     compile 'org.scribe:scribe:1.3.5' // Scribe OAuth && OAuth2 client

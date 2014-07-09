@@ -7,7 +7,6 @@ import android.util.Log;
 import com.feedient.android.adapters.FeedientRestAdapter;
 import com.feedient.android.cards.FeedItemCard;
 import com.feedient.android.data.AssetsPropertyReader;
-import com.feedient.android.helpers.ImageLoaderHelper;
 import com.feedient.android.interfaces.FeedientService;
 import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.models.json.Account;
@@ -23,7 +22,6 @@ import com.feedient.android.models.providers.Instagram;
 import com.feedient.android.models.providers.Tumblr;
 import com.feedient.android.models.providers.Twitter;
 import com.feedient.android.models.providers.YouTube;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,9 +37,8 @@ public class MainModel extends Observable {
     private Context context;
 
     private final long timerInterval;
-    private final ImageLoader imageLoader;
     private int newNotifications;
-    private List<Card> feedPostCards;
+    private List<FeedPost> feedPosts;
     private Map<String, String> paginationKeys; // <userProviderId, since>
     private List<UserProvider> userProviders;
     private HashMap<String, IProviderModel> providers;
@@ -59,7 +56,7 @@ public class MainModel extends Observable {
     public MainModel(Context context) {
         this.context = context;
 
-        feedPostCards = new ArrayList<Card>();
+        feedPosts = new ArrayList<FeedPost>();
         paginationKeys = new HashMap<String, String>();
         userProviders = new ArrayList<UserProvider>();
         account = new Account();
@@ -73,8 +70,6 @@ public class MainModel extends Observable {
 
         accessToken = sharedPreferences.getString(properties.getProperty("prefs.key.token"), "");
         isRefreshing = false;
-
-        imageLoader = ImageLoaderHelper.getImageLoader(context);
 
         timerInterval = Long.parseLong(configProperties.getProperty("auto_update_interval"));
 
@@ -130,7 +125,7 @@ public class MainModel extends Observable {
                     public void success(FeedPostList feedPostList, Response response) {
                         // Set the posts
                         for (FeedPost fp : feedPostList.getFeedPosts()) {
-                            MainModel.this.feedPostCards.add(new FeedItemCard(context, fp, imageLoader));
+                            MainModel.this.feedPosts.add(fp);
                         }
 
                         // Set the paginations
@@ -184,7 +179,7 @@ public class MainModel extends Observable {
                 // Add posts to the beginning (Start at the end of the array for ordering)
                 for (int i = feedPostList.getFeedPosts().size() - 1; i >= 0; i--) {
                     FeedPost fp = feedPostList.getFeedPosts().get(i);
-                    MainModel.this.feedPostCards.add(0, new FeedItemCard(context, fp, imageLoader));
+                    MainModel.this.feedPosts.add(0, fp);
                 }
 
                 // Set the paginations
@@ -266,8 +261,8 @@ public class MainModel extends Observable {
         });
     }
 
-    public List<Card> getFeedPostCards() {
-        return feedPostCards;
+    public List<FeedPost> getFeedPosts() {
+        return feedPosts;
     }
 
     public List<UserProvider> getUserProviders() {

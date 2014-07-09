@@ -17,8 +17,11 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.feedient.android.R;
 import com.feedient.android.adapters.DrawerItemAdapter;
+import com.feedient.android.adapters.FeedPostArrayAdapter;
+import com.feedient.android.adapters.FeedientCardArrayAdapter;
 import com.feedient.android.adapters.GridItemAdapter;
 import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.models.GridItem;
@@ -38,11 +41,11 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class MainActivity extends Activity implements Observer, OnRefreshListener {
-    private CardArrayAdapter mCardArrayAdapter;
+    private FeedPostArrayAdapter mFeedPostArrayAdapter;
     private DrawerItemAdapter mDrawerItemAdapter;
     private MainModel mMainModel;
     private PullToRefreshLayout mPullToRefreshLayout;
-    private CardListView mCardListView;
+    private ListView mFeedPostsList;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -64,7 +67,7 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         mMainModel.loadFeeds();
 
         // Init the views
-        mCardListView       = (CardListView)findViewById(R.id.list);
+        mFeedPostsList      = (ListView)findViewById(R.id.list);
         mDrawerLayout       = (DrawerLayout)findViewById(R.id.drawer_layout);
         mDrawerList         = (ListView)findViewById(R.id.drawer_provider_list);
         mTxtDrawerUserEmail = (TextView)findViewById(R.id.txt_user_email);
@@ -86,9 +89,13 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
 
+        // Fix margin top and bottom for list of cards
+        mFeedPostsList.addFooterView(new View(this), null, false);
+        mFeedPostsList.addHeaderView(new View(this), null, false);
+
         // Set the adapter for our feed
-        mCardArrayAdapter = new CardArrayAdapter(this, mMainModel.getFeedPostCards());
-        mCardListView.setAdapter(mCardArrayAdapter);
+        mFeedPostArrayAdapter = new FeedPostArrayAdapter(this, mMainModel.getFeedPosts());
+        mFeedPostsList.setAdapter(mFeedPostArrayAdapter);
 
         // Set the adapter for our drawer list
         mDrawerItemAdapter = new DrawerItemAdapter(this, mMainModel.getUserProviders(), mMainModel.getProviders());
@@ -148,7 +155,7 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
             public void run() {
                 checkLoggedIn();
 
-                mCardArrayAdapter.notifyDataSetChanged();
+                mFeedPostArrayAdapter.notifyDataSetChanged();
                 mDrawerItemAdapter.notifyDataSetChanged();
                 mPullToRefreshLayout.setRefreshing(mMainModel.isRefreshing());
                 mTxtDrawerUserEmail.setText(mMainModel.getAccount().getEmail());
