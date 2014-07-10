@@ -46,8 +46,8 @@ public class Entities {
         this.mentions = new ArrayList<MentionEntity>();
         this.place = new PlaceEntity();
 
-        this.extendedLink = new ExtendedLinkEntity();
-        this.extendedVideo = new ExtendedVideoEntity();
+        this.extendedLink = null;
+        this.extendedVideo = null;
     }
 
     public List<LinkEntity> getLinks() {
