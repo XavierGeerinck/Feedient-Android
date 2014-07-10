@@ -29,7 +29,7 @@ public class FeedPostArrayAdapter extends ArrayAdapter<FeedPost> {
     // ViewHolder
     static class ViewHolder {
         // Header
-        ImageView imgThumbnailUser ;
+        ImageView imgThumbnailUser;
         TextView txtUserPostedBy;
         TextView txtDatePosted;
 
@@ -50,11 +50,16 @@ public class FeedPostArrayAdapter extends ArrayAdapter<FeedPost> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View rowView = convertView;
 
+//        // Set 15dp margin left and right on the list items
+//        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) convertView.getLayoutParams();
+//        params.setMargins(15, 0, 15, 0);
+//        convertView.setLayoutParams(params);
+
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         // Setup the items to re-use
         // Disable re-use, constantly re-use since we got dynamic adding of entities
-        //if (rowView == null) {
+        if (rowView == null) {
             rowView = inflater.inflate(R.layout.list_feed_post_item, null);
 
             // Configure ViewHolder
@@ -64,15 +69,20 @@ public class FeedPostArrayAdapter extends ArrayAdapter<FeedPost> {
             viewHolder.txtUserPostedBy  = (TextView)rowView.findViewById(R.id.txt_user_posted_by);
             viewHolder.txtDatePosted    = (TextView)rowView.findViewById(R.id.txt_date_posted);
             viewHolder.txtMessage       = (TextView)rowView.findViewById(R.id.txt_message);
+            viewHolder.containerEntities = (LinearLayout)rowView.findViewById(R.id.layout_entities);
+
 
             // Set tag to rowView
             rowView.setTag(viewHolder);
-        //}
+        }
 
         // Fill Data
         ViewHolder holder = (ViewHolder)rowView.getTag();
-        holder.containerEntities = (LinearLayout)rowView.findViewById(R.id.layout_entities);
 
+        // Remove all the child views before adding new ones, this is because we re-use our view
+        holder.containerEntities.removeAllViews();
+
+        // Get our feedpost and add data
         FeedPost feedPost = feedPosts.get(position);
 
         holder.txtDatePosted.setText(DATE_FORMAT.format(feedPost.getContent().getDateCreated()));
@@ -118,17 +128,19 @@ public class FeedPostArrayAdapter extends ArrayAdapter<FeedPost> {
         ImageView imgEntityExtendedLinkThumbnail = (ImageView)entityView.findViewById(R.id.img_entity_extended_link_thumbnail);
         TextView txtEntityExtendedLinkTitle = (TextView)entityView.findViewById(R.id.txt_entity_extended_link_title);
         TextView txtEntityExtendedLinkDesc = (TextView)entityView.findViewById(R.id.txt_entity_extended_link_description);
-        TextView txtEntityExtendedLinkUrl = (TextView)entityView.findViewById(R.id.txt_entity_extended_link_url);
+
+        container.addView(entityView);
 
         // Init data
         ExtendedLinkEntity le = fp.getContent().getEntities().getExtendedLink();
         txtEntityExtendedLinkTitle.setText(le.getName());
         txtEntityExtendedLinkDesc.setText(le.getDescription());
-        txtEntityExtendedLinkUrl.setText(le.getUrl());
 
-        container.addView(entityView);
 
-        // Async load image
-        Picasso.with(getContext()).load(le.getImageUrl()).into(imgEntityExtendedLinkThumbnail);
+//        int height = ((View)(entityView.getParent())).getLayoutParams().height;
+//        int width = ((View)(entityView.getParent())).getLayoutParams().width;
+//
+//        // Async load image
+//        Picasso.with(getContext()).load(le.getImageUrl()).resize(width, height).centerCrop().into(imgEntityExtendedLinkThumbnail);
     }
 }
