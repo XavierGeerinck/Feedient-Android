@@ -41,7 +41,7 @@
     </style>
 
     <style name="ActionBar.Solid.Feedient" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
-        <item name="android:background">@drawable/ab_solid_feedient</item>
+        <item name="android:background">#1ead91</item>
         <item name="android:backgroundStacked">@drawable/ab_stacked_solid_feedient</item>
         <item name="android:backgroundSplit">@drawable/ab_bottom_solid_feedient</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Feedient</item>
