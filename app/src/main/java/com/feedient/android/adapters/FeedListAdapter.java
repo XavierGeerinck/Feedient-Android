@@ -108,18 +108,13 @@ public class FeedListAdapter extends BaseAdapter {
         CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(item.getContent().getDateCreated().getTime(), System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
         holder.txtDatePosted.setText(timeAgo);
 
-        // If text show, else remove from view
-        if (!TextUtils.isEmpty(item.getContent().getMessage())) {
-            holder.txtMessage.setText(item.getContent().getMessage());
-        } else {
-            holder.txtMessage.setVisibility(View.GONE);
-        }
-
         // User
         holder.txtUserPostedBy.setText(item.getUser().getName());
 
         // Load the image async
         Picasso.with(activity).load(item.getUser().getImageLink()).into(holder.imgThumbnailUser);
+
+        String message = item.getContent().getMessage();
 
         // ENTITIES PARSING
         // Pictures
@@ -129,17 +124,17 @@ public class FeedListAdapter extends BaseAdapter {
 
         // Links
         if (item.getContent().getEntities().getLinks().size() > 0) {
-            _handleEntityLinks(holder.txtMessage, item);
+            message = _handleEntityLinks(item.getContent().getMessage(), item);
         }
 
         // Hashtags
         if (item.getContent().getEntities().getHashtags().size() > 0) {
-            _handleEntityHashtags(holder.txtMessage, item);
+            message = _handleEntityHashtags(item.getContent().getMessage(), item);
         }
 
         // Mentions
         if (item.getContent().getEntities().getMentions().size() > 0) {
-            _handleEntityMentions(holder.txtMessage, item);
+            message = _handleEntityMentions(item.getContent().getMessage(), item);
         }
 
         // Extended Link
@@ -147,47 +142,42 @@ public class FeedListAdapter extends BaseAdapter {
             _handleEntityExtendedLink(inflater, holder.containerEntities, item);
         }
 
+        // Set message if set
+        if (!TextUtils.isEmpty(message)) {
+            Log.e("Feedient", message);
+            holder.txtMessage.setMovementMethod(LinkMovementMethod.getInstance());
+            holder.txtMessage.setText(Html.fromHtml(message));
+        } else {
+            holder.txtMessage.setVisibility(View.GONE);
+        }
+
         // Return view
         return convertView;
     }
 
-    private void _handleEntityMentions(TextView tv, FeedPost fp) {
-        String text = tv.getText().toString();
-
+    private String _handleEntityMentions(String message, FeedPost fp) {
         for (MentionEntity me : fp.getContent().getEntities().getMentions()) {
-            text = text.replace("#" + me.getName(), "<a href=\"" + me.getProfileLink() + "\">#" + me.getName() + "</a>");
+            message = message.replace(me.getName(), "<a href=\"" + me.getProfileLink() + "\">" + me.getName() + "</a>");
         }
 
-        tv.setMovementMethod(LinkMovementMethod.getInstance());
-        tv.setText(Html.fromHtml(text));
-        tv.setVisibility(View.VISIBLE);
+        return message;
     }
 
-    private void _handleEntityHashtags(TextView tv, FeedPost fp) {
-        String text = tv.getText().toString();
-
+    private String _handleEntityHashtags(String message, FeedPost fp) {
         for (HashtagEntity he : fp.getContent().getEntities().getHashtags()) {
-            text = text.replace("#" + he.getName(), "<a href=\"" + he.getLink() + "\">#" + he.getName() + "</a>");
+            message = message.replace("#" + he.getName(), "<a href=\"" + he.getLink() + "\">#" + he.getName() + "</a>");
         }
 
-        tv.setMovementMethod(LinkMovementMethod.getInstance());
-        tv.setText(Html.fromHtml(text));
-        tv.setVisibility(View.VISIBLE);
+        return message;
     }
 
-    private void _handleEntityLinks(TextView tv, FeedPost fp) {
-        String text = tv.getText().toString();
-
+    private String _handleEntityLinks(String message, FeedPost fp) {
         for (LinkEntity le : fp.getContent().getEntities().getLinks()) {
-            text = text.replace(le.getDisplayUrl(), "<a href=\"" + le.getExpandedUrl() + "\">" + le.getDisplayUrl() + "</a>");
-            text = text.replace(le.getShortenedUrl(), "<a href=\"" + le.getExpandedUrl() + "\">" + le.getDisplayUrl() + "</a>");
-            text = text.replace(le.getExpandedUrl(), "<a href=\"" + le.getExpandedUrl() + "\">" + le.getDisplayUrl() + "</a>");
+            message = message.replace(le.getDisplayUrl(), "<a href=\"" + le.getExpandedUrl() + "\">" + le.getDisplayUrl() + "</a>");
+            message = message.replace(le.getShortenedUrl(), "<a href=\"" + le.getExpandedUrl() + "\">" + le.getDisplayUrl() + "</a>");
         }
 
-        Log.e("Feedient", text);
-        tv.setMovementMethod(LinkMovementMethod.getInstance());
-        tv.setText(Html.fromHtml(text));
-        tv.setVisibility(View.VISIBLE);
+        return message;
     }
 
     private void _handleEntityPictures(LayoutInflater inflater, LinearLayout container, FeedPost fp) {
