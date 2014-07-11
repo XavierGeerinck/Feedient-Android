@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.feedient.android.R;
 import com.feedient.android.adapters.DrawerItemAdapter;
-import com.feedient.android.adapters.FeedPostArrayAdapter;
+import com.feedient.android.adapters.FeedListAdapter;
 import com.feedient.android.adapters.GridItemAdapter;
 import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.models.GridItem;
@@ -38,7 +38,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class MainActivity extends Activity implements Observer, OnRefreshListener {
-    private FeedPostArrayAdapter mFeedPostArrayAdapter;
+    private FeedListAdapter mFeedListAdapter;
     private DrawerItemAdapter mDrawerItemAdapter;
     private MainModel mMainModel;
     private PullToRefreshLayout mPullToRefreshLayout;
@@ -91,8 +91,8 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         mFeedPostsList.addHeaderView(new View(this), null, false);
 
         // Set the adapter for our feed
-        mFeedPostArrayAdapter = new FeedPostArrayAdapter(this, mMainModel.getFeedPosts());
-        mFeedPostsList.setAdapter(mFeedPostArrayAdapter);
+        mFeedListAdapter = new FeedListAdapter(this, mMainModel.getFeedPosts());
+        mFeedPostsList.setAdapter(mFeedListAdapter);
 
         // Set the adapter for our drawer list
         mDrawerItemAdapter = new DrawerItemAdapter(this, mMainModel.getUserProviders(), mMainModel.getProviders());
@@ -152,7 +152,7 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
             public void run() {
                 checkLoggedIn();
 
-                mFeedPostArrayAdapter.notifyDataSetChanged();
+                mFeedListAdapter.notifyDataSetChanged();
                 mDrawerItemAdapter.notifyDataSetChanged();
                 mPullToRefreshLayout.setRefreshing(mMainModel.isRefreshing());
                 mTxtDrawerUserEmail.setText(mMainModel.getAccount().getEmail());

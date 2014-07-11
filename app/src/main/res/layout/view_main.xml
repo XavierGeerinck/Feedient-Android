@@ -18,12 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/list"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="@dimen/activity_horizontal_margin"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin">
+            android:divider="@null">
         </ListView>
     </uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>
 
