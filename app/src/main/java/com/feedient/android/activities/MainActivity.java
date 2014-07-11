@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,15 +39,18 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class MainActivity extends Activity implements Observer, OnRefreshListener {
-    private FeedListAdapter mFeedListAdapter;
+    // Drawer variables
     private NavDrawerListAdapter mNavDrawerListAdapter;
     private NavDrawerProvidersListAdapter mNavDrawerProvidersListAdapter;
-    private MainModel mMainModel;
-    private PullToRefreshLayout mPullToRefreshLayout;
-    private ListView mFeedPostsList;
     private DrawerLayout mDrawerLayout;
     private ListView mNavDrawerList;
     private ListView mNavDrawerProvidersList;
+
+    // Feed variables
+    private FeedListAdapter mFeedListAdapter;
+    private MainModel mMainModel;
+    private PullToRefreshLayout mPullToRefreshLayout;
+    private ListView mFeedPostsList;
     private ActionBarDrawerToggle mDrawerToggle;
 
     /**
@@ -81,10 +85,6 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
             }
         };
 
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
-
         // Fix margin top and bottom for list of cards
         mFeedPostsList.addFooterView(new View(this), null, false);
         mFeedPostsList.addHeaderView(new View(this), null, false);
@@ -93,13 +93,17 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         mFeedListAdapter = new FeedListAdapter(this, mMainModel.getFeedPosts());
         mFeedPostsList.setAdapter(mFeedListAdapter);
 
+        // Set the adapter for our drawer list navigation items
+        mNavDrawerListAdapter = new NavDrawerListAdapter(getApplicationContext(), mMainModel.getNavDrawerItems());
+        mNavDrawerList.setAdapter(mNavDrawerListAdapter);
+
         // Set the adapter for our drawer provider list items
-        mNavDrawerProvidersListAdapter = new NavDrawerProvidersListAdapter(this, mMainModel.getProviders(), mMainModel.getUserProviders());
+        mNavDrawerProvidersListAdapter = new NavDrawerProvidersListAdapter(getApplicationContext(), mMainModel.getProviders(), mMainModel.getUserProviders());
         mNavDrawerProvidersList.setAdapter(mNavDrawerProvidersListAdapter);
 
-        // Set the adapter for our drawer list navigation items
-        mNavDrawerListAdapter = new NavDrawerListAdapter(this, mMainModel.getNavDrawerItems());
-        mNavDrawerList.setAdapter(mNavDrawerListAdapter);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
 
         mPullToRefreshLayout = (PullToRefreshLayout)findViewById(R.id.swipe_container);
         ActionBarPullToRefresh.from(this)
@@ -156,6 +160,7 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
                 checkLoggedIn();
 
                 mFeedListAdapter.notifyDataSetChanged();
+                mNavDrawerListAdapter.notifyDataSetChanged();
                 mNavDrawerProvidersListAdapter.notifyDataSetChanged();
                 mPullToRefreshLayout.setRefreshing(mMainModel.isRefreshing());
             }
