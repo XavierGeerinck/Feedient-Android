@@ -192,6 +192,14 @@ public class FeedListAdapter extends BaseAdapter {
     }
 
     private void _handleEntityExtendedLink(LayoutInflater inflater, LinearLayout container, FeedPost fp) {
+        // Init data
+        ExtendedLinkEntity le = fp.getContent().getEntities().getExtendedLink();
+
+        // If no url set, return
+        if (le.getImageUrl().equals("")) {
+            return;
+        }
+
         View entityView = inflater.inflate(R.layout.entity_extended_link, null);
 
         // Init Elements
@@ -200,9 +208,6 @@ public class FeedListAdapter extends BaseAdapter {
         TextView txtEntityExtendedLinkHost = (TextView)entityView.findViewById(R.id.txt_entity_extended_link_url_host);
 
         container.addView(entityView);
-
-        // Init data
-        ExtendedLinkEntity le = fp.getContent().getEntities().getExtendedLink();
 
         // If the name is not set, remove it from view
         if (le.getName().length() > 1) {

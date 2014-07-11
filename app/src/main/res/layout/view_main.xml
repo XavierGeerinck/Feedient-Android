@@ -8,11 +8,11 @@
 
     <!-- Main View -->
     <uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/swipe_container"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipe_container"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <ListView
             android:layout_width="match_parent"
@@ -26,145 +26,93 @@
     <!-- Drawer View has to have android:layout_gravity="start" set -->
     <!-- Drawer should be max 320 -->
     <LinearLayout
-            android:id="@+id/left_drawer"
-            android:layout_height="match_parent"
-            android:layout_width="280dp"
-            android:orientation="vertical"
-            android:layout_gravity="start"
-            android:background="#FEFEFE"
-            android:divider="?android:dividerHorizontal"
-            android:showDividers="middle">
-
-        <!-- Header -->
-        <LinearLayout android:id="@+id/thumbnail"
-                      android:layout_width="280dp"
-                      android:layout_height="wrap_content"
-                      android:padding="10dp"
-                      android:layout_marginRight="5dp"
-                      android:background="#212322">
-
-            <!-- Feedient Icon -->
-            <ImageView
-                    android:id="@+id/img_provider_icon"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/avatar_image"/>
-
-
-            <!-- Name + Email -->
-            <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="15dp">
-
-                <!-- Create dummy imageView to center 2 elements -->
-                <ImageView
-                        android:id="@+id/dummy"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true" />
-
-                <TextView
-                        android:id="@+id/txt_user_email"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="raxezdev@gmail.com"
-                        android:textSize="18sp"
-                        android:textColor="#FFFFFF"
-                        android:layout_above="@+id/dummy"
-                        android:layout_centerVertical="true"/>
-
-                <TextView
-                        android:id="@+id/txt_user_role"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="NORMAL"
-                        android:textSize="14sp"
-                        android:textColor="#FFFFFF"
-                        android:layout_below="@+id/dummy"/>
-            </RelativeLayout>
-        </LinearLayout>
+        android:id="@+id/left_drawer"
+        android:layout_height="match_parent"
+        android:layout_width="@dimen/feed_item_drawer"
+        android:orientation="vertical"
+        android:layout_gravity="start"
+        android:background="@color/drawer"
+        android:divider="?android:dividerHorizontal"
+        android:showDividers="middle">
 
         <!-- Providers List -->
         <ListView
-                android:id="@+id/drawer_provider_list"
-                android:layout_width="280dp"
-                android:layout_height="wrap_content"
-                android:choiceMode="singleChoice"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="0dp"/>
+            android:id="@+id/drawer_provider_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:choiceMode="singleChoice"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp"/>
 
         <!-- Add User Provider -->
-        <RelativeLayout
-            android:layout_width="280dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
+            android:paddingLeft="@dimen/drawer_left_right"
+            android:paddingRight="@dimen/drawer_left_right"
+            android:paddingTop="@dimen/drawer_top_bot"
+            android:paddingBottom="@dimen/drawer_top_bot"
             android:onClick="onClickAddUserProvider">
 
             <!-- Icon -->
             <IconTextView
                 android:id="@+id/txt_provider_icon"
-                android:layout_width="20dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="22sp"
-                android:textColor="#626262"
-                android:text="{fa-plus}"/>
+                android:textSize="@dimen/drawer_item_icon"
+                android:textColor="@color/drawer_item_icon"
+                android:text="@string/drawer_add_provider_icon"/>
 
             <!-- Title -->
             <TextView
                 android:id="@+id/txt_provider_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/txt_provider_icon"
-                android:text="Add User Provider"
-                android:textColor="#626262"
+                android:text="@string/drawer_add_provider_title"
+                android:textColor="@color/drawer_item_title"
                 android:typeface="sans"
                 android:gravity="center"
-                android:textSize="16sp"
+                android:textSize="@dimen/drawer_item_title"
                 android:textStyle="bold"
-                android:layout_marginLeft="15dp"/>
+                android:layout_marginLeft="@dimen/drawer_item_title_marg"/>
 
-        </RelativeLayout>
+        </LinearLayout>
 
         <!-- Logout -->
-        <RelativeLayout
-            android:layout_width="280dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
+            android:paddingLeft="@dimen/drawer_left_right"
+            android:paddingRight="@dimen/drawer_left_right"
+            android:paddingTop="@dimen/drawer_top_bot"
+            android:paddingBottom="@dimen/drawer_top_bot"
             android:onClick="onClickLogout">
 
             <!-- Icon -->
             <IconTextView
                 android:id="@+id/txt_logout_icon"
-                android:layout_width="20dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="22sp"
-                android:textColor="#626262"
-                android:text="{fa-sign-out}"/>
+                android:textSize="@dimen/drawer_item_icon"
+                android:textColor="@color/drawer_item_icon"
+                android:text="@string/drawer_logout_icon"/>
 
             <!-- Title -->
             <TextView
                 android:id="@+id/txr_logout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/txt_logout_icon"
-                android:text="Sign out"
-                android:textColor="#626262"
+                android:text="@string/drawer_logout_title"
+                android:textColor="@color/drawer_item_title"
                 android:typeface="sans"
                 android:gravity="center"
-                android:textSize="16sp"
+                android:textSize="@dimen/drawer_item_title"
                 android:textStyle="bold"
-                android:layout_marginLeft="15dp"/>
+                android:layout_marginLeft="@dimen/drawer_item_title_marg"/>
 
-        </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>

@@ -15,6 +15,10 @@
     <string name="dialog_sign_out_title">Sign out confirmation</string>
     <string name="dialog_sign_out_message">Are you sure you wish to sign out?</string>
     <string name="choice_confirm">Yes</string>
+    <string name="drawer_add_provider_title">Add User Provider</string>
+    <string name="drawer_add_provider_icon">{fa-plus}</string>
+    <string name="drawer_logout_icon">{fa-sign-out}</string>
+    <string name="drawer_logout_title">Sign out</string>
 
     <!--
         FontAwesome 4.1.0

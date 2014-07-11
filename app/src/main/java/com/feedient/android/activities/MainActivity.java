@@ -46,8 +46,6 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
-    private TextView mTxtDrawerUserRole;
-    private TextView mTxtDrawerUserEmail;
 
     /**
      * Called when the activity is first created.
@@ -67,8 +65,6 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         mFeedPostsList      = (ListView)findViewById(R.id.list);
         mDrawerLayout       = (DrawerLayout)findViewById(R.id.drawer_layout);
         mDrawerList         = (ListView)findViewById(R.id.drawer_provider_list);
-        mTxtDrawerUserEmail = (TextView)findViewById(R.id.txt_user_email);
-        mTxtDrawerUserRole  = (TextView)findViewById(R.id.txt_user_role);
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_navigation_drawer, R.string.drawer_open, R.string.drawer_close) {
             public void onDrawerClosed(View view) {
@@ -155,8 +151,6 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
                 mFeedListAdapter.notifyDataSetChanged();
                 mDrawerItemAdapter.notifyDataSetChanged();
                 mPullToRefreshLayout.setRefreshing(mMainModel.isRefreshing());
-                mTxtDrawerUserEmail.setText(mMainModel.getAccount().getEmail());
-                mTxtDrawerUserRole.setText(mMainModel.getAccount().getRole());
             }
         });
     }

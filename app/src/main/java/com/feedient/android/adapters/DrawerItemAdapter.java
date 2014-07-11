@@ -25,7 +25,6 @@ public class DrawerItemAdapter extends ArrayAdapter<UserProvider> {
     // ViewHolder pattern (http://developer.android.com/training/improving-layouts/smooth-scrolling.html#ViewHolder)
     public static class ViewHolderItem {
         UserProvider userProvider;
-        ImageView imgProviderIcon;
         TextView txtProviderIcon;
         TextView txtProviderUserName;
         ImageButton imgBtnRemoveProvider;
@@ -50,7 +49,6 @@ public class DrawerItemAdapter extends ArrayAdapter<UserProvider> {
             // Set up the ViewHolder
             viewHolder = new ViewHolderItem();
             viewHolder.userProvider = userProviders.get(position);
-            viewHolder.imgProviderIcon = (ImageView)convertView.findViewById(R.id.img_provider_icon);
             viewHolder.txtProviderUserName = (TextView)convertView.findViewById(R.id.txt_provider_user_name);
             viewHolder.txtProviderIcon = (TextView)convertView.findViewById(R.id.txt_provider_icon);
             viewHolder.imgBtnRemoveProvider = (ImageButton)convertView.findViewById(R.id.img_btn_provider_remove);
@@ -63,8 +61,6 @@ public class DrawerItemAdapter extends ArrayAdapter<UserProvider> {
         }
 
         if (viewHolder.userProvider != null) {
-
-
             if (viewHolder.userProvider.getProviderAccount() != null) {
                 viewHolder.txtProviderIcon.setText("{" + providers.get(viewHolder.userProvider.getProviderAccount().getName().toLowerCase()).getIcon() + "}");
             }
