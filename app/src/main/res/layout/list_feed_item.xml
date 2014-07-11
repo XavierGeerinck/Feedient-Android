@@ -7,8 +7,8 @@
     android:background="@color/feed_bg">
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginRight="@dimen/feed_item_margin"
         android:layout_marginLeft="@dimen/feed_item_margin"
         android:layout_marginTop="@dimen/feed_item_margin"
@@ -20,7 +20,7 @@
         <!--  Header -->
         <LinearLayout
             android:id="@+id/header"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/feed_item_padding_left_right"
@@ -42,7 +42,7 @@
 
             <LinearLayout
                 android:id="@+id/container_details"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/feed_item_profile_info_padd">
@@ -50,7 +50,7 @@
                 <!-- Posted By User -->
                 <TextView
                     android:id="@+id/txt_user_posted_by"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="\@thebillkidy"
                     android:textSize="@dimen/feed_item_profile_name"
@@ -59,7 +59,7 @@
                 <!-- Date Posted -->
                 <TextView
                     android:id="@+id/txt_date_posted"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/feed_item_timestamp"
                     android:textColor="@color/timestamp"
@@ -110,7 +110,7 @@
         <!-- Message -->
         <TextView
             android:id="@+id/txt_message"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/feed_item_status_pad_bot"
             android:paddingLeft="@dimen/feed_item_status_pad_left_right"
@@ -120,7 +120,7 @@
         <!-- Content - Entities -->
         <LinearLayout
             android:id="@+id/layout_entities"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -129,8 +129,8 @@
         <!-- Social Actions -->
         <RelativeLayout
             android:id="@+id/footer"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:paddingTop="@dimen/feed_item_padding_top_bottom"
             android:paddingLeft="@dimen/feed_item_padding_left_right"
             android:paddingRight="@dimen/feed_item_padding_left_right">
@@ -164,7 +164,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_border_feedient"
-                android:text="Comment"
+                android:text="COMMENT"
                 android:layout_alignParentRight="true"
                 android:textColor="#737373"
                 android:textStyle="bold"

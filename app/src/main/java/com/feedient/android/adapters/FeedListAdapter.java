@@ -144,7 +144,6 @@ public class FeedListAdapter extends BaseAdapter {
 
         // Set message if set
         if (!TextUtils.isEmpty(message)) {
-            Log.e("Feedient", message);
             holder.txtMessage.setMovementMethod(LinkMovementMethod.getInstance());
             holder.txtMessage.setText(Html.fromHtml(message));
         } else {
