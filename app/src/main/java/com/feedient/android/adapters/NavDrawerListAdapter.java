@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.IconTextView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,19 +23,18 @@ import java.util.List;
 public class NavDrawerListAdapter extends BaseAdapter {
     private final Context context;
     private final List<NavDrawerItem> navDrawerItems;
+    private final LayoutInflater inflater;
 
     // ViewHolder pattern (http://developer.android.com/training/improving-layouts/smooth-scrolling.html#ViewHolder)
     public static class ViewHolderItem {
-        UserProvider userProvider;
         IconTextView txtIcon;
         TextView txtTitle;
-        ImageButton txtRemoveIcon;
     }
 
-    public NavDrawerListAdapter(Context context, List<NavDrawerItem> navDrawerItems, HashMap<String, IProviderModel> providers) {
+    public NavDrawerListAdapter(Context context, List<NavDrawerItem> navDrawerItems) {
         this.context = context;
-        this.providers = providers;
         this.navDrawerItems = navDrawerItems;
+        this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
 
@@ -58,15 +58,12 @@ public class NavDrawerListAdapter extends BaseAdapter {
         ViewHolderItem viewHolder;
 
         if (convertView == null) {
-            convertView = layoutInflater.inflate(R.layout.drawer_list_item, null);
+            convertView = inflater.inflate(R.layout.drawer_list_item, null);
 
             // Set up the ViewHolder
             viewHolder = new ViewHolderItem();
-            viewHolder.userProvider = userProviders.get(position);
-            viewHolder.txtProviderUserName = (TextView)convertView.findViewById(R.id.txt_provider_user_name);
-            viewHolder.txtProviderIcon = (TextView)convertView.findViewById(R.id.txt_provider_icon);
-            viewHolder.imgBtnRemoveProvider = (ImageButton)convertView.findViewById(R.id.img_btn_provider_remove);
-            viewHolder.imgBtnRemoveProvider.setTag(viewHolder.userProvider);
+            viewHolder.txtTitle = (TextView)convertView.findViewById(R.id.txt_title);
+            viewHolder.txtIcon = (IconTextView)convertView.findViewById(R.id.txt_icon);
 
             // Store the holder
             convertView.setTag(viewHolder);
@@ -74,21 +71,8 @@ public class NavDrawerListAdapter extends BaseAdapter {
             viewHolder = (ViewHolderItem)convertView.getTag();
         }
 
-        if (viewHolder.userProvider != null) {
-            if (viewHolder.userProvider.getProviderAccount() != null) {
-                viewHolder.txtProviderIcon.setText("{" + providers.get(viewHolder.userProvider.getProviderAccount().getName().toLowerCase()).getIcon() + "}");
-            }
-
-            if (viewHolder.userProvider.getProviderAccount().getUsername() != null) {
-                viewHolder.txtProviderUserName.setText(viewHolder.userProvider.getProviderAccount().getUsername());
-            }
-
-            if (viewHolder.userProvider.getProviderAccount().getFullName() != null) {
-                viewHolder.txtProviderUserName.setText(viewHolder.userProvider.getProviderAccount().getFullName());
-            }
-
-            Iconify.addIcons(viewHolder.txtProviderIcon);
-        }
+        viewHolder.txtTitle.setText(navDrawerItems.get(position).getTitle());
+        Iconify.addIcons(viewHolder.txtIcon);
 
         return convertView;
     }

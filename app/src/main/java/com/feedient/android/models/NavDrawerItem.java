@@ -3,7 +3,6 @@ package com.feedient.android.models;
 public class NavDrawerItem {
     private String title;
     private String icon;
-    private boolean isRemoveVisible = false;
 
     public NavDrawerItem() {
         this.title = "";
@@ -13,12 +12,6 @@ public class NavDrawerItem {
     public NavDrawerItem(String title, String icon) {
         this.title = title;
         this.icon = icon;
-    }
-
-    public NavDrawerItem(String title, String icon, boolean isRemoveVisible) {
-        this.title = title;
-        this.icon = icon;
-        this.isRemoveVisible = isRemoveVisible;
     }
 
     public String getTitle() {
@@ -35,13 +28,5 @@ public class NavDrawerItem {
 
     public void setIcon(String icon) {
         this.icon = icon;
-    }
-
-    public boolean isRemoveVisible() {
-        return isRemoveVisible;
-    }
-
-    public void setRemoveVisible(boolean isRemoveVisible) {
-        this.isRemoveVisible = isRemoveVisible;
     }
 }

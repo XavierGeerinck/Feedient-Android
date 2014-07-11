@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
+
+import com.feedient.android.R;
 import com.feedient.android.adapters.FeedientRestAdapter;
 import com.feedient.android.data.AssetsPropertyReader;
 import com.feedient.android.interfaces.FeedientService;
@@ -49,6 +51,8 @@ public class MainModel extends Observable {
     private FeedientService feedientService;
     private String accessToken;
 
+    private List<NavDrawerItem> navDrawerItems;
+
     private boolean isRefreshing;
 
     public MainModel(Context context) {
@@ -72,6 +76,15 @@ public class MainModel extends Observable {
         timerInterval = Long.parseLong(configProperties.getProperty("auto_update_interval"));
 
         initProviders();
+        initMenuItems();
+    }
+
+    private void initMenuItems() {
+        String[] navMenuTitles = context.getResources().getStringArray(R.array.nav_drawer_items);
+        navDrawerItems = new ArrayList<NavDrawerItem>();
+
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], "{fa-plus}")); // Add provider
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], "{fa-sign-out}")); // Sign Out
     }
 
     private void initProviders() {
@@ -293,5 +306,9 @@ public class MainModel extends Observable {
 
     public String getAccessToken() {
         return sharedPreferences.getString(properties.getProperty("prefs.key.token"), "");
+    }
+
+    public List<NavDrawerItem> getNavDrawerItems() {
+        return navDrawerItems;
     }
 }

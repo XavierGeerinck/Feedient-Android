@@ -21,6 +21,7 @@ import com.feedient.android.R;
 import com.feedient.android.adapters.NavDrawerListAdapter;
 import com.feedient.android.adapters.FeedListAdapter;
 import com.feedient.android.adapters.GridItemAdapter;
+import com.feedient.android.adapters.NavDrawerProvidersListAdapter;
 import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.models.GridItem;
 import com.feedient.android.models.MainModel;
@@ -39,11 +40,13 @@ import java.util.Observer;
 public class MainActivity extends Activity implements Observer, OnRefreshListener {
     private FeedListAdapter mFeedListAdapter;
     private NavDrawerListAdapter mNavDrawerListAdapter;
+    private NavDrawerProvidersListAdapter mNavDrawerProvidersListAdapter;
     private MainModel mMainModel;
     private PullToRefreshLayout mPullToRefreshLayout;
     private ListView mFeedPostsList;
     private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
+    private ListView mNavDrawerList;
+    private ListView mNavDrawerProvidersList;
     private ActionBarDrawerToggle mDrawerToggle;
 
     /**
@@ -61,9 +64,10 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         mMainModel.loadFeeds();
 
         // Init the views
-        mFeedPostsList      = (ListView)findViewById(R.id.list);
-        mDrawerLayout       = (DrawerLayout)findViewById(R.id.drawer_layout);
-        mDrawerList         = (ListView)findViewById(R.id.drawer_provider_list);
+        mFeedPostsList          = (ListView)findViewById(R.id.list);
+        mDrawerLayout           = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mNavDrawerList          = (ListView)findViewById(R.id.drawer_list);
+        mNavDrawerProvidersList = (ListView)findViewById(R.id.drawer_provider_list);
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_navigation_drawer, R.string.drawer_open, R.string.drawer_close) {
             public void onDrawerClosed(View view) {
@@ -89,9 +93,13 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         mFeedListAdapter = new FeedListAdapter(this, mMainModel.getFeedPosts());
         mFeedPostsList.setAdapter(mFeedListAdapter);
 
-        // Set the adapter for our drawer list
-        mNavDrawerListAdapter = new NavDrawerListAdapter(this, mMainModel.getUserProviders(), mMainModel.getProviders());
-        mDrawerList.setAdapter(mNavDrawerListAdapter);
+        // Set the adapter for our drawer provider list items
+        mNavDrawerProvidersListAdapter = new NavDrawerProvidersListAdapter(this, mMainModel.getProviders(), mMainModel.getUserProviders());
+        mNavDrawerProvidersList.setAdapter(mNavDrawerProvidersListAdapter);
+
+        // Set the adapter for our drawer list navigation items
+        mNavDrawerListAdapter = new NavDrawerListAdapter(this, mMainModel.getNavDrawerItems());
+        mNavDrawerList.setAdapter(mNavDrawerListAdapter);
 
         mPullToRefreshLayout = (PullToRefreshLayout)findViewById(R.id.swipe_container);
         ActionBarPullToRefresh.from(this)
@@ -148,7 +156,7 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
                 checkLoggedIn();
 
                 mFeedListAdapter.notifyDataSetChanged();
-                mNavDrawerListAdapter.notifyDataSetChanged();
+                mNavDrawerProvidersListAdapter.notifyDataSetChanged();
                 mPullToRefreshLayout.setRefreshing(mMainModel.isRefreshing());
             }
         });
@@ -191,7 +199,7 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
                     public void onClick(DialogInterface dialog, int id) {
                         UserProvider up = (UserProvider)v.getTag();
                         mMainModel.removeUserProvider(up);
-                        mNavDrawerListAdapter.remove(up);
+                        //mNavDrawerListAdapter.remove(up);
                     }
                 })
                 .setNegativeButton(R.string.choice_cancel, new DialogInterface.OnClickListener() {

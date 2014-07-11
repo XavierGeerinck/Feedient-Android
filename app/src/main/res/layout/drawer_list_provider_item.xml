@@ -7,7 +7,7 @@
 
     <!-- Drawer Item Icon -->
     <IconTextView
-        android:id="@+id/txt_icon"
+        android:id="@+id/txt_provider_icon"
         android:layout_width="25dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -17,14 +17,26 @@
 
     <!-- Drawer Item Title -->
     <TextView
-        android:id="@+id/txt_title"
+        android:id="@+id/txt_provider_user_name"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_toRightOf="@id/txt_icon"
+        android:layout_toRightOf="@id/txt_provider_icon"
         android:minHeight="?android:attr/listPreferredItemHeightSmall"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
         android:textColor="@color/drawer_list_item_title"
         android:gravity="center_vertical"
         android:paddingRight="@dimen/drawer_list_item_padding_left_right"/>
+
+    <!-- Provider Remove Button -->
+    <ImageButton
+        android:id="@+id/img_btn_provider_remove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="8dp"
+        android:src="@drawable/ic_action_remove"
+        android:background="@null"
+        android:onClick="onClickRemoveUserProvider"/>
 
 </RelativeLayout>
