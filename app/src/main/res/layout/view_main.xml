@@ -35,6 +35,12 @@
         android:divider="?android:dividerHorizontal"
         android:showDividers="middle">
 
+        <!-- Framelayout to display Fragments -->
+        <FrameLayout
+            android:id="@+id/frame_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
         <!-- Providers List -->
         <ListView
             android:id="@+id/drawer_provider_list"

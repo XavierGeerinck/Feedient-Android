@@ -3,33 +3,30 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp"
-    android:paddingTop="15dp"
-    android:paddingBottom="15dp">
+    android:orientation="horizontal">
 
-    <!-- Provider Icon -->
-    <TextView
-        android:id="@+id/txt_provider_icon"
-        android:layout_width="20dp"
-        android:layout_height="match_parent"
-        android:textSize="22sp"
-        android:textColor="#626262"/>
+    <!-- Drawer Item Icon -->
+    <IconTextView
+        android:id="@+id/txt_icon"
+        android:layout_width="25dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:src="@drawable/ic_home"
+        android:layout_centerVertical="true"/>
 
-    <!-- Provider User Name -->
+    <!-- Drawer Item Title -->
     <TextView
         android:id="@+id/txt_provider_user_name"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_toRightOf="@id/txt_provider_icon"
-        android:text="FeedientApp"
-        android:textColor="#626262"
-        android:typeface="sans"
-        android:gravity="center"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginLeft="15dp"/>
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:textColor="@color/drawer_list_item_title"
+        android:gravity="center_vertical"
+        android:paddingRight="@dimen/drawer_list_item_padding_left_right"/>
 
     <!-- Provider Remove Button -->
     <ImageButton
@@ -38,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="5dp"
+        android:layout_marginRight="8dp"
         android:src="@drawable/ic_action_remove"
         android:background="@null"
         android:onClick="onClickRemoveUserProvider"/>

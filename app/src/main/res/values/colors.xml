@@ -16,4 +16,8 @@
     <color name="drawer">#FEFEFE</color>
     <color name="drawer_item_icon">#626262</color>
     <color name="drawer_item_title">#626262</color>
+    <color name="drawer_list_background">#FFFFFF</color>
+    <color name="drawer_list_background_pressed">#EEEEEE</color>
+    <color name="counter_text_bg">#FFFFFF</color>
+    <color name="drawer_list_item_title">#626262</color>
 </resources>

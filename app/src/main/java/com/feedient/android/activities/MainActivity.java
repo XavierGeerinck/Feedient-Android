@@ -16,10 +16,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.feedient.android.R;
-import com.feedient.android.adapters.DrawerItemAdapter;
+import com.feedient.android.adapters.NavDrawerListAdapter;
 import com.feedient.android.adapters.FeedListAdapter;
 import com.feedient.android.adapters.GridItemAdapter;
 import com.feedient.android.interfaces.IProviderModel;
@@ -39,7 +38,7 @@ import java.util.Observer;
 
 public class MainActivity extends Activity implements Observer, OnRefreshListener {
     private FeedListAdapter mFeedListAdapter;
-    private DrawerItemAdapter mDrawerItemAdapter;
+    private NavDrawerListAdapter mNavDrawerListAdapter;
     private MainModel mMainModel;
     private PullToRefreshLayout mPullToRefreshLayout;
     private ListView mFeedPostsList;
@@ -91,8 +90,8 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         mFeedPostsList.setAdapter(mFeedListAdapter);
 
         // Set the adapter for our drawer list
-        mDrawerItemAdapter = new DrawerItemAdapter(this, mMainModel.getUserProviders(), mMainModel.getProviders());
-        mDrawerList.setAdapter(mDrawerItemAdapter);
+        mNavDrawerListAdapter = new NavDrawerListAdapter(this, mMainModel.getUserProviders(), mMainModel.getProviders());
+        mDrawerList.setAdapter(mNavDrawerListAdapter);
 
         mPullToRefreshLayout = (PullToRefreshLayout)findViewById(R.id.swipe_container);
         ActionBarPullToRefresh.from(this)
@@ -149,7 +148,7 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
                 checkLoggedIn();
 
                 mFeedListAdapter.notifyDataSetChanged();
-                mDrawerItemAdapter.notifyDataSetChanged();
+                mNavDrawerListAdapter.notifyDataSetChanged();
                 mPullToRefreshLayout.setRefreshing(mMainModel.isRefreshing());
             }
         });
@@ -192,7 +191,7 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
                     public void onClick(DialogInterface dialog, int id) {
                         UserProvider up = (UserProvider)v.getTag();
                         mMainModel.removeUserProvider(up);
-                        mDrawerItemAdapter.remove(up);
+                        mNavDrawerListAdapter.remove(up);
                     }
                 })
                 .setNegativeButton(R.string.choice_cancel, new DialogInterface.OnClickListener() {

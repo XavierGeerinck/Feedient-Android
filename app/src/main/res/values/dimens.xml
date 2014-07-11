@@ -26,4 +26,5 @@
     <dimen name="drawer_item_icon">22sp</dimen>
     <dimen name="drawer_item_title">16sp</dimen>
     <dimen name="drawer_item_title_marg">15dp</dimen>
+    <dimen name="drawer_list_item_padding_left_right">40dp</dimen>
 </resources>

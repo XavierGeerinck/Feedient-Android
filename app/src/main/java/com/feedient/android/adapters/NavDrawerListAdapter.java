@@ -5,38 +5,52 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.feedient.android.R;
 import com.feedient.android.interfaces.IProviderModel;
+import com.feedient.android.models.NavDrawerItem;
 import com.feedient.android.models.json.UserProvider;
 import com.joanzapata.android.iconify.Iconify;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class DrawerItemAdapter extends ArrayAdapter<UserProvider> {
+public class NavDrawerListAdapter extends BaseAdapter {
     private final Context context;
-    private final List<UserProvider> userProviders;
-    private final HashMap<String, IProviderModel> providers;
-    private final LayoutInflater layoutInflater;
+    private final List<NavDrawerItem> navDrawerItems;
 
     // ViewHolder pattern (http://developer.android.com/training/improving-layouts/smooth-scrolling.html#ViewHolder)
     public static class ViewHolderItem {
         UserProvider userProvider;
-        TextView txtProviderIcon;
-        TextView txtProviderUserName;
-        ImageButton imgBtnRemoveProvider;
+        IconTextView txtIcon;
+        TextView txtTitle;
+        ImageButton txtRemoveIcon;
     }
 
-    public DrawerItemAdapter(Context context, List<UserProvider> userProviders, HashMap<String, IProviderModel> providers) {
-        super(context, R.layout.view_main, userProviders);
-
+    public NavDrawerListAdapter(Context context, List<NavDrawerItem> navDrawerItems, HashMap<String, IProviderModel> providers) {
         this.context = context;
         this.providers = providers;
-        this.userProviders = userProviders;
-        this.layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.navDrawerItems = navDrawerItems;
+    }
+
+
+    @Override
+    public int getCount() {
+        return navDrawerItems.size();
+    }
+
+    @Override
+    public Object getItem(int i) {
+        return navDrawerItems.get(i);
+    }
+
+    @Override
+    public long getItemId(int i) {
+        return i;
     }
 
     @Override
