@@ -6,4 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="@dimen/feed_item_status_pad_top"
-    android:paddingBottom="@dimen/feed_item_status_pad_bot"/>
+    android:paddingBottom="@dimen/feed_item_status_pad_bot"
+    android:paddingLeft="@dimen/feed_item_entity_image_pad_left_right"
+    android:paddingRight="@dimen/feed_item_entity_image_pad_left_right"
+    android:scaleType="fitXY"/>

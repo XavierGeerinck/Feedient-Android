@@ -138,41 +138,40 @@
             <IconButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_border_feedient"
                 android:id="@+id/btn_twitter_favorite"
                 android:text="{fa-star}"
-                android:textColor="#737373"
-                android:textSize="18sp"
-                android:layout_marginRight="10dp"
+                android:textColor="@color/feed_item_action_social_icon"
+                android:textSize="@dimen/feed_item_action_social_icon"
+                android:layout_marginRight="@dimen/feed_item_action_social_icon_marg_left_right"
                 android:minHeight="1dp"
-                android:minWidth="1dp"/>
+                android:minWidth="1dp"
+                android:background="@android:color/transparent"/>
 
             <IconButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_border_feedient"
                 android:id="@+id/btn_twitter_retweet"
                 android:layout_toRightOf="@id/btn_twitter_favorite"
                 android:text="{fa-retweet}"
-                android:textColor="#737373"
-                android:textSize="18sp"
-                android:layout_marginRight="10dp"
+                android:textColor="@color/feed_item_action_social_icon"
+                android:textSize="@dimen/feed_item_action_social_icon"
+                android:layout_marginRight="@dimen/feed_item_action_social_icon_marg_left_right"
                 android:minHeight="1dp"
-                android:minWidth="1dp"/>
+                android:minWidth="1dp"
+                android:background="@android:color/transparent"/>
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_border_feedient"
-                android:text="COMMENT"
+                android:text="@string/feed_item_action_comment"
                 android:layout_alignParentRight="true"
-                android:textColor="#737373"
+                android:textColor="@color/feed_item_action_social_icon"
                 android:textStyle="bold"
-                android:textSize="16sp"
+                android:textSize="@dimen/feed_item_action_social_comment"
                 android:minHeight="1dp"
-                android:minWidth="1dp"/>
+                android:minWidth="1dp"
+                android:background="@android:color/transparent"/>
 
         </RelativeLayout>
     </LinearLayout>
-
 </RelativeLayout>
