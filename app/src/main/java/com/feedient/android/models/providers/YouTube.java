@@ -6,9 +6,11 @@ import android.util.Log;
 
 import com.feedient.android.interfaces.FeedientService;
 import com.feedient.android.interfaces.IProviderModel;
+import com.feedient.android.models.json.UserProvider;
 import com.feedient.android.models.json.response.AddProvider;
 import com.feedient.android.models.json.response.RemoveUserProvider;
 import com.feedient.oauth.OAuthDialog;
+import com.feedient.oauth.interfaces.IAddProviderCallback;
 import com.feedient.oauth.interfaces.IOAuth2Provider;
 import com.feedient.oauth.webview.WebViewCallback;
 
@@ -69,11 +71,11 @@ public class YouTube implements IProviderModel, IOAuth2Provider {
         return OAUTH_URL;
     }
 
-    public void addProvider(String accessToken, FeedientService feedientService, String oAuthCode) {
-        feedientService.addOAuth2Provider(accessToken, NAME, oAuthCode, new Callback<AddProvider>() {
+    public void addProvider(String accessToken, FeedientService feedientService, String oAuthCode, final IAddProviderCallback callback) {
+        feedientService.addOAuth2Provider(accessToken, NAME, oAuthCode, new Callback<UserProvider>() {
             @Override
-            public void success(AddProvider addProvider, Response response) {
-                Log.e("Feedient", "isSuccess: " + addProvider.isSuccess());
+            public void success(UserProvider userProvider, Response response) {
+                callback.onSuccess(userProvider);
             }
 
             @Override
@@ -84,12 +86,12 @@ public class YouTube implements IProviderModel, IOAuth2Provider {
     }
 
     @Override
-    public void popup(Context context, final String accessToken) {
+    public void popup(Context context, final String accessToken, final IAddProviderCallback callback) {
         // Create + open the OAuthDialog
         OAuthDialog dialog = new OAuthDialog(context, OAUTH_URL, OAUTH_CALLBACK_URL, new WebViewCallback() {
             @Override
             public void onGotTokens(Dialog oAuthDialog, HashMap<String, String> tokens) {
-                addProvider(accessToken, feedientService, tokens.get("code"));
+                addProvider(accessToken, feedientService, tokens.get("code"), callback);
 
                 // close dialogs
                 oAuthDialog.dismiss();

@@ -6,9 +6,11 @@ import android.util.Log;
 
 import com.feedient.android.interfaces.FeedientService;
 import com.feedient.android.interfaces.IProviderModel;
+import com.feedient.android.models.json.UserProvider;
 import com.feedient.android.models.json.response.AddProvider;
 import com.feedient.android.models.json.response.RemoveUserProvider;
 import com.feedient.oauth.OAuthDialog;
+import com.feedient.oauth.interfaces.IAddProviderCallback;
 import com.feedient.oauth.interfaces.IGetRequestTokenCallback;
 import com.feedient.oauth.interfaces.IOAuth1Provider;
 import com.feedient.oauth.models.GetRequestToken;
@@ -71,11 +73,11 @@ public class Tumblr implements IProviderModel, IOAuth1Provider {
         return OAUTH_URL;
     }
 
-    public void addProvider(String accessToken, FeedientService feedientService, String requestSecret, String oAuthToken, String oAuthVerifier) {
-        feedientService.addOAuth1Provider(accessToken, NAME, requestSecret, oAuthToken, oAuthVerifier, new Callback<AddProvider>() {
+    public void addProvider(String accessToken, FeedientService feedientService, String requestSecret, String oAuthToken, String oAuthVerifier, final IAddProviderCallback callback) {
+        feedientService.addOAuth1Provider(accessToken, NAME, requestSecret, oAuthToken, oAuthVerifier, new Callback<UserProvider>() {
             @Override
-            public void success(AddProvider addProvider, Response response) {
-                Log.e("Feedient", "isSuccess: " + addProvider.isSuccess());
+            public void success(UserProvider userProvider, Response response) {
+                callback.onSuccess(userProvider);
             }
 
             @Override
@@ -86,7 +88,7 @@ public class Tumblr implements IProviderModel, IOAuth1Provider {
     }
 
     @Override
-    public void popup(final Context context, final String accessToken) {
+    public void popup(final Context context, final String accessToken, final IAddProviderCallback callback) {
         getRequestToken(new IGetRequestTokenCallback() {
             @Override
             public void success(final GetRequestToken requestToken) {
@@ -94,7 +96,7 @@ public class Tumblr implements IProviderModel, IOAuth1Provider {
                 OAuthDialog dialog = new OAuthDialog(context, OAUTH_URL + requestToken.getoAuthToken(), OAUTH_CALLBACK_URL, new WebViewCallback() {
                     @Override
                     public void onGotTokens(Dialog oAuthDialog, HashMap<String, String> tokens) {
-                        addProvider(accessToken, feedientService, requestToken.getoAuthSecret(), tokens.get("oauth_token"), tokens.get("oauth_verifier"));
+                        addProvider(accessToken, feedientService, requestToken.getoAuthSecret(), tokens.get("oauth_token"), tokens.get("oauth_verifier"), callback);
 
                         // close dialogs
                         oAuthDialog.dismiss();

@@ -37,7 +37,6 @@ public class NavDrawerListAdapter extends BaseAdapter {
         this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-
     @Override
     public int getCount() {
         return navDrawerItems.size();
@@ -72,6 +71,7 @@ public class NavDrawerListAdapter extends BaseAdapter {
         }
 
         viewHolder.txtTitle.setText(navDrawerItems.get(position).getTitle());
+        viewHolder.txtIcon.setText(navDrawerItems.get(position).getIcon());
         Iconify.addIcons(viewHolder.txtIcon);
 
         return convertView;

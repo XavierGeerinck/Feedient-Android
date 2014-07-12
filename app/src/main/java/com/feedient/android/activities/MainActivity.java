@@ -23,6 +23,7 @@ import com.feedient.android.adapters.NavDrawerListAdapter;
 import com.feedient.android.adapters.FeedListAdapter;
 import com.feedient.android.adapters.GridItemAdapter;
 import com.feedient.android.adapters.NavDrawerProvidersListAdapter;
+import com.feedient.android.interfaces.IDrawerProviderItemCallback;
 import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.models.GridItem;
 import com.feedient.android.models.MainModel;
@@ -45,13 +46,17 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
     private DrawerLayout mDrawerLayout;
     private ListView mNavDrawerList;
     private ListView mNavDrawerProvidersList;
+    private ActionBarDrawerToggle mDrawerToggle;
 
     // Feed variables
     private FeedListAdapter mFeedListAdapter;
     private MainModel mMainModel;
     private PullToRefreshLayout mPullToRefreshLayout;
     private ListView mFeedPostsList;
-    private ActionBarDrawerToggle mDrawerToggle;
+
+    // App title
+    private CharSequence mTitle;
+    private CharSequence mDrawerTitle;
 
     /**
      * Called when the activity is first created.
@@ -60,6 +65,8 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_main); // @todo: When loading, set a loading icon
+
+        mTitle = mDrawerTitle = getTitle();
 
         // Init observers
         mMainModel = new MainModel(this);
@@ -72,18 +79,6 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         mDrawerLayout           = (DrawerLayout)findViewById(R.id.drawer_layout);
         mNavDrawerList          = (ListView)findViewById(R.id.drawer_list);
         mNavDrawerProvidersList = (ListView)findViewById(R.id.drawer_provider_list);
-
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_navigation_drawer, R.string.drawer_open, R.string.drawer_close) {
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                getActionBar().setTitle("Feedient");
-            }
-
-            public void onDrawerOpened(View view) {
-                super.onDrawerOpened(view);
-                getActionBar().setTitle("Settings");
-            }
-        };
 
         // Fix margin top and bottom for list of cards
         mFeedPostsList.addFooterView(new View(this), null, false);
@@ -98,12 +93,35 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         mNavDrawerList.setAdapter(mNavDrawerListAdapter);
 
         // Set the adapter for our drawer provider list items
-        mNavDrawerProvidersListAdapter = new NavDrawerProvidersListAdapter(getApplicationContext(), mMainModel.getProviders(), mMainModel.getUserProviders());
+        mNavDrawerProvidersListAdapter = new NavDrawerProvidersListAdapter(getApplicationContext(), mMainModel.getUserProviders(), mMainModel.getProviders(), new IDrawerProviderItemCallback() {
+            @Override
+            public void onClickRemoveUserProvider(UserProvider up) {
+                MainActivity.this.onClickRemoveUserProvider(up);
+            }
+        });
         mNavDrawerProvidersList.setAdapter(mNavDrawerProvidersListAdapter);
 
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
+
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.drawable.ic_navigation_drawer, // Toggle icon
+                R.string.drawer_open,            // Description onOpen
+                R.string.drawer_close            // Description onClose
+        ) {
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                getActionBar().setTitle(mTitle);
+            }
+
+            public void onDrawerOpened(View view) {
+                super.onDrawerOpened(view);
+                getActionBar().setTitle(mDrawerTitle);
+            }
+        };
+
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mNavDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         mPullToRefreshLayout = (PullToRefreshLayout)findViewById(R.id.swipe_container);
         ActionBarPullToRefresh.from(this)
@@ -113,6 +131,20 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
 
         // Start auto update
         //mMainModel.initAutoUpdateTimer();
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        mTitle = title;
+        getActionBar().setTitle(mTitle);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // If nav drawer is opened, hide the action items
+        //boolean drawerOpen = mDrawerLayout.isDrawerOpen(mNavDrawerList);
+        //menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -140,16 +172,25 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         }
     }
 
+    @Override
     public void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync toggle state after onRestoreInstanceState has occurred
         mDrawerToggle.syncState();
     }
 
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
+
+
+    @Override
+    public void onRefreshStarted(View view) {
+        mMainModel.loadNewPosts();
+    }
+
 
     @Override
     public void update(Observable observable, Object o) {
@@ -173,36 +214,18 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         }
     }
 
-    public void onClickLogout(final View v) {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.dialog_sign_out_title)
-                .setMessage(R.string.dialog_sign_out_message)
-                .setPositiveButton(R.string.choice_confirm, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    mMainModel.logout();
-                    }
-                })
-                .setNegativeButton(R.string.choice_cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User cancelled the dialog
-                    }
-                })
-                .show();
-    }
-
     private void openLoginActivity() {
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
         finish(); // close current intent
     }
 
-    public void onClickRemoveUserProvider(final View v) {
+    public void onClickRemoveUserProvider(final UserProvider up) {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.dialog_remove_user_provider_title)
                 .setMessage(R.string.dialog_remove_user_provider_message)
                 .setPositiveButton(R.string.choice_remove, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        UserProvider up = (UserProvider)v.getTag();
                         mMainModel.removeUserProvider(up);
                         //mNavDrawerListAdapter.remove(up);
                     }
@@ -215,7 +238,32 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
                 .show();
     }
 
-    public void onClickAddUserProvider(View v) {
+    /**
+     * DrawerItemListener -  OnItemClick in the drawer
+     */
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            executeAction(position);
+        }
+    }
+
+    private void executeAction(int position) {
+        View view = getWindow().getDecorView().getRootView();
+
+        switch (position) {
+            // Add Provider
+            case 0:
+                actionAddUserProvider(view);
+                break;
+            // Logout
+            case 1:
+                actionLogout(view);
+                break;
+        }
+    }
+
+    public void actionAddUserProvider(View v) {
         View customView = LayoutInflater.from(this).inflate(R.layout.dialog_grid, null);
         final List<GridItem> items = new ArrayList<GridItem>();
 
@@ -243,8 +291,20 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         });
     }
 
-    @Override
-    public void onRefreshStarted(View view) {
-        mMainModel.loadNewPosts();
+    public void actionLogout(final View v) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.dialog_sign_out_title)
+                .setMessage(R.string.dialog_sign_out_message)
+                .setPositiveButton(R.string.choice_confirm, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        mMainModel.logout();
+                    }
+                })
+                .setNegativeButton(R.string.choice_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                })
+                .show();
     }
 }

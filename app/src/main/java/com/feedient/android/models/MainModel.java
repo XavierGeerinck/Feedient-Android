@@ -9,6 +9,7 @@ import com.feedient.android.R;
 import com.feedient.android.adapters.FeedientRestAdapter;
 import com.feedient.android.data.AssetsPropertyReader;
 import com.feedient.android.interfaces.FeedientService;
+import com.feedient.oauth.interfaces.IAddProviderCallback;
 import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.models.json.Account;
 import com.feedient.android.models.json.UserProvider;
@@ -262,7 +263,7 @@ public class MainModel extends Observable {
         feedientService.removeUserProvider(accessToken, up.getId(), new Callback<RemoveUserProvider>() {
             @Override
             public void success(RemoveUserProvider rup, Response response) {
-                Log.e("Feedient", "Remove User Provider: " + rup.isSuccess());
+                _triggerObservers();
             }
 
             @Override
@@ -293,7 +294,13 @@ public class MainModel extends Observable {
     }
 
     public void addProvider(IProviderModel provider) {
-        provider.popup(context, accessToken);
+        provider.popup(context, accessToken, new IAddProviderCallback() {
+            @Override
+            public void onSuccess(UserProvider provider) {
+                userProviders.add(provider);
+                _triggerObservers();
+            }
+        });
     }
 
     public FeedientService getFeedientService() {

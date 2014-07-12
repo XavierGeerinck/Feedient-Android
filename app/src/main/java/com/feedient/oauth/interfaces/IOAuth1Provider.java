@@ -9,6 +9,6 @@ public interface IOAuth1Provider {
     public String getOauthCallbackUrl();
     public String getAppId();
 
-    public void popup(Context context, final String accessToken);
+    public void popup(Context context, final String accessToken, IAddProviderCallback callback);
     public void getRequestToken(IGetRequestTokenCallback callback);
 }
