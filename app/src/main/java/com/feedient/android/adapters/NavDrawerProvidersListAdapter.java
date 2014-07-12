@@ -2,6 +2,7 @@ package com.feedient.android.adapters;
 
 import android.content.Context;
 import android.text.Layout;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,12 +90,12 @@ public class NavDrawerProvidersListAdapter extends BaseAdapter {
             if (viewHolder.userProvider.getProviderAccount() != null) {
                 viewHolder.txtProviderIcon.setText("{" + providers.get(viewHolder.userProvider.getProviderAccount().getName().toLowerCase()).getIcon() + "}");
 
-                if (viewHolder.userProvider.getProviderAccount().getUsername() != null) {
-                    viewHolder.txtProviderUserName.setText(viewHolder.userProvider.getProviderAccount().getUsername());
+                if (viewHolder.userProvider.getProviderAccount().getFullName() != null && !TextUtils.isEmpty(viewHolder.userProvider.getProviderAccount().getFullName())) {
+                    viewHolder.txtProviderUserName.setText(viewHolder.userProvider.getProviderAccount().getFullName());
                 }
 
-                if (viewHolder.userProvider.getProviderAccount().getFullName() != null) {
-                    viewHolder.txtProviderUserName.setText(viewHolder.userProvider.getProviderAccount().getFullName());
+                if (viewHolder.userProvider.getProviderAccount().getUsername() != null && !TextUtils.isEmpty(viewHolder.userProvider.getProviderAccount().getUsername())) {
+                    viewHolder.txtProviderUserName.setText(viewHolder.userProvider.getProviderAccount().getUsername());
                 }
             }
 
