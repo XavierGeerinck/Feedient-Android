@@ -24,7 +24,7 @@ public class Tumblr implements IProviderModel, IOAuth1Provider {
     public static final String NAME = "tumblr";
     public static final String TEXT_COLOR = "#35465c";
     public static final String ICON = "fa-tumblr";
-    public static final String APP_ID = "S8NXaMjYSrlDt1hhLCNnw7BucYviEtpz4o5fY26TGkNdVm9aV9";
+    public static final String APP_ID = "0eMZWV63dKEc3ec4ePB5AbOFW9IhYLcR3rFaW4CMe7v5Ai0Qki";
     public static final String OAUTH_CALLBACK_URL = "http://test.feedient.com/app/callback/tumblr";
     public static final String OAUTH_URL = "http://www.tumblr.com/oauth/authorize?oauth_token="; //@todo: Needs Request Token
 

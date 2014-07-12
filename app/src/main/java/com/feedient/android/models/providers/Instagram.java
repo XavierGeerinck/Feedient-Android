@@ -22,7 +22,7 @@ public class Instagram implements IProviderModel, IOAuth2Provider {
     public static final String NAME = "instagram";
     public static final String TEXT_COLOR = "#3f729b";
     public static final String ICON = "fa-instagram";
-    public static final String APP_ID = "23320322e2744f9a85f30e807b8f860b";
+    public static final String APP_ID = "bda95c8497074bc58b84076c8f576e2f";
     public static final String OAUTH_CALLBACK_URL = "http://test.feedient.com/app/callback/instagram";
     public static final String OAUTH_URL = "https://api.instagram.com/oauth/authorize?client_id=" + APP_ID + "&response_type=code&scope=basic+comments+relationships+likes&redirect_uri=" + OAUTH_CALLBACK_URL;
 

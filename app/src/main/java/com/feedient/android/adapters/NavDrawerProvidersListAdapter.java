@@ -71,10 +71,6 @@ public class NavDrawerProvidersListAdapter extends BaseAdapter {
             // Set up the ViewHolder
             viewHolder = new ViewHolderItem();
 
-            if (userProviders.size() > position) {
-                viewHolder.userProvider = userProviders.get(position);
-            }
-
             viewHolder.txtProviderIcon = (IconTextView)convertView.findViewById(R.id.txt_provider_icon);
             viewHolder.txtProviderUserName = (TextView)convertView.findViewById(R.id.txt_provider_user_name);
             viewHolder.txtRemoveIcon = (ImageButton)convertView.findViewById(R.id.img_btn_provider_remove);
@@ -85,17 +81,21 @@ public class NavDrawerProvidersListAdapter extends BaseAdapter {
             viewHolder = (ViewHolderItem)convertView.getTag();
         }
 
+        if (userProviders.size() > position) {
+            viewHolder.userProvider = userProviders.get(position);
+        }
+
         if (viewHolder.userProvider != null) {
             if (viewHolder.userProvider.getProviderAccount() != null) {
                 viewHolder.txtProviderIcon.setText("{" + providers.get(viewHolder.userProvider.getProviderAccount().getName().toLowerCase()).getIcon() + "}");
-            }
 
-            if (viewHolder.userProvider.getProviderAccount().getUsername() != null) {
-                viewHolder.txtProviderUserName.setText(viewHolder.userProvider.getProviderAccount().getUsername());
-            }
+                if (viewHolder.userProvider.getProviderAccount().getUsername() != null) {
+                    viewHolder.txtProviderUserName.setText(viewHolder.userProvider.getProviderAccount().getUsername());
+                }
 
-            if (viewHolder.userProvider.getProviderAccount().getFullName() != null) {
-                viewHolder.txtProviderUserName.setText(viewHolder.userProvider.getProviderAccount().getFullName());
+                if (viewHolder.userProvider.getProviderAccount().getFullName() != null) {
+                    viewHolder.txtProviderUserName.setText(viewHolder.userProvider.getProviderAccount().getFullName());
+                }
             }
 
             Iconify.addIcons(viewHolder.txtProviderIcon);
