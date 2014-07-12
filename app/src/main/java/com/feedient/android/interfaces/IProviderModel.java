@@ -2,8 +2,6 @@ package com.feedient.android.interfaces;
 
 import android.content.Context;
 
-import com.feedient.oauth.interfaces.IAddProviderCallback;
-
 public interface IProviderModel {
     public String getTextColor();
     public String getIcon();

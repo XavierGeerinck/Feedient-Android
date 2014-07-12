@@ -44,11 +44,11 @@ public interface FeedientService {
 
     @FormUrlEncoded
     @POST("/provider/{name}/callback")
-    void addOAuth2Provider(@Header("Bearer")String accessToken, @Path("name")String providerName, @Field("oauth_code")String oauthCode, Callback<UserProvider> cb);
+    void addOAuth2Provider(@Header("Bearer")String accessToken, @Path("name")String providerName, @Field("oauth_code")String oauthCode, Callback<List<UserProvider>> cb);
 
     @FormUrlEncoded
     @POST("/provider/{name}/callback")
-    void addOAuth1Provider(@Header("Bearer")String accessToken, @Path("name")String providerName, @Field("oauth_secret")String oAuthSecret, @Field("oauth_token")String oAuthToken, @Field("oauth_verifier")String oAuthVerifier, Callback<UserProvider> cb);
+    void addOAuth1Provider(@Header("Bearer")String accessToken, @Path("name")String providerName, @Field("oauth_secret")String oAuthSecret, @Field("oauth_token")String oAuthToken, @Field("oauth_verifier")String oAuthVerifier, Callback<List<UserProvider>> cb);
 
     @GET("/provider/{name}/request_token")
     void getRequestToken(@Header("Bearer")String accessToken, @Path("name")String providerName, Callback<GetRequestToken> cb);

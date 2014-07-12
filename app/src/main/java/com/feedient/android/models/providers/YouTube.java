@@ -2,22 +2,17 @@ package com.feedient.android.models.providers;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.util.Log;
 
 import com.feedient.android.interfaces.FeedientService;
 import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.models.json.UserProvider;
-import com.feedient.android.models.json.response.AddProvider;
-import com.feedient.android.models.json.response.RemoveUserProvider;
 import com.feedient.oauth.OAuthDialog;
-import com.feedient.oauth.interfaces.IAddProviderCallback;
+import com.feedient.android.interfaces.IAddProviderCallback;
 import com.feedient.oauth.interfaces.IOAuth2Provider;
 import com.feedient.oauth.webview.WebViewCallback;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.HashMap;
+import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -72,10 +67,10 @@ public class YouTube implements IProviderModel, IOAuth2Provider {
     }
 
     public void addProvider(String accessToken, FeedientService feedientService, String oAuthCode, final IAddProviderCallback callback) {
-        feedientService.addOAuth2Provider(accessToken, NAME, oAuthCode, new Callback<UserProvider>() {
+        feedientService.addOAuth2Provider(accessToken, NAME, oAuthCode, new Callback<List<UserProvider>>() {
             @Override
-            public void success(UserProvider userProvider, Response response) {
-                callback.onSuccess(userProvider);
+            public void success(List<UserProvider> userProviders, Response response) {
+                callback.onSuccess(userProviders);
             }
 
             @Override

@@ -8,7 +8,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -283,7 +282,7 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 // call the OAuth popup
-                mMainModel.addProvider(items.get(position).getProviderModel());
+                mMainModel.addUserProvider(items.get(position).getProviderModel());
 
                 // Close the other dialog
                 pickProviderDialog.dismiss();

@@ -9,7 +9,7 @@ import com.feedient.android.R;
 import com.feedient.android.adapters.FeedientRestAdapter;
 import com.feedient.android.data.AssetsPropertyReader;
 import com.feedient.android.interfaces.FeedientService;
-import com.feedient.oauth.interfaces.IAddProviderCallback;
+import com.feedient.android.interfaces.IAddProviderCallback;
 import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.models.json.Account;
 import com.feedient.android.models.json.UserProvider;
@@ -259,20 +259,6 @@ public class MainModel extends Observable {
         notifyObservers();
     }
 
-    public void removeUserProvider(UserProvider up) {
-        feedientService.removeUserProvider(accessToken, up.getId(), new Callback<RemoveUserProvider>() {
-            @Override
-            public void success(RemoveUserProvider rup, Response response) {
-                _triggerObservers();
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                Log.e("Feedient", retrofitError.getMessage());
-            }
-        });
-    }
-
     public List<FeedPost> getFeedPosts() {
         return feedPosts;
     }
@@ -293,11 +279,29 @@ public class MainModel extends Observable {
         return account;
     }
 
-    public void addProvider(IProviderModel provider) {
+    public void removeUserProvider(final UserProvider up) {
+        feedientService.removeUserProvider(accessToken, up.getId(), new Callback<RemoveUserProvider>() {
+            @Override
+            public void success(RemoveUserProvider rup, Response response) {
+                userProviders.remove(up);
+                _triggerObservers();
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.e("Feedient", retrofitError.getMessage());
+            }
+        });
+    }
+
+    public void addUserProvider(IProviderModel provider) {
         provider.popup(context, accessToken, new IAddProviderCallback() {
             @Override
-            public void onSuccess(UserProvider provider) {
-                userProviders.add(provider);
+            public void onSuccess(List<UserProvider> addedUserProviders) {
+                for (UserProvider up : addedUserProviders) {
+                    userProviders.add(up);
+                }
+
                 _triggerObservers();
             }
         });
