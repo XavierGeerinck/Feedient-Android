@@ -2,6 +2,8 @@ package com.feedient.android.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
@@ -193,7 +195,7 @@ public class FeedListAdapter extends BaseAdapter {
 
     private void _handleEntityExtendedLink(LayoutInflater inflater, LinearLayout container, FeedPost fp) {
         // Init data
-        ExtendedLinkEntity le = fp.getContent().getEntities().getExtendedLink();
+        final ExtendedLinkEntity le = fp.getContent().getEntities().getExtendedLink();
 
         // If no url set, return
         if (le.getImageUrl().equals("")) {
@@ -206,6 +208,16 @@ public class FeedListAdapter extends BaseAdapter {
         ImageView imgEntityExtendedLinkThumbnail = (ImageView)entityView.findViewById(R.id.img_entity_extended_link_thumbnail);
         TextView txtEntityExtendedLinkTitle = (TextView)entityView.findViewById(R.id.txt_entity_extended_link_title);
         TextView txtEntityExtendedLinkHost = (TextView)entityView.findViewById(R.id.txt_entity_extended_link_url_host);
+
+        // Add onClick open webbrowser
+        entityView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse(le.getUrl());
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                activity.startActivity(intent);
+            }
+        });
 
         container.addView(entityView);
 
