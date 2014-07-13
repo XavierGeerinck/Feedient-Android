@@ -135,31 +135,14 @@
             android:paddingLeft="@dimen/feed_item_padding_left_right"
             android:paddingRight="@dimen/feed_item_padding_left_right">
 
-            <IconButton
+            <!-- Social Action Buttons -->
+            <LinearLayout
+                android:id="@+id/layout_social_actions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btn_twitter_favorite"
-                android:text="{fa-star}"
-                android:textColor="@color/feed_item_action_social_icon"
-                android:textSize="@dimen/feed_item_action_social_icon"
-                android:layout_marginRight="@dimen/feed_item_action_social_icon_marg_left_right"
-                android:minHeight="1dp"
-                android:minWidth="1dp"
-                android:background="@android:color/transparent"/>
+                android:orientation="horizontal" />
 
-            <IconButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_twitter_retweet"
-                android:layout_toRightOf="@id/btn_twitter_favorite"
-                android:text="{fa-retweet}"
-                android:textColor="@color/feed_item_action_social_icon"
-                android:textSize="@dimen/feed_item_action_social_icon"
-                android:layout_marginRight="@dimen/feed_item_action_social_icon_marg_left_right"
-                android:minHeight="1dp"
-                android:minWidth="1dp"
-                android:background="@android:color/transparent"/>
-
+            <!-- Comment Button -->
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

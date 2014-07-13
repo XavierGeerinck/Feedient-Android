@@ -11,6 +11,7 @@ import com.feedient.android.interfaces.IAddProviderCallback;
 import com.feedient.oauth.interfaces.IOAuth2Provider;
 import com.feedient.oauth.webview.WebViewCallback;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,11 +30,20 @@ public class YouTube implements IProviderModel, IOAuth2Provider {
     private Context context;
     private FeedientService feedientService;
     private String accessToken;
+    private List<ProviderAction> actions;
 
     public YouTube(Context context, FeedientService feedientService, String accessToken) {
         this.context = context;
         this.feedientService = feedientService;
         this.accessToken = accessToken;
+        this.actions = new ArrayList<ProviderAction>();
+
+        _initActions();
+    }
+
+    private void _initActions() {
+        actions.add(new ProviderAction("like", "liked", "{fa-thumbs-up}"));
+        actions.add(new ProviderAction("dislike", "disliked", "{fa-thumbs-down}"));
     }
 
     @Override
@@ -95,5 +105,9 @@ public class YouTube implements IProviderModel, IOAuth2Provider {
 
         dialog.setTitle("Add Provider");
         dialog.show();
+    }
+
+    public List<ProviderAction> getActions() {
+        return actions;
     }
 }

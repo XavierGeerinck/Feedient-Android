@@ -14,22 +14,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.IconButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.feedient.android.R;
+import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.models.json.schema.FeedPost;
 import com.feedient.android.models.json.schema.entities.ExtendedLinkEntity;
 import com.feedient.android.models.json.schema.entities.HashtagEntity;
 import com.feedient.android.models.json.schema.entities.LinkEntity;
 import com.feedient.android.models.json.schema.entities.MentionEntity;
+import com.feedient.android.models.providers.ProviderAction;
 import com.squareup.picasso.Picasso;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class FeedListAdapter extends BaseAdapter {
@@ -40,6 +44,7 @@ public class FeedListAdapter extends BaseAdapter {
     private final Activity activity;
     private final LayoutInflater inflater;
     private final List<FeedPost> feedItems;
+    private final HashMap<String, IProviderModel> providers;
 
     // ViewHolder
     static class ViewHolder {
@@ -53,12 +58,14 @@ public class FeedListAdapter extends BaseAdapter {
 
         // Entities Container
         LinearLayout containerEntities;
+        LinearLayout containerSocialActions;
     }
 
-    public FeedListAdapter(Activity activity, List<FeedPost> feedItems) {
+    public FeedListAdapter(Activity activity, List<FeedPost> feedItems, HashMap<String, IProviderModel> providers) {
         this.activity = activity;
         this.feedItems = feedItems;
         this.inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.providers = providers;
     }
 
     @Override
@@ -91,6 +98,7 @@ public class FeedListAdapter extends BaseAdapter {
             viewHolder.txtDatePosted    = (TextView)convertView.findViewById(R.id.txt_date_posted);
             viewHolder.txtMessage       = (TextView)convertView.findViewById(R.id.txt_message);
             viewHolder.containerEntities = (LinearLayout)convertView.findViewById(R.id.layout_entities);
+            viewHolder.containerSocialActions = (LinearLayout)convertView.findViewById(R.id.layout_social_actions);
 
 
             // Set tag to rowView
@@ -102,6 +110,7 @@ public class FeedListAdapter extends BaseAdapter {
 
         // Remove all the child views before adding new ones, this is because we re-use our view
         holder.containerEntities.removeAllViews();
+        holder.containerSocialActions.removeAllViews();
 
         // Get our FeedItem and add data
         FeedPost item = feedItems.get(position);
@@ -117,6 +126,9 @@ public class FeedListAdapter extends BaseAdapter {
         Picasso.with(activity).load(item.getUser().getImageLink()).into(holder.imgThumbnailUser);
 
         String message = item.getContent().getMessage();
+
+        // SOCIAL ACTION BUTTONS
+        _handleSocialActionButtons(inflater, holder.containerSocialActions, item);
 
         // ENTITIES PARSING
         // Pictures
@@ -154,6 +166,22 @@ public class FeedListAdapter extends BaseAdapter {
 
         // Return view
         return convertView;
+    }
+
+    private void _handleSocialActionButtons(LayoutInflater inflater, LinearLayout containerSocialActions, FeedPost item) {
+
+        IProviderModel provider = providers.get(item.getProvider().getName());
+
+        for (ProviderAction pa : provider.getActions()) {
+            View socialActionButtonView = inflater.inflate(R.layout.social_action_button, null);
+
+            // Init Elements
+            IconButton button = (IconButton)socialActionButtonView.findViewById(R.id.btn_social_action);
+            button.setText(pa.getIcon());
+
+            // Add view
+            containerSocialActions.addView(socialActionButtonView);
+        }
     }
 
     private String _handleEntityMentions(String message, FeedPost fp) {

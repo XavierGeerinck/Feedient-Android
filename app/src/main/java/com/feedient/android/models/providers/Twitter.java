@@ -13,6 +13,7 @@ import com.feedient.oauth.interfaces.IGetRequestTokenCallback;
 import com.feedient.oauth.interfaces.IOAuth1Provider;
 import com.feedient.oauth.webview.WebViewCallback;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,11 +32,20 @@ public class Twitter implements IProviderModel, IOAuth1Provider {
     private FeedientService feedientService;
     private Context context;
     private String accessToken;
+    private List<ProviderAction> actions;
 
     public Twitter(Context context, FeedientService feedientService, String accessToken) {
         this.accessToken = accessToken;
         this.feedientService = feedientService;
         this.context = context;
+        this.actions = new ArrayList<ProviderAction>();
+
+        _initActions();
+    }
+
+    private void _initActions() {
+        actions.add(new ProviderAction("favorite", "favorited", "{fa-star}"));
+        actions.add(new ProviderAction("retweet", "retweeted", "{fa-retweet}"));
     }
 
     @Override
@@ -119,5 +129,9 @@ public class Twitter implements IProviderModel, IOAuth1Provider {
 
             }
         });
+    }
+
+    public List<ProviderAction> getActions() {
+        return actions;
     }
 }

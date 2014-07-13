@@ -13,6 +13,7 @@ import com.feedient.oauth.interfaces.IOAuth1Provider;
 import com.feedient.oauth.models.GetRequestToken;
 import com.feedient.oauth.webview.WebViewCallback;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,11 +32,20 @@ public class Tumblr implements IProviderModel, IOAuth1Provider {
     private Context context;
     private FeedientService feedientService;
     private String accessToken;
+    private List<ProviderAction> actions;
 
     public Tumblr(Context context, FeedientService feedientService, String accessToken) {
         this.context = context;
         this.feedientService = feedientService;
         this.accessToken = accessToken;
+        this.actions = new ArrayList<ProviderAction>();
+
+        _initActions();
+    }
+
+    private void _initActions() {
+        actions.add(new ProviderAction("like", "liked", "{fa-heart}"));
+        actions.add(new ProviderAction("reblog", "reblogged", "{fa-retweet}"));
     }
 
     @Override
@@ -119,5 +129,9 @@ public class Tumblr implements IProviderModel, IOAuth1Provider {
 
             }
         });
+    }
+
+    public List<ProviderAction> getActions() {
+        return actions;
     }
 }
