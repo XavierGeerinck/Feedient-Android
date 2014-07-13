@@ -168,16 +168,22 @@ public class FeedListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private void _handleSocialActionButtons(LayoutInflater inflater, LinearLayout containerSocialActions, FeedPost item) {
+    private void _handleSocialActionButtons(LayoutInflater inflater, LinearLayout containerSocialActions, final FeedPost item) {
 
         IProviderModel provider = providers.get(item.getProvider().getName());
 
-        for (ProviderAction pa : provider.getActions()) {
+        for (final ProviderAction pa : provider.getActions()) {
             View socialActionButtonView = inflater.inflate(R.layout.social_action_button, null);
 
             // Init Elements
             IconButton button = (IconButton)socialActionButtonView.findViewById(R.id.btn_social_action);
             button.setText(pa.getIcon());
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    pa.getCallback().handleOnClick(item);
+                }
+            });
 
             // Add view
             containerSocialActions.addView(socialActionButtonView);

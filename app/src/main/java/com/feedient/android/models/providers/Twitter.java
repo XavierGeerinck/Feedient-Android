@@ -2,10 +2,14 @@ package com.feedient.android.models.providers;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.util.Log;
 
 import com.feedient.android.interfaces.FeedientService;
 import com.feedient.android.interfaces.IProviderModel;
+import com.feedient.android.interfaces.ISocialActionCallback;
 import com.feedient.android.models.json.UserProvider;
+import com.feedient.android.models.json.response.PerformAction;
+import com.feedient.android.models.json.schema.FeedPost;
 import com.feedient.oauth.OAuthDialog;
 import com.feedient.android.interfaces.IAddProviderCallback;
 import com.feedient.oauth.models.GetRequestToken;
@@ -44,8 +48,83 @@ public class Twitter implements IProviderModel, IOAuth1Provider {
     }
 
     private void _initActions() {
-        actions.add(new ProviderAction("favorite", "favorited", "{fa-star}"));
-        actions.add(new ProviderAction("retweet", "retweeted", "{fa-retweet}"));
+        actions.add(new ProviderAction("favorite", "favorited", "{fa-star}", new ISocialActionCallback() {
+            @Override
+            public void handleOnClick(FeedPost feedPost) {
+                if (!feedPost.getContent().getActionsPerformed().isFavorited()) {
+                    _doActionFavorite(feedPost);
+                } else {
+                    _doActionUnFavorite(feedPost);
+                }
+            }
+        }));
+
+        actions.add(new ProviderAction("retweet", "retweeted", "{fa-retweet}", new ISocialActionCallback() {
+            @Override
+            public void handleOnClick(FeedPost feedPost) {
+                if (!feedPost.getContent().getActionsPerformed().isRetweeted()) {
+                    _doActionRetweet(feedPost);
+                } else {
+                    _doActionUnRetweet(feedPost);
+                }
+            }
+        }));
+    }
+
+    private void _doActionFavorite(final FeedPost feedPost) {
+        feedientService.doActionFavorite(accessToken, feedPost.getProvider().getId(), "favorite", feedPost.getId(), new Callback<PerformAction>() {
+            @Override
+            public void success(PerformAction performAction, Response response) {
+                feedPost.getContent().getActionsPerformed().setFavorited(true);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.e("Feedient", retrofitError.getMessage());
+            }
+        });
+    }
+
+    private void _doActionUnFavorite(final FeedPost feedPost) {
+        feedientService.undoActionFavorite(accessToken, feedPost.getProvider().getId(), "unfavorite", feedPost.getId(), new Callback<PerformAction>() {
+            @Override
+            public void success(PerformAction performAction, Response response) {
+                feedPost.getContent().getActionsPerformed().setFavorited(false);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.e("Feedient", retrofitError.getMessage());
+            }
+        });
+    }
+
+    private void _doActionRetweet(final FeedPost feedPost) {
+        feedientService.doActionRetweet(accessToken, feedPost.getProvider().getId(), "retweet", feedPost.getId(), new Callback<PerformAction>() {
+            @Override
+            public void success(PerformAction performAction, Response response) {
+                feedPost.getContent().getActionsPerformed().setRetweeted(true);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.e("Feedient", retrofitError.getMessage());
+            }
+        });
+    }
+
+    private void _doActionUnRetweet(final FeedPost feedPost) {
+        feedientService.undoActionRetweet(accessToken, feedPost.getProvider().getId(), "delete_retweet", feedPost.getId(), new Callback<PerformAction>() {
+            @Override
+            public void success(PerformAction performAction, Response response) {
+                feedPost.getContent().getActionsPerformed().setRetweeted(false);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.e("Feedient", retrofitError.getMessage());
+            }
+        });
     }
 
     @Override

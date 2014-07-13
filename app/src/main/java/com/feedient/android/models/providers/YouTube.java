@@ -5,7 +5,9 @@ import android.content.Context;
 
 import com.feedient.android.interfaces.FeedientService;
 import com.feedient.android.interfaces.IProviderModel;
+import com.feedient.android.interfaces.ISocialActionCallback;
 import com.feedient.android.models.json.UserProvider;
+import com.feedient.android.models.json.schema.FeedPost;
 import com.feedient.oauth.OAuthDialog;
 import com.feedient.android.interfaces.IAddProviderCallback;
 import com.feedient.oauth.interfaces.IOAuth2Provider;
@@ -42,8 +44,19 @@ public class YouTube implements IProviderModel, IOAuth2Provider {
     }
 
     private void _initActions() {
-        actions.add(new ProviderAction("like", "liked", "{fa-thumbs-up}"));
-        actions.add(new ProviderAction("dislike", "disliked", "{fa-thumbs-down}"));
+        actions.add(new ProviderAction("like", "liked", "{fa-thumbs-up}", new ISocialActionCallback() {
+            @Override
+            public void handleOnClick(FeedPost feedPost) {
+
+            }
+        }));
+
+        actions.add(new ProviderAction("dislike", "disliked", "{fa-thumbs-down}", new ISocialActionCallback() {
+            @Override
+            public void handleOnClick(FeedPost feedPost) {
+
+            }
+        }));
     }
 
     @Override

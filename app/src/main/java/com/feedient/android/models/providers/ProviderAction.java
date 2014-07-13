@@ -1,14 +1,18 @@
 package com.feedient.android.models.providers;
 
+import com.feedient.android.interfaces.ISocialActionCallback;
+
 public class ProviderAction {
     private String nameNormal;
     private String namePerformed;
     private String icon;
+    private ISocialActionCallback callback;
 
-    public ProviderAction(String nameNormal, String namePerformed, String icon) {
+    public ProviderAction(String nameNormal, String namePerformed, String icon, ISocialActionCallback callback) {
         this.nameNormal = nameNormal;
         this.namePerformed = namePerformed;
         this.icon = icon;
+        this.callback = callback;
     }
 
     public String getNameNormal() {
@@ -21,5 +25,9 @@ public class ProviderAction {
 
     public String getIcon() {
         return icon;
+    }
+
+    public ISocialActionCallback getCallback() {
+        return callback;
     }
 }

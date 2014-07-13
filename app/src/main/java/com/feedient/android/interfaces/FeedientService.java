@@ -4,6 +4,7 @@ import com.feedient.android.models.json.Account;
 import com.feedient.android.models.json.feed.FeedPostList;
 import com.feedient.android.models.json.response.AddProvider;
 import com.feedient.android.models.json.response.Logout;
+import com.feedient.android.models.json.response.PerformAction;
 import com.feedient.oauth.models.GetRequestToken;
 import com.feedient.android.models.json.response.RemoveUserProvider;
 import com.feedient.android.models.json.feed.FeedResult;
@@ -55,4 +56,30 @@ public interface FeedientService {
 
     @GET("/logout")
     void logout(@Header("Bearer")String accessToken, Callback<Logout> cb);
+
+    // ACTIONS
+    @FormUrlEncoded
+    @POST("/provider/{userProviderId}/action/{actionMethod}")
+    void doActionLike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("post_id")String id, Callback<PerformAction> cb);
+
+    @FormUrlEncoded
+    @POST("/provider/{userProviderId}/action/{actionMethod}")
+    void undoActionLike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("post_id")String id, Callback<PerformAction> cb);
+
+    @FormUrlEncoded
+    @POST("/provider/{userProviderId}/action/{actionMethod}")
+    void doActionFavorite(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("tweet_id")String tweetId, Callback<PerformAction> cb);
+
+    @FormUrlEncoded
+    @POST("/provider/{userProviderId}/action/{actionMethod}")
+    void undoActionFavorite(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("tweet_id")String tweetId, Callback<PerformAction> cb);
+
+    @FormUrlEncoded
+    @POST("/provider/{userProviderId}/action/{actionMethod}")
+    void doActionRetweet(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("tweet_id")String tweetId, Callback<PerformAction> cb);
+
+    @FormUrlEncoded
+    @POST("/provider/{userProviderId}/action/{actionMethod}")
+    void undoActionRetweet(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("tweet_id")String tweetId, Callback<PerformAction> cb);
+
 }

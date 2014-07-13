@@ -9,9 +9,17 @@ public class ActionsPerformed {
     @SerializedName("favorited")
     private boolean favorited;
 
+    @SerializedName("shared")
+    private boolean shared;
+
+    @SerializedName("liked")
+    private boolean liked;
+
     public ActionsPerformed() {
         retweeted = false;
         favorited = false;
+        shared = false;
+        liked = false;
     }
 
     public boolean isRetweeted() {
@@ -28,5 +36,21 @@ public class ActionsPerformed {
 
     public void setFavorited(boolean favorited) {
         this.favorited = favorited;
+    }
+
+    public boolean isShared() {
+        return shared;
+    }
+
+    public void setShared(boolean shared) {
+        this.shared = shared;
+    }
+
+    public boolean isLiked() {
+        return liked;
+    }
+
+    public void setLiked(boolean liked) {
+        this.liked = liked;
     }
 }
