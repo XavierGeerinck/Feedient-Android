@@ -115,8 +115,8 @@ public class FeedListAdapter extends BaseAdapter {
         // Get our FeedItem and add data
         FeedPost item = feedItems.get(position);
 
-        // Convert timestamp into x ago
-        CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(item.getContent().getDateCreated().getTime(), System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
+        // Convert timestamp into x ago, +7200000 because of 2 hours difference between server and host
+        CharSequence timeAgo = DateUtils.getRelativeTimeSpanString((item.getContent().getDateCreated().getTime() + 7200000), System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
         holder.txtDatePosted.setText(timeAgo);
 
         // User
@@ -169,7 +169,6 @@ public class FeedListAdapter extends BaseAdapter {
     }
 
     private void _handleSocialActionButtons(LayoutInflater inflater, LinearLayout containerSocialActions, final FeedPost item) {
-
         IProviderModel provider = providers.get(item.getProvider().getName());
 
         for (final ProviderAction pa : provider.getActions()) {
