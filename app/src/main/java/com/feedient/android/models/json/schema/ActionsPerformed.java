@@ -15,11 +15,19 @@ public class ActionsPerformed {
     @SerializedName("liked")
     private boolean liked;
 
+    @SerializedName("reblogged")
+    private boolean reblogged;
+
+    @SerializedName("disliked")
+    private boolean disliked;
+
     public ActionsPerformed() {
         retweeted = false;
         favorited = false;
         shared = false;
         liked = false;
+        reblogged = false;
+        disliked = false;
     }
 
     public boolean isRetweeted() {
@@ -52,5 +60,21 @@ public class ActionsPerformed {
 
     public void setLiked(boolean liked) {
         this.liked = liked;
+    }
+
+    public boolean isReblogged() {
+        return reblogged;
+    }
+
+    public void setReblogged(boolean reblogged) {
+        this.reblogged = reblogged;
+    }
+
+    public void setDisliked(boolean disliked) {
+        this.disliked = disliked;
+    }
+
+    public boolean isDisliked() {
+        return disliked;
     }
 }

@@ -59,7 +59,7 @@ public class Facebook implements IProviderModel, IOAuth2Provider {
     }
 
     private void _doActionLike(final FeedPost feedPost) {
-        feedientService.doActionLike(accessToken, feedPost.getProvider().getId(), "like", feedPost.getId(), new Callback<PerformAction>() {
+        feedientService.doActionFacebookLike(accessToken, feedPost.getProvider().getId(), "like", feedPost.getId(), new Callback<PerformAction>() {
             @Override
             public void success(PerformAction performAction, Response response) {
                 feedPost.getContent().getActionsPerformed().setLiked(true);
@@ -73,7 +73,7 @@ public class Facebook implements IProviderModel, IOAuth2Provider {
     }
 
     private void _doActionUnlike(final FeedPost feedPost) {
-        feedientService.undoActionLike(accessToken, feedPost.getProvider().getId(), "unlike", feedPost.getId(), new Callback<PerformAction>() {
+        feedientService.undoActionFacebookLike(accessToken, feedPost.getProvider().getId(), "unlike", feedPost.getId(), new Callback<PerformAction>() {
             @Override
             public void success(PerformAction performAction, Response response) {
                 feedPost.getContent().getActionsPerformed().setLiked(false);

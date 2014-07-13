@@ -24,6 +24,9 @@ public class FeedPost {
     @SerializedName("twitter")
     private Twitter twitter;
 
+    @SerializedName("tumblr")
+    private Tumblr tumblr;
+
     @SerializedName("pagination")
     private Pagination pagination;
 
@@ -33,6 +36,7 @@ public class FeedPost {
         user = new User();
         content = new Content();
         twitter = new Twitter();
+        tumblr = new Tumblr();
         provider = new Provider();
         pagination = new Pagination();
         entities = new Entities();
@@ -92,6 +96,14 @@ public class FeedPost {
 
     public void setPagination(Pagination pagination) {
         this.pagination = pagination;
+    }
+
+    public Tumblr getTumblr() {
+        return tumblr;
+    }
+
+    public Entities getEntities() {
+        return entities;
     }
 
     @Override

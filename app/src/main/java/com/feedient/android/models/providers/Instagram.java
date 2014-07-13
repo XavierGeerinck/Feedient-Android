@@ -2,11 +2,13 @@ package com.feedient.android.models.providers;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.util.Log;
 
 import com.feedient.android.interfaces.FeedientService;
 import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.interfaces.ISocialActionCallback;
 import com.feedient.android.models.json.UserProvider;
+import com.feedient.android.models.json.response.PerformAction;
 import com.feedient.android.models.json.schema.FeedPost;
 import com.feedient.oauth.OAuthDialog;
 import com.feedient.android.interfaces.IAddProviderCallback;
@@ -47,9 +49,41 @@ public class Instagram implements IProviderModel, IOAuth2Provider {
         actions.add(new ProviderAction("like", "liked", "{fa-heart}", new ISocialActionCallback() {
             @Override
             public void handleOnClick(FeedPost feedPost) {
-
+                if (!feedPost.getContent().getActionsPerformed().isLiked()) {
+                    _doActionLike(feedPost);
+                } else {
+                    _doActionUnlike(feedPost);
+                }
             }
         }));
+    }
+
+    private void _doActionLike(final FeedPost feedPost) {
+        feedientService.doActionInstagramLike(accessToken, feedPost.getProvider().getId(), "like", feedPost.getId(), new Callback<PerformAction>() {
+            @Override
+            public void success(PerformAction performAction, Response response) {
+                feedPost.getContent().getActionsPerformed().setLiked(true);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.e("Feedient", retrofitError.getMessage());
+            }
+        });
+    }
+
+    private void _doActionUnlike(final FeedPost feedPost) {
+        feedientService.undoActionInstagramLike(accessToken, feedPost.getProvider().getId(), "unlike", feedPost.getId(), new Callback<PerformAction>() {
+            @Override
+            public void success(PerformAction performAction, Response response) {
+                feedPost.getContent().getActionsPerformed().setLiked(false);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.e("Feedient", retrofitError.getMessage());
+            }
+        });
     }
 
     @Override

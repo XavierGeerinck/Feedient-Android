@@ -72,7 +72,7 @@ public class Twitter implements IProviderModel, IOAuth1Provider {
     }
 
     private void _doActionFavorite(final FeedPost feedPost) {
-        feedientService.doActionFavorite(accessToken, feedPost.getProvider().getId(), "favorite", feedPost.getId(), new Callback<PerformAction>() {
+        feedientService.doActionTwitterFavorite(accessToken, feedPost.getProvider().getId(), "favorite", feedPost.getId(), new Callback<PerformAction>() {
             @Override
             public void success(PerformAction performAction, Response response) {
                 feedPost.getContent().getActionsPerformed().setFavorited(true);
@@ -86,7 +86,7 @@ public class Twitter implements IProviderModel, IOAuth1Provider {
     }
 
     private void _doActionUnFavorite(final FeedPost feedPost) {
-        feedientService.undoActionFavorite(accessToken, feedPost.getProvider().getId(), "unfavorite", feedPost.getId(), new Callback<PerformAction>() {
+        feedientService.undoActionTwitterFavorite(accessToken, feedPost.getProvider().getId(), "unfavorite", feedPost.getId(), new Callback<PerformAction>() {
             @Override
             public void success(PerformAction performAction, Response response) {
                 feedPost.getContent().getActionsPerformed().setFavorited(false);
@@ -100,7 +100,7 @@ public class Twitter implements IProviderModel, IOAuth1Provider {
     }
 
     private void _doActionRetweet(final FeedPost feedPost) {
-        feedientService.doActionRetweet(accessToken, feedPost.getProvider().getId(), "retweet", feedPost.getId(), new Callback<PerformAction>() {
+        feedientService.doActionTwitterRetweet(accessToken, feedPost.getProvider().getId(), "retweet", feedPost.getId(), new Callback<PerformAction>() {
             @Override
             public void success(PerformAction performAction, Response response) {
                 feedPost.getContent().getActionsPerformed().setRetweeted(true);
@@ -114,7 +114,7 @@ public class Twitter implements IProviderModel, IOAuth1Provider {
     }
 
     private void _doActionUnRetweet(final FeedPost feedPost) {
-        feedientService.undoActionRetweet(accessToken, feedPost.getProvider().getId(), "delete_retweet", feedPost.getId(), new Callback<PerformAction>() {
+        feedientService.undoActionTwitterRetweet(accessToken, feedPost.getProvider().getId(), "delete_retweet", feedPost.getId(), new Callback<PerformAction>() {
             @Override
             public void success(PerformAction performAction, Response response) {
                 feedPost.getContent().getActionsPerformed().setRetweeted(false);

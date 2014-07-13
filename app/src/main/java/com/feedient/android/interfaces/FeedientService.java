@@ -58,28 +58,65 @@ public interface FeedientService {
     void logout(@Header("Bearer")String accessToken, Callback<Logout> cb);
 
     // ACTIONS
+    // Facebook
     @FormUrlEncoded
     @POST("/provider/{userProviderId}/action/{actionMethod}")
-    void doActionLike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("post_id")String id, Callback<PerformAction> cb);
+    void doActionFacebookLike(@Header("Bearer") String accessToken, @Path("userProviderId") String userProviderId, @Path("actionMethod") String actionMethod, @Field("post_id") String id, Callback<PerformAction> cb);
 
     @FormUrlEncoded
     @POST("/provider/{userProviderId}/action/{actionMethod}")
-    void undoActionLike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("post_id")String id, Callback<PerformAction> cb);
+    void undoActionFacebookLike(@Header("Bearer") String accessToken, @Path("userProviderId") String userProviderId, @Path("actionMethod") String actionMethod, @Field("post_id") String id, Callback<PerformAction> cb);
+
+    // Twitter
+    @FormUrlEncoded
+    @POST("/provider/{userProviderId}/action/{actionMethod}")
+    void doActionTwitterFavorite(@Header("Bearer") String accessToken, @Path("userProviderId") String userProviderId, @Path("actionMethod") String actionMethod, @Field("tweet_id") String tweetId, Callback<PerformAction> cb);
 
     @FormUrlEncoded
     @POST("/provider/{userProviderId}/action/{actionMethod}")
-    void doActionFavorite(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("tweet_id")String tweetId, Callback<PerformAction> cb);
+    void undoActionTwitterFavorite(@Header("Bearer") String accessToken, @Path("userProviderId") String userProviderId, @Path("actionMethod") String actionMethod, @Field("tweet_id") String tweetId, Callback<PerformAction> cb);
 
     @FormUrlEncoded
     @POST("/provider/{userProviderId}/action/{actionMethod}")
-    void undoActionFavorite(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("tweet_id")String tweetId, Callback<PerformAction> cb);
+    void doActionTwitterRetweet(@Header("Bearer") String accessToken, @Path("userProviderId") String userProviderId, @Path("actionMethod") String actionMethod, @Field("tweet_id") String tweetId, Callback<PerformAction> cb);
 
     @FormUrlEncoded
     @POST("/provider/{userProviderId}/action/{actionMethod}")
-    void doActionRetweet(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("tweet_id")String tweetId, Callback<PerformAction> cb);
+    void undoActionTwitterRetweet(@Header("Bearer") String accessToken, @Path("userProviderId") String userProviderId, @Path("actionMethod") String actionMethod, @Field("tweet_id") String tweetId, Callback<PerformAction> cb);
+
+    // Instagram
+    @FormUrlEncoded
+    @POST("/provider/{userProviderId}/action/{actionMethod}")
+    void doActionInstagramLike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id, Callback<PerformAction> cb);
 
     @FormUrlEncoded
     @POST("/provider/{userProviderId}/action/{actionMethod}")
-    void undoActionRetweet(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("tweet_id")String tweetId, Callback<PerformAction> cb);
+    void undoActionInstagramLike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id, Callback<PerformAction> cb);
+
+    // Tumblr
+    @FormUrlEncoded
+    @POST("/provider/{userProviderId}/action/{actionMethod}")
+    void doActionTumblrLike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id, @Field("reblog_key")String reblogKey, Callback<PerformAction> cb);
+
+    @FormUrlEncoded
+    @POST("/provider/{userProviderId}/action/{actionMethod}")
+    void undoActionTumblrLike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id, @Field("reblog_key")String reblogKey, Callback<PerformAction> cb);
+
+    @FormUrlEncoded
+    @POST("/provider/{userProviderId}/action/{actionMethod}")
+    void doActionTumblrReblog(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id, @Field("reblog_key")String reblogKey, Callback<PerformAction> cb);
+
+    // YouTube
+    @FormUrlEncoded
+    @POST("/provider/{userProviderId}/action/{actionMethod}")
+    void doActionYoutubeLike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id, Callback<PerformAction> cb);
+
+    @FormUrlEncoded
+    @POST("/provider/{userProviderId}/action/{actionMethod}")
+    void undoActionYoutubeLike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id, Callback<PerformAction> cb);
+
+    @FormUrlEncoded
+    @POST("/provider/{userProviderId}/action/{actionMethod}")
+    void doActionYoutubeDislike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id, Callback<PerformAction> cb);
 
 }
