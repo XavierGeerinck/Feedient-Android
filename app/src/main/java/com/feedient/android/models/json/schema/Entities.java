@@ -11,23 +11,24 @@ import com.feedient.android.models.json.schema.entities.VideoEntity;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Entities {
     @SerializedName("links")
-    private List<LinkEntity> links;
+    private LinkEntity[] links;
 
     @SerializedName("pictures")
-    private List<PictureEntity> pictures;
+    private PictureEntity[] pictures;
 
     @SerializedName("hashtags")
-    private List<HashtagEntity> hashtags;
+    private HashtagEntity[] hashtags;
 
     @SerializedName("videos")
-    private List<VideoEntity> videos;
+    private VideoEntity[] videos;
 
     @SerializedName("mentions")
-    private List<MentionEntity> mentions;
+    private MentionEntity[] mentions;
 
     @SerializedName("place")
     private PlaceEntity place;
@@ -39,34 +40,29 @@ public class Entities {
     private ExtendedVideoEntity extendedVideo;
 
     public Entities() {
-        this.links = new ArrayList<LinkEntity>();
-        this.pictures = new ArrayList<PictureEntity>();
-        this.hashtags = new ArrayList<HashtagEntity>();
-        this.videos = new ArrayList<VideoEntity>();
-        this.mentions = new ArrayList<MentionEntity>();
         this.place = new PlaceEntity();
 
         this.extendedLink = null;
         this.extendedVideo = null;
     }
 
-    public List<LinkEntity> getLinks() {
+    public LinkEntity[] getLinks() {
         return links;
     }
 
-    public List<PictureEntity> getPictures() {
+    public PictureEntity[] getPictures() {
         return pictures;
     }
 
-    public List<HashtagEntity> getHashtags() {
+    public HashtagEntity[] getHashtags() {
         return hashtags;
     }
 
-    public List<VideoEntity> getVideos() {
+    public VideoEntity[] getVideos() {
         return videos;
     }
 
-    public List<MentionEntity> getMentions() {
+    public MentionEntity[] getMentions() {
         return mentions;
     }
 

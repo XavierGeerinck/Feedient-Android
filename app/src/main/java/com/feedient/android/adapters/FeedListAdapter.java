@@ -120,22 +120,22 @@ public class FeedListAdapter extends BaseAdapter {
 
         // ENTITIES PARSING
         // Pictures
-        if (item.getContent().getEntities().getPictures().size() > 0) {
+        if (item.getContent().getEntities().getPictures().length > 0) {
             _handleEntityPictures(inflater, holder.containerEntities, item);
         }
 
         // Links
-        if (item.getContent().getEntities().getLinks().size() > 0) {
+        if (item.getContent().getEntities().getLinks().length > 0) {
             message = _handleEntityLinks(item.getContent().getMessage(), item);
         }
 
         // Hashtags
-        if (item.getContent().getEntities().getHashtags().size() > 0) {
+        if (item.getContent().getEntities().getHashtags().length > 0) {
             message = _handleEntityHashtags(item.getContent().getMessage(), item);
         }
 
         // Mentions
-        if (item.getContent().getEntities().getMentions().size() > 0) {
+        if (item.getContent().getEntities().getMentions().length > 0) {
             message = _handleEntityMentions(item.getContent().getMessage(), item);
         }
 
@@ -190,7 +190,7 @@ public class FeedListAdapter extends BaseAdapter {
         container.addView(entityPictureView);
 
         // Init Data
-        Picasso.with(activity).load(fp.getContent().getEntities().getPictures().get(0).getLargePictureUrl()).into(imgEntityPicture);
+        Picasso.with(activity).load(fp.getContent().getEntities().getPictures()[0].getLargePicture().getUrl()).into(imgEntityPicture);
     }
 
     private void _handleEntityExtendedLink(LayoutInflater inflater, LinearLayout container, FeedPost fp) {

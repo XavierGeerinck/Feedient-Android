@@ -35,6 +35,7 @@ public class FeedPost {
         twitter = new Twitter();
         provider = new Provider();
         pagination = new Pagination();
+        entities = new Entities();
     }
 
     public String getId() {
