@@ -123,7 +123,9 @@ public class FeedListAdapter extends BaseAdapter {
         holder.txtUserPostedBy.setText(item.getUser().getName());
 
         // Load the image async
-        Picasso.with(activity).load(item.getUser().getImageLink()).into(holder.imgThumbnailUser);
+        if (!TextUtils.isEmpty(item.getUser().getImageLink())) {
+            Picasso.with(activity).load(item.getUser().getImageLink()).into(holder.imgThumbnailUser);
+        }
 
         String message = item.getContent().getMessage();
 
