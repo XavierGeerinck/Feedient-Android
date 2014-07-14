@@ -47,7 +47,7 @@ public class OAuthDialog extends Dialog {
         this.oAuthUrl = oAuthUrl;
         this.callback = callback;
         this.dialogTitle = "";
-        this.dialogTitleBackgroundColor = Color.parseColor("#1ead91");
+        this.dialogTitleBackgroundColor = Color.parseColor("#1EAD91");
     }
 
     @Override
@@ -82,6 +82,7 @@ public class OAuthDialog extends Dialog {
         mTxtTitle.setTextColor(Color.WHITE);
         mTxtTitle.setPadding(20, 15, 0, 15);
         mTxtTitle.setTextSize(18);
+        mTxtTitle.setHeight(56);
         mTxtTitle.setBackgroundColor(this.dialogTitleBackgroundColor);
 
         mContent.addView(mTxtTitle);
