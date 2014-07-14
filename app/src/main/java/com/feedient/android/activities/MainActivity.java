@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -29,6 +30,7 @@ import com.feedient.android.models.GridItem;
 import com.feedient.android.models.MainModel;
 
 import com.feedient.android.models.json.UserProvider;
+import com.feedient.android.views.FloatingActionButton;
 
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
@@ -53,6 +55,7 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
     private MainModel mMainModel;
     private PullToRefreshLayout mPullToRefreshLayout;
     private ListView mFeedPostsList;
+    private FloatingActionButton mBtnCompose;
 
     // App title
     private CharSequence mTitle;
@@ -79,6 +82,10 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         mDrawerLayout           = (DrawerLayout)findViewById(R.id.drawer_layout);
         mNavDrawerList          = (ListView)findViewById(R.id.drawer_list);
         mNavDrawerProvidersList = (ListView)findViewById(R.id.drawer_provider_list);
+        mBtnCompose             = (FloatingActionButton)findViewById(R.id.btn_compose);
+
+        mBtnCompose.setColor(Color.WHITE);
+        mBtnCompose.setDrawable(R.drawable.ic_compose);
 
         // Fix margin top and bottom for list of cards
         mFeedPostsList.addFooterView(new View(this), null, false);
