@@ -17,6 +17,7 @@ import com.feedient.android.models.json.UserSession;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import rx.functions.Action1;
 
 import java.util.Properties;
 
@@ -57,24 +58,19 @@ public class LoginActivity extends Activity {
     }
 
     public void login(View view) {
-        feedientService.authorizeUser(email.getText().toString(), password.getText().toString(), new Callback<UserSession>() {
-            @Override
-            public void success(UserSession userSession, Response response) {
-                // Save the accessToken and UID
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(properties.getProperty("prefs.key.token"), userSession.getToken());
-                editor.putString(properties.getProperty("prefs.key.uid"), userSession.getUid());
-                editor.apply();
+        feedientService.authorizeUser(email.getText().toString(), password.getText().toString())
+            .subscribe(new Action1<UserSession>() {
+                @Override
+                public void call(UserSession userSession) {
+                    // Save the accessToken and UID
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(properties.getProperty("prefs.key.token"), userSession.getToken());
+                    editor.putString(properties.getProperty("prefs.key.uid"), userSession.getUid());
+                    editor.apply();
 
-                openViewAllFeedsActivity();
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                Toast.makeText(getApplicationContext(), retrofitError.getMessage(), Toast.LENGTH_LONG).show();
-                Log.e("Feedient", retrofitError.getMessage());
-            }
-        });
+                    openViewAllFeedsActivity();
+                }
+            });
     }
 
     public void openViewAllFeedsActivity() {

@@ -24,6 +24,7 @@ import java.util.List;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import rx.functions.Action1;
 
 public class Twitter implements IProviderModel, IOAuth1Provider {
     public static final String NAME = "twitter";
@@ -72,59 +73,43 @@ public class Twitter implements IProviderModel, IOAuth1Provider {
     }
 
     private void _doActionFavorite(final FeedPost feedPost) {
-        feedientService.doActionTwitterFavorite(accessToken, feedPost.getProvider().getId(), "favorite", feedPost.getId(), new Callback<PerformAction>() {
-            @Override
-            public void success(PerformAction performAction, Response response) {
-                feedPost.getContent().getActionsPerformed().setFavorited(true);
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                Log.e("Feedient", retrofitError.getMessage());
-            }
-        });
+        feedientService.doActionTwitterFavorite(accessToken, feedPost.getProvider().getId(), "favorite", feedPost.getId())
+            .subscribe(new Action1<PerformAction>() {
+                @Override
+                public void call(PerformAction performAction) {
+                    feedPost.getContent().getActionsPerformed().setFavorited(true);
+                }
+            });
     }
 
     private void _doActionUnFavorite(final FeedPost feedPost) {
-        feedientService.undoActionTwitterFavorite(accessToken, feedPost.getProvider().getId(), "unfavorite", feedPost.getId(), new Callback<PerformAction>() {
-            @Override
-            public void success(PerformAction performAction, Response response) {
-                feedPost.getContent().getActionsPerformed().setFavorited(false);
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                Log.e("Feedient", retrofitError.getMessage());
-            }
-        });
+        feedientService.undoActionTwitterFavorite(accessToken, feedPost.getProvider().getId(), "unfavorite", feedPost.getId())
+            .subscribe(new Action1<PerformAction>() {
+                @Override
+                public void call(PerformAction performAction) {
+                    feedPost.getContent().getActionsPerformed().setFavorited(false);
+                }
+            });
     }
 
     private void _doActionRetweet(final FeedPost feedPost) {
-        feedientService.doActionTwitterRetweet(accessToken, feedPost.getProvider().getId(), "retweet", feedPost.getId(), new Callback<PerformAction>() {
-            @Override
-            public void success(PerformAction performAction, Response response) {
-                feedPost.getContent().getActionsPerformed().setRetweeted(true);
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                Log.e("Feedient", retrofitError.getMessage());
-            }
-        });
+        feedientService.doActionTwitterRetweet(accessToken, feedPost.getProvider().getId(), "retweet", feedPost.getId())
+            .subscribe(new Action1<PerformAction>() {
+                @Override
+                public void call(PerformAction performAction) {
+                    feedPost.getContent().getActionsPerformed().setRetweeted(true);
+                }
+            });
     }
 
     private void _doActionUnRetweet(final FeedPost feedPost) {
-        feedientService.undoActionTwitterRetweet(accessToken, feedPost.getProvider().getId(), "delete_retweet", feedPost.getId(), new Callback<PerformAction>() {
-            @Override
-            public void success(PerformAction performAction, Response response) {
-                feedPost.getContent().getActionsPerformed().setRetweeted(false);
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                Log.e("Feedient", retrofitError.getMessage());
-            }
-        });
+        feedientService.undoActionTwitterRetweet(accessToken, feedPost.getProvider().getId(), "delete_retweet", feedPost.getId())
+            .subscribe(new Action1<PerformAction>() {
+                @Override
+                public void call(PerformAction performAction) {
+                    feedPost.getContent().getActionsPerformed().setRetweeted(false);
+                }
+            });
     }
 
     @Override
@@ -158,17 +143,13 @@ public class Twitter implements IProviderModel, IOAuth1Provider {
     }
 
     public void addProvider(String accessToken, FeedientService feedientService, String requestSecret, String oAuthToken, String oAuthVerifier, final IAddProviderCallback callback) {
-        feedientService.addOAuth1Provider(accessToken, NAME, requestSecret, oAuthToken, oAuthVerifier, new Callback<List<UserProvider>>() {
-            @Override
-            public void success(List<UserProvider> userProviders, Response response) {
-                callback.onSuccess(userProviders);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-            }
-        });
+        feedientService.addOAuth1Provider(accessToken, NAME, requestSecret, oAuthToken, oAuthVerifier)
+            .subscribe(new Action1<List<UserProvider>>() {
+                @Override
+                public void call(List<UserProvider> userProviders) {
+                    callback.onSuccess(userProviders);
+                }
+            });
     }
 
     @Override
@@ -196,18 +177,13 @@ public class Twitter implements IProviderModel, IOAuth1Provider {
 
     @Override
     public void getRequestToken(final IGetRequestTokenCallback callback) {
-        feedientService.getRequestToken(accessToken, NAME, new Callback<GetRequestToken>() {
-            @Override
-            public void success(GetRequestToken getRequestToken, Response response) {
-                // Got request token, call callback for popup
-                callback.success(getRequestToken);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-            }
-        });
+        feedientService.getRequestToken(accessToken, NAME)
+            .subscribe(new Action1<GetRequestToken>() {
+                @Override
+                public void call(GetRequestToken getRequestToken) {
+                    callback.success(getRequestToken);
+                }
+            });
     }
 
     public List<ProviderAction> getActions() {

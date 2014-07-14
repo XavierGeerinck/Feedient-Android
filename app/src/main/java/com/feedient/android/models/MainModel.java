@@ -31,6 +31,7 @@ import org.json.JSONException;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import rx.functions.Action1;
 
 import java.util.*;
 
@@ -98,69 +99,58 @@ public class MainModel extends Observable {
     }
 
     public void loadUser() {
-        feedientService.getAccount(accessToken, new Callback<Account>() {
-            @Override
-            public void success(Account account, Response response) {
-                MainModel.this.account.setId(account.getId());
-                MainModel.this.account.setEmail(account.getEmail());
-                MainModel.this.account.setLanguage(account.getLanguage());
-                MainModel.this.account.setRole(account.getRole());
-            }
+        feedientService.getAccount(accessToken)
+            .subscribe(new Action1<Account>() {
+                @Override
+                public void call(Account account) {
+                    MainModel.this.account.setId(account.getId());
+                    MainModel.this.account.setEmail(account.getEmail());
+                    MainModel.this.account.setLanguage(account.getLanguage());
+                    MainModel.this.account.setRole(account.getRole());
 
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                accessToken = "";
-                _triggerObservers();
-            }
-        });
+                    _triggerObservers();
+                }
+            });
     }
 
     /**
      * Loads the last X posts of the user
      */
     public void loadFeeds() {
-        feedientService.getProviders(accessToken, new Callback<List<UserProvider>>() {
-            @Override
-            public void success(List<UserProvider> userProviders, Response response) {
-                JSONArray userProviderIds = new JSONArray();
+        feedientService.getProviders(accessToken)
+            .subscribe(new Action1<List<UserProvider>>() {
+                @Override
+                public void call(List<UserProvider> userProviders) {
+                    JSONArray userProviderIds = new JSONArray();
 
-                for (UserProvider up : userProviders) {
-                    userProviderIds.put(up.getId());
-                    MainModel.this.userProviders.add(up);
+                    for (UserProvider up : userProviders) {
+                        userProviderIds.put(up.getId());
+                        MainModel.this.userProviders.add(up);
+                    }
+
+                    _triggerObservers();
+
+                    // Get all the feeds
+                    feedientService.getFeeds(accessToken, userProviderIds)
+                            .subscribe(new Action1<FeedPostList>() {
+                                @Override
+                                public void call(FeedPostList feedPostList) {
+                                    // Set the posts
+                                    for (FeedPost fp : feedPostList.getFeedPosts()) {
+                                        MainModel.this.feedPosts.add(fp);
+                                    }
+
+                                    // Set the paginations
+                                    for (BulkPagination bp : feedPostList.getPaginations()) {
+                                        paginationKeys.put(bp.getProviderId(), bp.getSince());
+                                    }
+
+                                    // We got list items added, trigger observers
+                                    _triggerObservers();
+                                }
+                            });
                 }
-
-                _triggerObservers();
-
-                // Get all the feeds
-                feedientService.getFeeds(accessToken, userProviderIds, new Callback<FeedPostList>() {
-                    @Override
-                    public void success(FeedPostList feedPostList, Response response) {
-                        // Set the posts
-                        for (FeedPost fp : feedPostList.getFeedPosts()) {
-                            MainModel.this.feedPosts.add(fp);
-                        }
-
-                        // Set the paginations
-                        for (BulkPagination bp : feedPostList.getPaginations()) {
-                            paginationKeys.put(bp.getProviderId(), bp.getSince());
-                        }
-
-                        // We got list items added, trigger observers
-                        _triggerObservers();
-                    }
-
-                    @Override
-                    public void failure(RetrofitError retrofitError) {
-                        Log.e("Feedient", retrofitError.getMessage());
-                    }
-                });
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                Log.e("Feedient", retrofitError.getMessage());
-            }
-        });
+            });
     }
 
     /**
@@ -184,31 +174,27 @@ public class MainModel extends Observable {
             }
         }
 
-        feedientService.getNewerPosts(accessToken, newFeedPosts, new Callback<FeedPostList>() {
-            @Override
-            public void success(FeedPostList feedPostList, Response response) {
-                Log.e("Feedient", "New posts: " + feedPostList.getFeedPosts().size());
-                // Add posts to the beginning (Start at the end of the array for ordering)
-                for (int i = feedPostList.getFeedPosts().size() - 1; i >= 0; i--) {
-                    FeedPost fp = feedPostList.getFeedPosts().get(i);
-                    MainModel.this.feedPosts.add(0, fp);
+        feedientService.getNewerPosts(accessToken, newFeedPosts)
+            .subscribe(new Action1<FeedPostList>() {
+                @Override
+                public void call(FeedPostList feedPostList) {
+                    Log.e("Feedient", "New posts: " + feedPostList.getFeedPosts().size());
+                    // Add posts to the beginning (Start at the end of the array for ordering)
+                    for (int i = feedPostList.getFeedPosts().size() - 1; i >= 0; i--) {
+                        FeedPost fp = feedPostList.getFeedPosts().get(i);
+                        MainModel.this.feedPosts.add(0, fp);
+                    }
+
+                    // Set the paginations
+                    for (BulkPagination bp : feedPostList.getPaginations()) {
+                        paginationKeys.put(bp.getProviderId(), bp.getSince());
+                    }
+
+                    // We got list items added, trigger observers
+                    isRefreshing = false;
+                    _triggerObservers();
                 }
-
-                // Set the paginations
-                for (BulkPagination bp : feedPostList.getPaginations()) {
-                    paginationKeys.put(bp.getProviderId(), bp.getSince());
-                }
-
-                // We got list items added, trigger observers
-                isRefreshing = false;
-                _triggerObservers();
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-
-            }
-        });
+            });
     }
 
     /**
@@ -231,20 +217,14 @@ public class MainModel extends Observable {
     }
 
     public void logout() {
-        feedientService.logout(this.accessToken, new Callback<Logout>() {
-            @Override
-            public void success(Logout logout, Response response) {
-                _removeAccessToken();
-                _triggerObservers();
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                _removeAccessToken();
-                _triggerObservers();
-                Log.e("Feedient", "Could not remove accessToken from server");
-            }
-        });
+        feedientService.logout(this.accessToken)
+            .subscribe(new Action1<Logout>() {
+                @Override
+                public void call(Logout logout) {
+                    _removeAccessToken();
+                    _triggerObservers();
+                }
+            });
     }
 
     private void _removeAccessToken() {
@@ -280,18 +260,14 @@ public class MainModel extends Observable {
     }
 
     public void removeUserProvider(final UserProvider up) {
-        feedientService.removeUserProvider(accessToken, up.getId(), new Callback<RemoveUserProvider>() {
-            @Override
-            public void success(RemoveUserProvider rup, Response response) {
-                userProviders.remove(up);
-                _triggerObservers();
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                Log.e("Feedient", retrofitError.getMessage());
-            }
-        });
+        feedientService.removeUserProvider(accessToken, up.getId())
+            .subscribe(new Action1<RemoveUserProvider>() {
+                @Override
+                public void call(RemoveUserProvider removeUserProvider) {
+                    userProviders.remove(up);
+                    _triggerObservers();
+                }
+            });
     }
 
     public void addUserProvider(IProviderModel provider) {

@@ -22,6 +22,7 @@ import java.util.List;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import rx.functions.Action1;
 
 public class Facebook implements IProviderModel, IOAuth2Provider {
     public static final String NAME = "facebook";
@@ -59,31 +60,23 @@ public class Facebook implements IProviderModel, IOAuth2Provider {
     }
 
     private void _doActionLike(final FeedPost feedPost) {
-        feedientService.doActionFacebookLike(accessToken, feedPost.getProvider().getId(), "like", feedPost.getId(), new Callback<PerformAction>() {
-            @Override
-            public void success(PerformAction performAction, Response response) {
-                feedPost.getContent().getActionsPerformed().setLiked(true);
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                Log.e("Feedient", retrofitError.getMessage());
-            }
-        });
+        feedientService.doActionFacebookLike(accessToken, feedPost.getProvider().getId(), "like", feedPost.getId())
+            .subscribe(new Action1<PerformAction>() {
+                @Override
+                public void call(PerformAction performAction) {
+                    feedPost.getContent().getActionsPerformed().setLiked(true);
+                }
+            });
     }
 
     private void _doActionUnlike(final FeedPost feedPost) {
-        feedientService.undoActionFacebookLike(accessToken, feedPost.getProvider().getId(), "unlike", feedPost.getId(), new Callback<PerformAction>() {
-            @Override
-            public void success(PerformAction performAction, Response response) {
-                feedPost.getContent().getActionsPerformed().setLiked(false);
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                Log.e("Feedient", retrofitError.getMessage());
-            }
-        });
+        feedientService.undoActionFacebookLike(accessToken, feedPost.getProvider().getId(), "unlike", feedPost.getId())
+            .subscribe(new Action1<PerformAction>() {
+                @Override
+                public void call(PerformAction performAction) {
+                    feedPost.getContent().getActionsPerformed().setLiked(false);
+                }
+            });
     }
 
     @Override
@@ -117,17 +110,13 @@ public class Facebook implements IProviderModel, IOAuth2Provider {
     }
 
     public void addProvider(String accessToken, FeedientService feedientService, String oAuthCode, final IAddProviderCallback callback) {
-        feedientService.addOAuth2Provider(accessToken, NAME, oAuthCode, new Callback<List<UserProvider>>() {
-            @Override
-            public void success(List<UserProvider> userProviders, Response response) {
-                callback.onSuccess(userProviders);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-            }
-        });
+        feedientService.addOAuth2Provider(accessToken, NAME, oAuthCode)
+            .subscribe(new Action1<List<UserProvider>>() {
+                @Override
+                public void call(List<UserProvider> userProviders) {
+                    callback.onSuccess(userProviders);
+                }
+            });
     }
 
     @Override

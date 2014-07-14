@@ -2,121 +2,116 @@ package com.feedient.android.interfaces;
 
 import com.feedient.android.models.json.Account;
 import com.feedient.android.models.json.feed.FeedPostList;
-import com.feedient.android.models.json.response.AddProvider;
 import com.feedient.android.models.json.response.Logout;
 import com.feedient.android.models.json.response.PerformAction;
 import com.feedient.oauth.models.GetRequestToken;
 import com.feedient.android.models.json.response.RemoveUserProvider;
-import com.feedient.android.models.json.feed.FeedResult;
 import com.feedient.android.models.json.UserProvider;
 import com.feedient.android.models.json.UserSession;
 
 import org.json.JSONArray;
 
-import retrofit.Callback;
 import retrofit.http.*;
+import rx.Observable;
 
 import java.util.List;
 
 public interface FeedientService {
     @GET("/user")
-    void getAccount(@Header("Bearer")String accessToken, Callback<Account> cb);
+    Observable<Account> getAccount(@Header("Bearer")String accessToken);
 
     @FormUrlEncoded
     @POST("/user/authorize")
-    void authorizeUser(@Field("email")String email, @Field("password")String password, Callback<UserSession> cb);
+    Observable<UserSession> authorizeUser(@Field("email")String email, @Field("password")String password);
 
     @GET("/provider")
-    void getProviders(@Header("Bearer")String accessToken, Callback<List<UserProvider>> cb);
-
-    @GET("/provider/{providerId}/feed")
-    void getFeed(@Header("Bearer")String accessToken, @Path("providerId")String providerId, Callback<FeedResult> cb);
+    Observable<List<UserProvider>> getProviders(@Header("Bearer")String accessToken);
 
     @FormUrlEncoded
     @POST("/providers/feed")
-    void getFeeds(@Header("Bearer")String accessToken, @Field("providers")JSONArray providers, Callback<FeedPostList> cb);
+    Observable<FeedPostList> getFeeds(@Header("Bearer")String accessToken, @Field("providers")JSONArray providers);
 
     @FormUrlEncoded
     @POST("/providers/feed/new")
-    void getNewerPosts(@Header("Bearer")String accessToken, @Field("objects")JSONArray objects, Callback<FeedPostList> cb);
+    Observable<FeedPostList> getNewerPosts(@Header("Bearer")String accessToken, @Field("objects")JSONArray objects);
 
     @DELETE("/provider/{id}")
-    void removeUserProvider(@Header("Bearer")String accessToken, @Path("id")String providerId, Callback<RemoveUserProvider> cb);
+    Observable<RemoveUserProvider> removeUserProvider(@Header("Bearer")String accessToken, @Path("id")String providerId);
 
     @FormUrlEncoded
     @POST("/provider/{name}/callback")
-    void addOAuth2Provider(@Header("Bearer")String accessToken, @Path("name")String providerName, @Field("oauth_code")String oauthCode, Callback<List<UserProvider>> cb);
+    Observable<List<UserProvider>> addOAuth2Provider(@Header("Bearer")String accessToken, @Path("name")String providerName, @Field("oauth_code")String oauthCode);
 
     @FormUrlEncoded
     @POST("/provider/{name}/callback")
-    void addOAuth1Provider(@Header("Bearer")String accessToken, @Path("name")String providerName, @Field("oauth_secret")String oAuthSecret, @Field("oauth_token")String oAuthToken, @Field("oauth_verifier")String oAuthVerifier, Callback<List<UserProvider>> cb);
+    Observable<List<UserProvider>> addOAuth1Provider(@Header("Bearer")String accessToken, @Path("name")String providerName, @Field("oauth_secret")String oAuthSecret, @Field("oauth_token")String oAuthToken, @Field("oauth_verifier")String oAuthVerifier);
 
     @GET("/provider/{name}/request_token")
-    void getRequestToken(@Header("Bearer")String accessToken, @Path("name")String providerName, Callback<GetRequestToken> cb);
+    Observable<GetRequestToken> getRequestToken(@Header("Bearer")String accessToken, @Path("name")String providerName);
 
     @GET("/logout")
-    void logout(@Header("Bearer")String accessToken, Callback<Logout> cb);
+    Observable<Logout> logout(@Header("Bearer")String accessToken);
 
     // ACTIONS
     // Facebook
     @FormUrlEncoded
     @POST("/provider/{userProviderId}/action/{actionMethod}")
-    void doActionFacebookLike(@Header("Bearer") String accessToken, @Path("userProviderId") String userProviderId, @Path("actionMethod") String actionMethod, @Field("post_id") String id, Callback<PerformAction> cb);
+    Observable<PerformAction> doActionFacebookLike(@Header("Bearer") String accessToken, @Path("userProviderId") String userProviderId, @Path("actionMethod") String actionMethod, @Field("post_id") String id);
 
     @FormUrlEncoded
     @POST("/provider/{userProviderId}/action/{actionMethod}")
-    void undoActionFacebookLike(@Header("Bearer") String accessToken, @Path("userProviderId") String userProviderId, @Path("actionMethod") String actionMethod, @Field("post_id") String id, Callback<PerformAction> cb);
+    Observable<PerformAction> undoActionFacebookLike(@Header("Bearer") String accessToken, @Path("userProviderId") String userProviderId, @Path("actionMethod") String actionMethod, @Field("post_id") String id);
 
     // Twitter
     @FormUrlEncoded
     @POST("/provider/{userProviderId}/action/{actionMethod}")
-    void doActionTwitterFavorite(@Header("Bearer") String accessToken, @Path("userProviderId") String userProviderId, @Path("actionMethod") String actionMethod, @Field("tweet_id") String tweetId, Callback<PerformAction> cb);
+    Observable<PerformAction> doActionTwitterFavorite(@Header("Bearer") String accessToken, @Path("userProviderId") String userProviderId, @Path("actionMethod") String actionMethod, @Field("tweet_id") String tweetId);
 
     @FormUrlEncoded
     @POST("/provider/{userProviderId}/action/{actionMethod}")
-    void undoActionTwitterFavorite(@Header("Bearer") String accessToken, @Path("userProviderId") String userProviderId, @Path("actionMethod") String actionMethod, @Field("tweet_id") String tweetId, Callback<PerformAction> cb);
+    Observable<PerformAction> undoActionTwitterFavorite(@Header("Bearer") String accessToken, @Path("userProviderId") String userProviderId, @Path("actionMethod") String actionMethod, @Field("tweet_id") String tweetId);
 
     @FormUrlEncoded
     @POST("/provider/{userProviderId}/action/{actionMethod}")
-    void doActionTwitterRetweet(@Header("Bearer") String accessToken, @Path("userProviderId") String userProviderId, @Path("actionMethod") String actionMethod, @Field("tweet_id") String tweetId, Callback<PerformAction> cb);
+    Observable<PerformAction> doActionTwitterRetweet(@Header("Bearer") String accessToken, @Path("userProviderId") String userProviderId, @Path("actionMethod") String actionMethod, @Field("tweet_id") String tweetId);
 
     @FormUrlEncoded
     @POST("/provider/{userProviderId}/action/{actionMethod}")
-    void undoActionTwitterRetweet(@Header("Bearer") String accessToken, @Path("userProviderId") String userProviderId, @Path("actionMethod") String actionMethod, @Field("tweet_id") String tweetId, Callback<PerformAction> cb);
+    Observable<PerformAction> undoActionTwitterRetweet(@Header("Bearer") String accessToken, @Path("userProviderId") String userProviderId, @Path("actionMethod") String actionMethod, @Field("tweet_id") String tweetId);
 
     // Instagram
     @FormUrlEncoded
     @POST("/provider/{userProviderId}/action/{actionMethod}")
-    void doActionInstagramLike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id, Callback<PerformAction> cb);
+    Observable<PerformAction> doActionInstagramLike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id);
 
     @FormUrlEncoded
     @POST("/provider/{userProviderId}/action/{actionMethod}")
-    void undoActionInstagramLike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id, Callback<PerformAction> cb);
+    Observable<PerformAction> undoActionInstagramLike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id);
 
     // Tumblr
     @FormUrlEncoded
     @POST("/provider/{userProviderId}/action/{actionMethod}")
-    void doActionTumblrLike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id, @Field("reblog_key")String reblogKey, Callback<PerformAction> cb);
+    Observable<PerformAction> doActionTumblrLike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id, @Field("reblog_key")String reblogKey);
 
     @FormUrlEncoded
     @POST("/provider/{userProviderId}/action/{actionMethod}")
-    void undoActionTumblrLike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id, @Field("reblog_key")String reblogKey, Callback<PerformAction> cb);
+    Observable<PerformAction> undoActionTumblrLike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id, @Field("reblog_key")String reblogKey);
 
     @FormUrlEncoded
     @POST("/provider/{userProviderId}/action/{actionMethod}")
-    void doActionTumblrReblog(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id, @Field("reblog_key")String reblogKey, Callback<PerformAction> cb);
+    Observable<PerformAction> doActionTumblrReblog(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id, @Field("reblog_key")String reblogKey);
 
     // YouTube
     @FormUrlEncoded
     @POST("/provider/{userProviderId}/action/{actionMethod}")
-    void doActionYoutubeLike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id, Callback<PerformAction> cb);
+    Observable<PerformAction> doActionYoutubeLike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id);
 
     @FormUrlEncoded
     @POST("/provider/{userProviderId}/action/{actionMethod}")
-    void undoActionYoutubeLike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id, Callback<PerformAction> cb);
+    Observable<PerformAction> undoActionYoutubeLike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id);
 
     @FormUrlEncoded
     @POST("/provider/{userProviderId}/action/{actionMethod}")
-    void doActionYoutubeDislike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id, Callback<PerformAction> cb);
+    Observable<PerformAction> doActionYoutubeDislike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id);
 
 }

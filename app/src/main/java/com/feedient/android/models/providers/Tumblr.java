@@ -24,6 +24,7 @@ import java.util.List;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import rx.functions.Action1;
 
 public class Tumblr implements IProviderModel, IOAuth1Provider {
     public static final String NAME = "tumblr";
@@ -68,45 +69,33 @@ public class Tumblr implements IProviderModel, IOAuth1Provider {
     }
 
     private void _doActionReblog(final FeedPost feedPost) {
-        feedientService.doActionTumblrReblog(accessToken, feedPost.getProvider().getId(), "reblog", feedPost.getId(), feedPost.getTumblr().getReblogKey(), new Callback<PerformAction>() {
-            @Override
-            public void success(PerformAction performAction, Response response) {
-                feedPost.getContent().getActionsPerformed().setReblogged(true);
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                Log.e("Feedient", retrofitError.getMessage());
-            }
-        });
+        feedientService.doActionTumblrReblog(accessToken, feedPost.getProvider().getId(), "reblog", feedPost.getId(), feedPost.getTumblr().getReblogKey())
+            .subscribe(new Action1<PerformAction>() {
+                @Override
+                public void call(PerformAction performAction) {
+                    feedPost.getContent().getActionsPerformed().setReblogged(true);
+                }
+            });
     }
 
     private void _doActionLike(final FeedPost feedPost) {
-        feedientService.doActionTumblrLike(accessToken, feedPost.getProvider().getId(), "like", feedPost.getId(), feedPost.getTumblr().getReblogKey(), new Callback<PerformAction>() {
-            @Override
-            public void success(PerformAction performAction, Response response) {
-                feedPost.getContent().getActionsPerformed().setLiked(true);
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                Log.e("Feedient", retrofitError.getMessage());
-            }
-        });
+        feedientService.doActionTumblrLike(accessToken, feedPost.getProvider().getId(), "like", feedPost.getId(), feedPost.getTumblr().getReblogKey())
+            .subscribe(new Action1<PerformAction>() {
+                @Override
+                public void call(PerformAction performAction) {
+                    feedPost.getContent().getActionsPerformed().setLiked(true);
+                }
+            });
     }
 
     private void _doActionUnlike(final FeedPost feedPost) {
-        feedientService.undoActionTumblrLike(accessToken, feedPost.getProvider().getId(), "unlike", feedPost.getId(), feedPost.getTumblr().getReblogKey(), new Callback<PerformAction>() {
-            @Override
-            public void success(PerformAction performAction, Response response) {
-                feedPost.getContent().getActionsPerformed().setLiked(false);
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                Log.e("Feedient", retrofitError.getMessage());
-            }
-        });
+        feedientService.undoActionTumblrLike(accessToken, feedPost.getProvider().getId(), "unlike", feedPost.getId(), feedPost.getTumblr().getReblogKey())
+            .subscribe(new Action1<PerformAction>() {
+                @Override
+                public void call(PerformAction performAction) {
+                    feedPost.getContent().getActionsPerformed().setLiked(false);
+                }
+            });
     }
 
     @Override
@@ -140,17 +129,13 @@ public class Tumblr implements IProviderModel, IOAuth1Provider {
     }
 
     public void addProvider(String accessToken, FeedientService feedientService, String requestSecret, String oAuthToken, String oAuthVerifier, final IAddProviderCallback callback) {
-        feedientService.addOAuth1Provider(accessToken, NAME, requestSecret, oAuthToken, oAuthVerifier, new Callback<List<UserProvider>>() {
-            @Override
-            public void success(List<UserProvider> userProviders, Response response) {
-                callback.onSuccess(userProviders);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-            }
-        });
+        feedientService.addOAuth1Provider(accessToken, NAME, requestSecret, oAuthToken, oAuthVerifier)
+            .subscribe(new Action1<List<UserProvider>>() {
+                @Override
+                public void call(List<UserProvider> userProviders) {
+                    callback.onSuccess(userProviders);
+                }
+            });
     }
 
     @Override
@@ -178,18 +163,13 @@ public class Tumblr implements IProviderModel, IOAuth1Provider {
 
     @Override
     public void getRequestToken(final IGetRequestTokenCallback callback) {
-        feedientService.getRequestToken(accessToken, NAME, new Callback<GetRequestToken>() {
-            @Override
-            public void success(GetRequestToken getRequestToken, Response response) {
-                // Got request token, call callback for popup
-                callback.success(getRequestToken);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-            }
-        });
+        feedientService.getRequestToken(accessToken, NAME)
+            .subscribe(new Action1<GetRequestToken>() {
+                @Override
+                public void call(GetRequestToken getRequestToken) {
+                    callback.success(getRequestToken);
+                }
+            });
     }
 
     public List<ProviderAction> getActions() {
