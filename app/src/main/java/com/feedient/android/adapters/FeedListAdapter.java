@@ -23,6 +23,7 @@ import com.feedient.android.R;
 import com.feedient.android.interfaces.IProviderModel;
 import com.feedient.android.models.json.schema.FeedPost;
 import com.feedient.android.models.json.schema.entities.ExtendedLinkEntity;
+import com.feedient.android.models.json.schema.entities.ExtendedVideoEntity;
 import com.feedient.android.models.json.schema.entities.HashtagEntity;
 import com.feedient.android.models.json.schema.entities.LinkEntity;
 import com.feedient.android.models.json.schema.entities.MentionEntity;
@@ -158,6 +159,11 @@ public class FeedListAdapter extends BaseAdapter {
             _handleEntityExtendedLink(inflater, holder.containerEntities, item);
         }
 
+        // Video
+        if (item.getContent().getEntities().getExtendedVideo() != null) {
+            _handleEntityExtendedVideo(inflater, holder.containerEntities, item);
+        }
+
         // Set message if set
         if (!TextUtils.isEmpty(message)) {
             holder.txtMessage.setMovementMethod(LinkMovementMethod.getInstance());
@@ -240,9 +246,9 @@ public class FeedListAdapter extends BaseAdapter {
         View entityView = inflater.inflate(R.layout.entity_extended_link, null);
 
         // Init Elements
-        ImageView imgEntityExtendedLinkThumbnail = (ImageView)entityView.findViewById(R.id.img_entity_extended_link_thumbnail);
-        TextView txtEntityExtendedLinkTitle = (TextView)entityView.findViewById(R.id.txt_entity_extended_link_title);
-        TextView txtEntityExtendedLinkHost = (TextView)entityView.findViewById(R.id.txt_entity_extended_link_url_host);
+        ImageView imgThumbnail = (ImageView)entityView.findViewById(R.id.img_thumbnail);
+        TextView txtTitle = (TextView)entityView.findViewById(R.id.txt_title);
+        TextView txtHost = (TextView)entityView.findViewById(R.id.txt_url_host);
 
         // Add onClick open webbrowser
         entityView.setOnClickListener(new View.OnClickListener() {
@@ -257,20 +263,61 @@ public class FeedListAdapter extends BaseAdapter {
         container.addView(entityView);
 
         // If the name is not set, remove it from view
-        if (le.getName().length() > 1) {
-            txtEntityExtendedLinkTitle.setText(le.getName());
+        if (!TextUtils.isEmpty(le.getName())) {
+            txtTitle.setText(le.getName());
         } else {
-            txtEntityExtendedLinkTitle.setVisibility(View.GONE);
+            txtTitle.setVisibility(View.GONE);
         }
 
         try {
             URL url = new URL(le.getUrl());
-            txtEntityExtendedLinkHost.setText(url.getHost());
+            txtHost.setText(url.getHost());
         } catch (MalformedURLException e) {
             Log.e("Feedient", e.getMessage());
         }
 
         // Async load image
-        Picasso.with(activity).load(le.getImageUrl()).into(imgEntityExtendedLinkThumbnail);
+        Picasso.with(activity).load(le.getImageUrl()).into(imgThumbnail);
+    }
+
+    private void _handleEntityExtendedVideo(LayoutInflater inflater, LinearLayout container, FeedPost item) {
+        // Init data
+        final ExtendedVideoEntity le = item.getContent().getEntities().getExtendedVideo();
+
+        View entityView = inflater.inflate(R.layout.entity_extended_video, null);
+
+        // Init Elements
+        ImageView imgThumbnail = (ImageView)entityView.findViewById(R.id.img_thumbnail);
+        TextView txtTitle = (TextView)entityView.findViewById(R.id.txt_title);
+        TextView txtHost = (TextView)entityView.findViewById(R.id.txt_url_host);
+
+        // Add onClick open webbrowser
+        entityView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse(le.getLink());
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                activity.startActivity(intent);
+            }
+        });
+
+        container.addView(entityView);
+
+        // If the name is not set, remove it from view
+        if (!TextUtils.isEmpty(le.getTitle())) {
+            txtTitle.setText(le.getTitle());
+        } else {
+            txtTitle.setVisibility(View.GONE);
+        }
+
+        try {
+            URL url = new URL(le.getLink());
+            txtHost.setText(url.getHost());
+        } catch (MalformedURLException e) {
+            Log.e("Feedient", e.getMessage());
+        }
+
+        // Async load image
+        Picasso.with(activity).load(le.getThumbnail()).into(imgThumbnail);
     }
 }
