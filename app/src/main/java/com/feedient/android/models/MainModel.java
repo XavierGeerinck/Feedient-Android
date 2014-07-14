@@ -197,12 +197,25 @@ public class MainModel extends Observable {
             });
     }
 
-    /**
-     * Loads the posts that are older the date X
-     * @param lastDate
-     */
-    public void loadOlderPosts(Date lastDate) {
+    public void loadOlderPosts() {
+        isRefreshing = true;
+        _triggerObservers();
+//
+//        JSONArray newFeedPosts = new JSONArray();
+//
+//        // Get the last posts for every provider, and add the until key
+//        for (UserProvider up : userProviders) {
+//            String userProviderId = up.getId();
+//            String until = paginationKeys.get(up.getId());
+//
+//            try {
+//                newFeedPosts.put(new NewFeedPost(userProviderId, since));
+//            } catch (JSONException e) {
+//                Log.e("Feedient", e.getMessage());
+//            }
+//        }
 
+        Log.e("Feedient", "LOADING OLDER POSTS");
     }
 
     public void initAutoUpdateTimer() {

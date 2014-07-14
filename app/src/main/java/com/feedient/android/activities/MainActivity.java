@@ -25,7 +25,9 @@ import com.feedient.android.adapters.FeedListAdapter;
 import com.feedient.android.adapters.GridItemAdapter;
 import com.feedient.android.adapters.NavDrawerProvidersListAdapter;
 import com.feedient.android.interfaces.IDrawerProviderItemCallback;
+import com.feedient.android.interfaces.ILoadMoreListener;
 import com.feedient.android.interfaces.IProviderModel;
+import com.feedient.android.listeners.LoadMoreListener;
 import com.feedient.android.models.GridItem;
 import com.feedient.android.models.MainModel;
 
@@ -94,6 +96,12 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         // Set the adapter for our feed
         mFeedListAdapter = new FeedListAdapter(this, mMainModel.getFeedPosts(), mMainModel.getProviders());
         mFeedPostsList.setAdapter(mFeedListAdapter);
+        mFeedPostsList.setOnScrollListener(new LoadMoreListener(new ILoadMoreListener() {
+            @Override
+            public void onScrollCompleted() {
+                mMainModel.loadOlderPosts();
+            }
+        }));
 
         // Set the adapter for our drawer list navigation items
         mNavDrawerListAdapter = new NavDrawerListAdapter(getApplicationContext(), mMainModel.getNavDrawerItems());
