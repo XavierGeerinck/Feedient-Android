@@ -18,7 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/list"
-            android:divider="@null">
+            android:divider="@null"
+            android:background="#d3d6db">
         </ListView>
 
         <com.feedient.android.views.FloatingActionButton

@@ -12,7 +12,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.view.ViewPropertyAnimator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.IconButton;
 import android.widget.ImageView;
@@ -32,20 +34,16 @@ import com.squareup.picasso.Picasso;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 public class FeedListAdapter extends BaseAdapter {
-    // Statics
-    private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
-
     // Variables
     private final Activity activity;
     private final LayoutInflater inflater;
     private final List<FeedPost> feedItems;
     private final HashMap<String, IProviderModel> providers;
+    private int lastPosition = -1;
 
     // ViewHolder
     static class ViewHolder {
@@ -170,6 +168,25 @@ public class FeedListAdapter extends BaseAdapter {
             holder.txtMessage.setText(Html.fromHtml(message));
         } else {
             holder.txtMessage.setVisibility(View.GONE);
+        }
+
+        // Animate the view when we scroll down
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(convertView.getContext(), R.anim.up_from_bottom);
+
+//            convertView.setTranslationX(0.0F);
+//            convertView.setTranslationY(10);
+//            convertView.setRotationX(45.0F);
+//            convertView.setScaleX(0.7F);
+//            convertView.setScaleY(0.55F);
+//
+//            ViewPropertyAnimator localViewPropertyAnimator =
+//                    convertView.animate().rotationX(0.0F).rotationY(0.0F).translationX(0).translationY(0).setDuration(700).scaleX(
+//                            1.0F).scaleY(1.0F);
+//
+//            localViewPropertyAnimator.start();
+            convertView.startAnimation(animation);
+            lastPosition = position;
         }
 
         // Return view
