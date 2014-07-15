@@ -188,9 +188,14 @@ public class MainModel extends Observable {
                     }
 
                     // Set the new paginations
-                    for (BulkPagination bp : feedPostList.getPaginations()) {
+                    List<BulkPagination> paginations = feedPostList.getPaginations();
+                    for (int i = 0; i < paginations.size(); i++) {
+                        BulkPagination bp = paginations.get(i);
+
                         BulkPagination old = paginationKeys.get(bp.getProviderId());
-                        old.setSince(bp.getSince());
+                        bp.setUntil(old.getUntil()); // Set the until key back
+
+                        paginationKeys.put(bp.getProviderId(), bp);
                     }
 
                     // We got list items added, trigger observers
@@ -230,9 +235,14 @@ public class MainModel extends Observable {
                         }
 
                         // Set the new paginations
-                        for (BulkPagination bp : feedPostList.getPaginations()) {
+                        List<BulkPagination> paginations = feedPostList.getPaginations();
+                        for (int i = 0; i < paginations.size(); i++) {
+                            BulkPagination bp = paginations.get(i);
+
                             BulkPagination old = paginationKeys.get(bp.getProviderId());
-                            old.setProviderId(bp.getUntil());
+                            bp.setSince(old.getSince()); // Set the since key back
+
+                            paginationKeys.put(bp.getProviderId(), bp);
                         }
 
                         // We got list items added, trigger observers
