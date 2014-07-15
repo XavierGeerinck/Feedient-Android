@@ -99,7 +99,9 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         mFeedPostsList.setOnScrollListener(new LoadMoreListener(new ILoadMoreListener() {
             @Override
             public void onScrollCompleted() {
-                mMainModel.loadOlderPosts();
+                if (!mMainModel.isLoadingOlderPosts()) {
+                    mMainModel.loadOlderPosts();
+                }
             }
         }));
 

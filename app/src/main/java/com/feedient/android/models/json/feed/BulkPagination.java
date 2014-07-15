@@ -9,9 +9,13 @@ public class BulkPagination {
     @SerializedName("since")
     private String since;
 
+    @SerializedName("until")
+    private String until;
+
     public BulkPagination() {
         providerId = "";
         since = "";
+        until = "";
     }
 
     public String getSince() {
@@ -28,5 +32,13 @@ public class BulkPagination {
 
     public void setProviderId(String providerId) {
         this.providerId = providerId;
+    }
+
+    public String getUntil() {
+        return until;
+    }
+
+    public void setUntil(String until) {
+        this.until = until;
     }
 }

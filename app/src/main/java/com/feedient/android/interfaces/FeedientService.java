@@ -35,6 +35,10 @@ public interface FeedientService {
     @POST("/providers/feed/new")
     Observable<FeedPostList> getNewerPosts(@Header("Bearer")String accessToken, @Field("objects")JSONArray objects);
 
+    @FormUrlEncoded
+    @POST("/providers/feed/old")
+    Observable<FeedPostList> getOlderPosts(@Header("Bearer")String accessToken, @Field("objects")JSONArray objects);
+
     @DELETE("/provider/{id}")
     Observable<RemoveUserProvider> removeUserProvider(@Header("Bearer")String accessToken, @Path("id")String providerId);
 

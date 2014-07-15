@@ -16,6 +16,7 @@ import com.feedient.android.models.json.UserProvider;
 import com.feedient.android.models.json.feed.BulkPagination;
 import com.feedient.android.models.json.feed.FeedPostList;
 import com.feedient.android.models.json.request.NewFeedPost;
+import com.feedient.android.models.json.request.OldFeedPost;
 import com.feedient.android.models.json.response.Logout;
 import com.feedient.android.models.json.response.RemoveUserProvider;
 import com.feedient.android.models.json.schema.FeedPost;
@@ -41,7 +42,7 @@ public class MainModel extends Observable {
     private final long timerInterval;
     private int newNotifications;
     private List<FeedPost> feedPosts;
-    private Map<String, String> paginationKeys; // <userProviderId, since>
+    private Map<String, BulkPagination> paginationKeys; // <userProviderId, since>
     private List<UserProvider> userProviders;
     private HashMap<String, IProviderModel> providers;
     private Account account;
@@ -56,12 +57,13 @@ public class MainModel extends Observable {
     private List<NavDrawerItem> navDrawerItems;
 
     private boolean isRefreshing;
+    private boolean isLoadingOlderPosts;
 
     public MainModel(Context context) {
         this.context = context;
 
         feedPosts = new ArrayList<FeedPost>();
-        paginationKeys = new HashMap<String, String>();
+        paginationKeys = new HashMap<String, BulkPagination>();
         userProviders = new ArrayList<UserProvider>();
         account = new Account();
         newNotifications = 0;
@@ -142,7 +144,7 @@ public class MainModel extends Observable {
 
                                     // Set the paginations
                                     for (BulkPagination bp : feedPostList.getPaginations()) {
-                                        paginationKeys.put(bp.getProviderId(), bp.getSince());
+                                        paginationKeys.put(bp.getProviderId(), bp);
                                     }
 
                                     // We got list items added, trigger observers
@@ -165,7 +167,7 @@ public class MainModel extends Observable {
         // Get the last posts for every provider, and add the since key
         for (UserProvider up : userProviders) {
             String userProviderId = up.getId();
-            String since = paginationKeys.get(up.getId());
+            String since = paginationKeys.get(up.getId()).getSince();
 
             try {
                 newFeedPosts.put(new NewFeedPost(userProviderId, since));
@@ -185,9 +187,10 @@ public class MainModel extends Observable {
                         MainModel.this.feedPosts.add(0, fp);
                     }
 
-                    // Set the paginations
+                    // Set the new paginations
                     for (BulkPagination bp : feedPostList.getPaginations()) {
-                        paginationKeys.put(bp.getProviderId(), bp.getSince());
+                        BulkPagination old = paginationKeys.get(bp.getProviderId());
+                        old.setSince(bp.getSince());
                     }
 
                     // We got list items added, trigger observers
@@ -198,24 +201,46 @@ public class MainModel extends Observable {
     }
 
     public void loadOlderPosts() {
-        isRefreshing = true;
+        isLoadingOlderPosts = true;
         _triggerObservers();
-//
-//        JSONArray newFeedPosts = new JSONArray();
-//
-//        // Get the last posts for every provider, and add the until key
-//        for (UserProvider up : userProviders) {
-//            String userProviderId = up.getId();
-//            String until = paginationKeys.get(up.getId());
-//
-//            try {
-//                newFeedPosts.put(new NewFeedPost(userProviderId, since));
-//            } catch (JSONException e) {
-//                Log.e("Feedient", e.getMessage());
-//            }
-//        }
+
+        JSONArray olderFeedPosts = new JSONArray();
+
+        // Get the last posts for every provider, and add the since key
+        for (UserProvider up : userProviders) {
+            String userProviderId = up.getId();
+            String until = paginationKeys.get(up.getId()).getUntil();
+
+            try {
+                olderFeedPosts.put(new OldFeedPost(userProviderId, until));
+            } catch (JSONException e) {
+                Log.e("Feedient", e.getMessage());
+            }
+        }
 
         Log.e("Feedient", "LOADING OLDER POSTS");
+        feedientService.getOlderPosts(accessToken, olderFeedPosts)
+                .subscribe(new Action1<FeedPostList>() {
+                    @Override
+                    public void call(FeedPostList feedPostList) {
+                        Log.e("Feedient", "Older posts: " + feedPostList.getFeedPosts().size());
+                        // Add posts to the end
+                        for (FeedPost fp : feedPostList.getFeedPosts()) {
+                            MainModel.this.feedPosts.add(fp);
+                        }
+
+                        // Set the new paginations
+                        for (BulkPagination bp : feedPostList.getPaginations()) {
+                            BulkPagination old = paginationKeys.get(bp.getProviderId());
+                            old.setProviderId(bp.getUntil());
+                        }
+
+                        // We got list items added, trigger observers
+                        isLoadingOlderPosts = false;
+                        _triggerObservers();
+                    }
+                });
+
     }
 
     public void initAutoUpdateTimer() {
@@ -310,5 +335,9 @@ public class MainModel extends Observable {
 
     public List<NavDrawerItem> getNavDrawerItems() {
         return navDrawerItems;
+    }
+
+    public boolean isLoadingOlderPosts() {
+        return isLoadingOlderPosts;
     }
 }

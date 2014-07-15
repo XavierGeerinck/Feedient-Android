@@ -17,18 +17,16 @@ public class LoadMoreListener implements AbsListView.OnScrollListener {
     @Override
     public void onScrollStateChanged(AbsListView absListView, int scrollState) {
         this.currentScrollState = scrollState;
-        this.isScrollCompleted();
     }
 
     @Override
     public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         this.currentFirstVisibleItem = firstVisibleItem;
         this.currentVisibleItemCount = visibleItemCount;
-    }
 
-    private void isScrollCompleted() {
-        if (this.currentVisibleItemCount > 0 && this.currentScrollState == SCROLL_STATE_IDLE) {
-            // Check if scrolling is done
+        boolean loadMore = firstVisibleItem + visibleItemCount >= totalItemCount;
+
+        if (loadMore && this.currentScrollState != SCROLL_STATE_IDLE) {
             callback.onScrollCompleted();
         }
     }

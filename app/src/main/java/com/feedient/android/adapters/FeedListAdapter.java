@@ -233,7 +233,7 @@ public class FeedListAdapter extends BaseAdapter {
     private String _handleEntityLinks(String message, FeedPost fp) {
         for (LinkEntity le : fp.getContent().getEntities().getLinks()) {
             message = message.replace(le.getDisplayUrl(), "<a href=\"" + le.getExpandedUrl() + "\">" + le.getDisplayUrl() + "</a>");
-            message = message.replace(le.getShortenedUrl(), "<a href=\"" + le.getExpandedUrl() + "\">" + le.getDisplayUrl() + "</a>");
+//            message = message.replace(le.getShortenedUrl(), "<a href=\"" + le.getExpandedUrl() + "\">" + le.getDisplayUrl() + "</a>");
         }
 
         return message;
