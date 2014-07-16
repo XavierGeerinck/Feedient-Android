@@ -30,7 +30,8 @@
             <LinearLayout
                 android:id="@+id/container_thumbnail"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@drawable/feed_item_thumbnail_rounder_corner">
 
                 <ImageView
                     android:id="@+id/img_thumbnail_user"
@@ -52,9 +53,16 @@
                     android:id="@+id/txt_user_posted_by"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="\@thebillkidy"
                     android:textSize="@dimen/feed_item_profile_name"
                     android:textStyle="bold"/>
+
+                <!-- Formatted User Name -->
+                <TextView
+                    android:id="@+id/txt_user_formatted_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#bababa"
+                    android:textSize="12sp"/>
 
                 <!-- Date Posted -->
                 <TextView
@@ -66,45 +74,6 @@
                     android:textStyle="bold"/>
             </LinearLayout>
 
-            <!--&lt;!&ndash; Provider Box @todo &ndash;&gt;-->
-            <!--&lt;!&ndash; Note: marginRight="-1dp" so that the 1px goes invisible &ndash;&gt;-->
-            <!--<LinearLayout-->
-                <!--android:id="@+id/container_provider"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:background="@drawable/provider_border_feedient"-->
-                <!--android:minWidth="20dp"-->
-                <!--android:layout_marginRight="-1dp"-->
-                <!--android:paddingBottom="8dp"-->
-                <!--android:paddingLeft="10dp"-->
-                <!--android:paddingRight="10dp"-->
-                <!--android:paddingTop="8dp">-->
-
-                <!--&lt;!&ndash; Provider Icon &ndash;&gt;-->
-                <!--<IconTextView-->
-                    <!--android:id="@+id/txt_provider_icon"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="{fa-twitter}"-->
-                    <!--android:textColor="#55acee"-->
-                    <!--android:typeface="sans"-->
-                    <!--android:textSize="12sp"-->
-                    <!--android:textStyle="bold"/>-->
-
-                <!--&lt;!&ndash; Provider User Name &ndash;&gt;-->
-                <!--<TextView-->
-                    <!--android:id="@+id/txt_provider_name"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="\@thebillkidy"-->
-                    <!--android:textColor="#C1C1C1"-->
-                    <!--android:typeface="sans"-->
-                    <!--android:textSize="12sp"-->
-                    <!--android:textStyle="bold"-->
-                    <!--android:layout_alignRight="@id/txt_provider_icon"/>-->
-            <!--</LinearLayout>-->
-
         </LinearLayout>
 
         <!-- Message -->
@@ -115,7 +84,8 @@
             android:paddingBottom="@dimen/feed_item_status_pad_bot"
             android:paddingLeft="@dimen/feed_item_status_pad_left_right"
             android:paddingRight="@dimen/feed_item_status_pad_left_right"
-            android:paddingTop="@dimen/feed_item_status_pad_top"/>
+            android:paddingTop="@dimen/feed_item_status_pad_top"
+            android:textColor="#383838"/>
 
         <!-- Content - Entities -->
         <LinearLayout
@@ -135,43 +105,37 @@
             android:paddingLeft="@dimen/feed_item_padding_left_right"
             android:paddingRight="@dimen/feed_item_padding_left_right">
 
-            <IconButton
+            <!-- Provider User Name -->
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btn_twitter_favorite"
-                android:text="{fa-star}"
-                android:textColor="@color/feed_item_action_social_icon"
-                android:textSize="@dimen/feed_item_action_social_icon"
-                android:layout_marginRight="@dimen/feed_item_action_social_icon_marg_left_right"
-                android:minHeight="1dp"
-                android:minWidth="1dp"
-                android:background="@android:color/transparent"/>
+                android:orientation="horizontal">
 
-            <IconButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_twitter_retweet"
-                android:layout_toRightOf="@id/btn_twitter_favorite"
-                android:text="{fa-retweet}"
-                android:textColor="@color/feed_item_action_social_icon"
-                android:textSize="@dimen/feed_item_action_social_icon"
-                android:layout_marginRight="@dimen/feed_item_action_social_icon_marg_left_right"
-                android:minHeight="1dp"
-                android:minWidth="1dp"
-                android:background="@android:color/transparent"/>
+                <IconTextView
+                    android:id="@+id/img_user_provider_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"/>
 
-            <Button
+                <TextView
+                    android:id="@+id/txt_provider_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:text="thebillkidy"
+                    android:textColor="@color/timestamp"
+                    android:textSize="14sp"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+            <!-- Provider specific social actions -->
+            <LinearLayout
+                android:id="@+id/layout_social_actions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/feed_item_action_comment"
                 android:layout_alignParentRight="true"
-                android:textColor="@color/feed_item_action_social_icon"
-                android:textStyle="bold"
-                android:textSize="@dimen/feed_item_action_social_comment"
-                android:minHeight="1dp"
-                android:minWidth="1dp"
-                android:background="@android:color/transparent"/>
-
+                android:orientation="horizontal" />
         </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>

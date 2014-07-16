@@ -1,22 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="txt_message">#343434</color>
-    <color name="txt_date_posted">#1ead91</color>
     <color name="text_shadow">#7F000000</color>
     <color name="feedient_green">#1ead91</color>
     <color name="black">#000000</color>
-
     <color name="white">#ffffff</color>
+
+    <!-- Action Bar -->
+    <color name="actionbar_background">#1EAD91</color>
+    <color name="actionbar_title">#FFFFFF</color>
+
+    <!-- Feed -->
     <color name="feed_bg">#d3d6db</color>
     <color name="feed_item_bg">#ffffff</color>
     <color name="feed_item_border">#c2c3c8</color>
     <color name="feed_item_action_social_icon">#737373</color>
     <color name="link">#0a80d1</color>
     <color name="timestamp">#a0a3a7</color>
-    <color name="drawer">#FEFEFE</color>
+
+    <!-- Drawer -->
+    <color name="drawer_background">#FEFEFE</color>
+    <color name="drawer_list_background">#FFFFFF</color>
+    <color name="drawer_list_background_pressed">#EEEEEE</color>
+    <color name="drawer_list_item_title">#626262</color>
+    <color name="drawer_list_divider">#000000</color>
     <color name="drawer_item_icon">#626262</color>
     <color name="drawer_item_title">#626262</color>
+
     <color name="dialog_compose_footer">#e0e0e0</color>
     <color name="dialog_compose_attach_picture">#575757</color>
     <color name="dialog_compose_send">#1ead91</color>
+
+    <color name="drawer_provider_item_icon">#626262</color>
+
+    <!-- Grid Dialog -->
+    <color name="dialog_grid_title_color">#FFFFFF</color>
+    <color name="dialog_grid_title_background">#1EAD91</color>
 </resources>

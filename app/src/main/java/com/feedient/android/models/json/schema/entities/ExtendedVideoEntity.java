@@ -9,7 +9,7 @@ public class ExtendedVideoEntity {
     @SerializedName("thumbnail")
     private String thumbnail;
 
-    @SerializedName("image")
+    @SerializedName("title")
     private String title;
 
     @SerializedName("description")

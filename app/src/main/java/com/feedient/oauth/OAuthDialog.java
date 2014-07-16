@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Display;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -47,7 +48,7 @@ public class OAuthDialog extends Dialog {
         this.oAuthUrl = oAuthUrl;
         this.callback = callback;
         this.dialogTitle = "";
-        this.dialogTitleBackgroundColor = Color.parseColor("#1ead91");
+        this.dialogTitleBackgroundColor = Color.parseColor("#1EAD91");
     }
 
     @Override
@@ -81,7 +82,8 @@ public class OAuthDialog extends Dialog {
         mTxtTitle.setText(dialogTitle);
         mTxtTitle.setTextColor(Color.WHITE);
         mTxtTitle.setPadding(20, 15, 0, 15);
-        mTxtTitle.setTextSize(18);
+        mTxtTitle.setTextSize(20);
+        mTxtTitle.setHeight(72);
         mTxtTitle.setBackgroundColor(this.dialogTitleBackgroundColor);
 
         mContent.addView(mTxtTitle);

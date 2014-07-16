@@ -2,16 +2,15 @@ package com.feedient.android.interfaces;
 
 import android.content.Context;
 
-import com.feedient.oauth.interfaces.IOAuth1Provider;
-import com.feedient.oauth.interfaces.IOAuth2Provider;
+import com.feedient.android.models.providers.ProviderAction;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.List;
 
 public interface IProviderModel {
     public String getTextColor();
     public String getIcon();
     public String getName();
 
-    public void popup(Context context, final String accessToken);
+    public void popup(final String accessToken, IAddProviderCallback callback);
+    public List<ProviderAction> getActions();
 }

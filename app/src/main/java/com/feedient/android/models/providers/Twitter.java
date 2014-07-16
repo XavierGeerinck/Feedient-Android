@@ -6,18 +6,25 @@ import android.util.Log;
 
 import com.feedient.android.interfaces.FeedientService;
 import com.feedient.android.interfaces.IProviderModel;
-import com.feedient.android.models.json.response.AddProvider;
+import com.feedient.android.interfaces.ISocialActionCallback;
+import com.feedient.android.models.json.UserProvider;
+import com.feedient.android.models.json.response.PerformAction;
+import com.feedient.android.models.json.schema.FeedPost;
 import com.feedient.oauth.OAuthDialog;
+import com.feedient.android.interfaces.IAddProviderCallback;
 import com.feedient.oauth.models.GetRequestToken;
 import com.feedient.oauth.interfaces.IGetRequestTokenCallback;
 import com.feedient.oauth.interfaces.IOAuth1Provider;
 import com.feedient.oauth.webview.WebViewCallback;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import rx.functions.Action1;
 
 public class Twitter implements IProviderModel, IOAuth1Provider {
     public static final String NAME = "twitter";
@@ -27,14 +34,89 @@ public class Twitter implements IProviderModel, IOAuth1Provider {
     public static final String OAUTH_CALLBACK_URL = "http://test.feedient.com/app/callback/twitter";
     public static final String OAUTH_URL = "https://api.twitter.com/oauth/authorize?oauth_token=";
 
-    private FeedientService feedientService;
-    private Context context;
-    private String accessToken;
+    private final FeedientService feedientService;
+    private final Context context;
+    private final String accessToken;
+    private List<ProviderAction> actions;
 
     public Twitter(Context context, FeedientService feedientService, String accessToken) {
         this.accessToken = accessToken;
         this.feedientService = feedientService;
         this.context = context;
+        this.actions = new ArrayList<ProviderAction>();
+
+        _initActions();
+    }
+
+    private void _initActions() {
+        actions.add(new ProviderAction("favorite", "favorited", "{fa-star}", new ISocialActionCallback() {
+            @Override
+            public void handleOnClick(FeedPost feedPost) {
+                if (!feedPost.getContent().getActionsPerformed().isFavorited()) {
+                    _doActionFavorite(feedPost);
+                } else {
+                    _doActionUnFavorite(feedPost);
+                }
+            }
+        }));
+
+        actions.add(new ProviderAction("retweet", "retweeted", "{fa-retweet}", new ISocialActionCallback() {
+            @Override
+            public void handleOnClick(FeedPost feedPost) {
+                if (!feedPost.getContent().getActionsPerformed().isRetweeted()) {
+                    _doActionRetweet(feedPost);
+                } else {
+                    _doActionUnRetweet(feedPost);
+                }
+            }
+        }));
+
+        actions.add(new ProviderAction("comment", "comment", "{fa-reply}", new ISocialActionCallback() {
+            @Override
+            public void handleOnClick(FeedPost feedPost) {
+
+            }
+        }));
+    }
+
+    private void _doActionFavorite(final FeedPost feedPost) {
+        feedientService.doActionTwitterFavorite(accessToken, feedPost.getProvider().getId(), "favorite", feedPost.getId())
+            .subscribe(new Action1<PerformAction>() {
+                @Override
+                public void call(PerformAction performAction) {
+                    feedPost.getContent().getActionsPerformed().setFavorited(true);
+                }
+            });
+    }
+
+    private void _doActionUnFavorite(final FeedPost feedPost) {
+        feedientService.undoActionTwitterFavorite(accessToken, feedPost.getProvider().getId(), "unfavorite", feedPost.getId())
+            .subscribe(new Action1<PerformAction>() {
+                @Override
+                public void call(PerformAction performAction) {
+                    feedPost.getContent().getActionsPerformed().setFavorited(false);
+                }
+            });
+    }
+
+    private void _doActionRetweet(final FeedPost feedPost) {
+        feedientService.doActionTwitterRetweet(accessToken, feedPost.getProvider().getId(), "retweet", feedPost.getId())
+            .subscribe(new Action1<PerformAction>() {
+                @Override
+                public void call(PerformAction performAction) {
+                    feedPost.getContent().getActionsPerformed().setRetweeted(true);
+                }
+            });
+    }
+
+    private void _doActionUnRetweet(final FeedPost feedPost) {
+        feedientService.undoActionTwitterRetweet(accessToken, feedPost.getProvider().getId(), "delete_retweet", feedPost.getId())
+            .subscribe(new Action1<PerformAction>() {
+                @Override
+                public void call(PerformAction performAction) {
+                    feedPost.getContent().getActionsPerformed().setRetweeted(false);
+                }
+            });
     }
 
     @Override
@@ -67,41 +149,41 @@ public class Twitter implements IProviderModel, IOAuth1Provider {
         return OAUTH_URL;
     }
 
-    public void addProvider(String accessToken, FeedientService feedientService, String requestSecret, String oAuthToken, String oAuthVerifier) {
-        feedientService.addOAuth1Provider(accessToken, NAME, requestSecret, oAuthToken, oAuthVerifier, new Callback<AddProvider>() {
-            @Override
-            public void success(AddProvider addProvider, Response response) {
-                Log.e("Feedient", "isSuccess: " + addProvider.isSuccess());
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-            }
-        });
+    public void addProvider(String accessToken, FeedientService feedientService, String requestSecret, String oAuthToken, String oAuthVerifier, final IAddProviderCallback callback) {
+        feedientService.addOAuth1Provider(accessToken, NAME, requestSecret, oAuthToken, oAuthVerifier)
+            .subscribe(new Action1<List<UserProvider>>() {
+                @Override
+                public void call(List<UserProvider> userProviders) {
+                    callback.onSuccess(userProviders);
+                }
+            });
     }
 
     @Override
-    public void popup(final Context context, final String accessToken) {
+    public void popup(final String accessToken, final IAddProviderCallback callback) {
         getRequestToken(new IGetRequestTokenCallback() {
             @Override
             public void success(final GetRequestToken requestToken) {
-                // Create + open the OAuthDialog
-                OAuthDialog dialog = new OAuthDialog(context, OAUTH_URL + requestToken.getoAuthToken(), OAUTH_CALLBACK_URL, new WebViewCallback() {
-                    @Override
-                    public void onGotTokens(Dialog oAuthDialog, HashMap<String, String> tokens) {
-                        addProvider(accessToken, feedientService, requestToken.getoAuthSecret(), tokens.get("oauth_token"), tokens.get("oauth_verifier"));
-
-                        // close dialogs
-                        oAuthDialog.dismiss();
-                    }
-                });
-
-                dialog.setTitle("Add Provider");
-                dialog.show();
+                openOauthDialog(requestToken.getoAuthToken(), requestToken.getoAuthSecret(), callback);
             }
         });
 
+    }
+
+    private void openOauthDialog(final String oAuthToken, final String oAuthSecret, final IAddProviderCallback callback) {
+        Log.e("Feedient", "Creating Twitter Dialog");
+        OAuthDialog dialog = new OAuthDialog(context, OAUTH_URL + oAuthToken, OAUTH_CALLBACK_URL, new WebViewCallback() {
+            @Override
+            public void onGotTokens(Dialog oAuthDialog, HashMap<String, String> tokens) {
+                addProvider(accessToken, feedientService, oAuthSecret, tokens.get("oauth_token"), tokens.get("oauth_verifier"), callback);
+
+                // close dialogs
+                oAuthDialog.dismiss();
+            }
+        });
+        Log.e("Feedient", "Opening Twitter Dialog");
+        dialog.setTitle("Add Provider");
+        dialog.show();
     }
 
     @Override
@@ -109,14 +191,17 @@ public class Twitter implements IProviderModel, IOAuth1Provider {
         feedientService.getRequestToken(accessToken, NAME, new Callback<GetRequestToken>() {
             @Override
             public void success(GetRequestToken getRequestToken, Response response) {
-                // Got request token, call callback for popup
                 callback.success(getRequestToken);
             }
 
             @Override
-            public void failure(RetrofitError error) {
-
+            public void failure(RetrofitError retrofitError) {
+                Log.e("Feedient", retrofitError.getMessage());
             }
         });
+    }
+
+    public List<ProviderAction> getActions() {
+        return actions;
     }
 }
