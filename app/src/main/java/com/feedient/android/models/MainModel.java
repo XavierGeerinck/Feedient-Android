@@ -125,6 +125,8 @@ public class MainModel extends Observable {
                 public void call(List<UserProvider> userProviders) {
                     JSONArray userProviderIds = new JSONArray();
 
+                    MainModel.this.userProviders.clear();
+
                     for (UserProvider up : userProviders) {
                         userProviderIds.put(up.getId());
                         MainModel.this.userProviders.add(up);
@@ -137,6 +139,9 @@ public class MainModel extends Observable {
                             .subscribe(new Action1<FeedPostList>() {
                                 @Override
                                 public void call(FeedPostList feedPostList) {
+                                    MainModel.this.feedPosts.clear();
+                                    MainModel.this.paginationKeys.clear();
+
                                     // Set the posts
                                     for (FeedPost fp : feedPostList.getFeedPosts()) {
                                         MainModel.this.feedPosts.add(fp);
@@ -312,14 +317,16 @@ public class MainModel extends Observable {
             .subscribe(new Action1<RemoveUserProvider>() {
                 @Override
                 public void call(RemoveUserProvider removeUserProvider) {
+                    // Remove userProvider from list
                     userProviders.remove(up);
                     _triggerObservers();
+                    loadFeeds();
                 }
             });
     }
 
     public void addUserProvider(IProviderModel provider) {
-        provider.popup(context, accessToken, new IAddProviderCallback() {
+        provider.popup(accessToken, new IAddProviderCallback() {
             @Override
             public void onSuccess(List<UserProvider> addedUserProviders) {
                 for (UserProvider up : addedUserProviders) {
@@ -327,6 +334,9 @@ public class MainModel extends Observable {
                 }
 
                 _triggerObservers();
+
+                // On add of a userProvider, refresh the feeds
+                loadFeeds();
             }
         });
     }

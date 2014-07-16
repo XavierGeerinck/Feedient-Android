@@ -34,9 +34,9 @@ public class Twitter implements IProviderModel, IOAuth1Provider {
     public static final String OAUTH_CALLBACK_URL = "http://test.feedient.com/app/callback/twitter";
     public static final String OAUTH_URL = "https://api.twitter.com/oauth/authorize?oauth_token=";
 
-    private FeedientService feedientService;
-    private Context context;
-    private String accessToken;
+    private final FeedientService feedientService;
+    private final Context context;
+    private final String accessToken;
     private List<ProviderAction> actions;
 
     public Twitter(Context context, FeedientService feedientService, String accessToken) {
@@ -68,6 +68,13 @@ public class Twitter implements IProviderModel, IOAuth1Provider {
                 } else {
                     _doActionUnRetweet(feedPost);
                 }
+            }
+        }));
+
+        actions.add(new ProviderAction("comment", "comment", "{fa-reply}", new ISocialActionCallback() {
+            @Override
+            public void handleOnClick(FeedPost feedPost) {
+
             }
         }));
     }
@@ -153,37 +160,45 @@ public class Twitter implements IProviderModel, IOAuth1Provider {
     }
 
     @Override
-    public void popup(final Context context, final String accessToken, final IAddProviderCallback callback) {
+    public void popup(final String accessToken, final IAddProviderCallback callback) {
         getRequestToken(new IGetRequestTokenCallback() {
             @Override
             public void success(final GetRequestToken requestToken) {
-                // Create + open the OAuthDialog
-                OAuthDialog dialog = new OAuthDialog(context, OAUTH_URL + requestToken.getoAuthToken(), OAUTH_CALLBACK_URL, new WebViewCallback() {
-                    @Override
-                    public void onGotTokens(Dialog oAuthDialog, HashMap<String, String> tokens) {
-                        addProvider(accessToken, feedientService, requestToken.getoAuthSecret(), tokens.get("oauth_token"), tokens.get("oauth_verifier"), callback);
-
-                        // close dialogs
-                        oAuthDialog.dismiss();
-                    }
-                });
-
-                dialog.setTitle("Add Provider");
-                dialog.show();
+                openOauthDialog(requestToken.getoAuthToken(), requestToken.getoAuthSecret(), callback);
             }
         });
 
     }
 
+    private void openOauthDialog(final String oAuthToken, final String oAuthSecret, final IAddProviderCallback callback) {
+        Log.e("Feedient", "Creating Twitter Dialog");
+        OAuthDialog dialog = new OAuthDialog(context, OAUTH_URL + oAuthToken, OAUTH_CALLBACK_URL, new WebViewCallback() {
+            @Override
+            public void onGotTokens(Dialog oAuthDialog, HashMap<String, String> tokens) {
+                addProvider(accessToken, feedientService, oAuthSecret, tokens.get("oauth_token"), tokens.get("oauth_verifier"), callback);
+
+                // close dialogs
+                oAuthDialog.dismiss();
+            }
+        });
+        Log.e("Feedient", "Opening Twitter Dialog");
+        dialog.setTitle("Add Provider");
+        dialog.show();
+    }
+
     @Override
     public void getRequestToken(final IGetRequestTokenCallback callback) {
-        feedientService.getRequestToken(accessToken, NAME)
-            .subscribe(new Action1<GetRequestToken>() {
-                @Override
-                public void call(GetRequestToken getRequestToken) {
-                    callback.success(getRequestToken);
-                }
-            });
+        feedientService.getRequestToken(accessToken, NAME, new Callback<GetRequestToken>() {
+            @Override
+            public void success(GetRequestToken getRequestToken, Response response) {
+                callback.success(getRequestToken);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.e("Feedient", retrofitError.getMessage());
+            }
+        });
     }
 
     public List<ProviderAction> getActions() {

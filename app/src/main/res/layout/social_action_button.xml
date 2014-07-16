@@ -6,7 +6,7 @@
     android:id="@+id/btn_social_action"
     android:textColor="@color/feed_item_action_social_icon"
     android:textSize="@dimen/feed_item_action_social_icon"
-    android:paddingRight="@dimen/feed_item_action_social_icon_marg_left_right"
+    android:paddingLeft="@dimen/feed_item_action_social_icon_marg_left_right"
     android:minHeight="1dp"
     android:minWidth="1dp"
     android:background="@android:color/transparent"/>

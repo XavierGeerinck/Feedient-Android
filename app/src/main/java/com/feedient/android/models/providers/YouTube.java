@@ -27,7 +27,7 @@ import rx.functions.Action1;
 public class YouTube implements IProviderModel, IOAuth2Provider {
     public static final String NAME = "youtube";
     public static final String TEXT_COLOR = "#b31217";
-    public static final String ICON = "fa-youtube-square";
+    public static final String ICON = "fa-youtube-play";
     public static final String APP_ID = "1053845138024-8idrb4t2qjpd2rtq41967cd9vg6kr360.apps.googleusercontent.com";
     public static final String OAUTH_CALLBACK_URL = "http://test.feedient.com/app/callback/youtube";
     public static final String OAUTH_URL = "https://accounts.google.com/o/oauth2/auth?client_id=" + APP_ID + "&response_type=code&scope=https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube&access_type=offline&approval_prompt=force&redirect_uri=" + OAUTH_CALLBACK_URL;
@@ -137,7 +137,7 @@ public class YouTube implements IProviderModel, IOAuth2Provider {
     }
 
     @Override
-    public void popup(Context context, final String accessToken, final IAddProviderCallback callback) {
+    public void popup(final String accessToken, final IAddProviderCallback callback) {
         // Create + open the OAuthDialog
         OAuthDialog dialog = new OAuthDialog(context, OAUTH_URL, OAUTH_CALLBACK_URL, new WebViewCallback() {
             @Override

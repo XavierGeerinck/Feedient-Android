@@ -139,7 +139,7 @@ public class Tumblr implements IProviderModel, IOAuth1Provider {
     }
 
     @Override
-    public void popup(final Context context, final String accessToken, final IAddProviderCallback callback) {
+    public void popup(final String accessToken, final IAddProviderCallback callback) {
         getRequestToken(new IGetRequestTokenCallback() {
             @Override
             public void success(final GetRequestToken requestToken) {
@@ -158,18 +158,21 @@ public class Tumblr implements IProviderModel, IOAuth1Provider {
                 dialog.show();
             }
         });
-
     }
 
     @Override
     public void getRequestToken(final IGetRequestTokenCallback callback) {
-        feedientService.getRequestToken(accessToken, NAME)
-            .subscribe(new Action1<GetRequestToken>() {
-                @Override
-                public void call(GetRequestToken getRequestToken) {
-                    callback.success(getRequestToken);
-                }
-            });
+        feedientService.getRequestToken(accessToken, NAME, new Callback<GetRequestToken>() {
+            @Override
+            public void success(GetRequestToken getRequestToken, Response response) {
+                callback.success(getRequestToken);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.e("Feedient", retrofitError.getMessage());
+            }
+        });
     }
 
     public List<ProviderAction> getActions() {

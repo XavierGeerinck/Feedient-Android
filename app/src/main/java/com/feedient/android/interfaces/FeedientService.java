@@ -11,6 +11,7 @@ import com.feedient.android.models.json.UserSession;
 
 import org.json.JSONArray;
 
+import retrofit.Callback;
 import retrofit.http.*;
 import rx.Observable;
 
@@ -51,7 +52,7 @@ public interface FeedientService {
     Observable<List<UserProvider>> addOAuth1Provider(@Header("Bearer")String accessToken, @Path("name")String providerName, @Field("oauth_secret")String oAuthSecret, @Field("oauth_token")String oAuthToken, @Field("oauth_verifier")String oAuthVerifier);
 
     @GET("/provider/{name}/request_token")
-    Observable<GetRequestToken> getRequestToken(@Header("Bearer")String accessToken, @Path("name")String providerName);
+    void getRequestToken(@Header("Bearer")String accessToken, @Path("name")String providerName, Callback<GetRequestToken> cb);
 
     @GET("/logout")
     Observable<Logout> logout(@Header("Bearer")String accessToken);

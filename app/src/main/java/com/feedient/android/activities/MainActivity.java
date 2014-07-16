@@ -94,7 +94,7 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         mFeedPostsList.addHeaderView(new View(this), null, false);
 
         // Set the adapter for our feed
-        mFeedListAdapter = new FeedListAdapter(this, mMainModel.getFeedPosts(), mMainModel.getProviders());
+        mFeedListAdapter = new FeedListAdapter(this, mMainModel.getFeedPosts(), mMainModel.getUserProviders(), mMainModel.getProviders());
         mFeedPostsList.setAdapter(mFeedListAdapter);
         mFeedPostsList.setOnScrollListener(new LoadMoreListener(new ILoadMoreListener() {
             @Override

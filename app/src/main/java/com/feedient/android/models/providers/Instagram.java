@@ -57,6 +57,13 @@ public class Instagram implements IProviderModel, IOAuth2Provider {
                 }
             }
         }));
+
+        actions.add(new ProviderAction("comment", "comment", "{fa-comment}", new ISocialActionCallback() {
+            @Override
+            public void handleOnClick(FeedPost feedPost) {
+
+            }
+        }));
     }
 
     private void _doActionLike(final FeedPost feedPost) {
@@ -120,7 +127,7 @@ public class Instagram implements IProviderModel, IOAuth2Provider {
     }
 
     @Override
-    public void popup(Context context, final String accessToken, final IAddProviderCallback callback) {
+    public void popup(final String accessToken, final IAddProviderCallback callback) {
         // Create + open the OAuthDialog
         OAuthDialog dialog = new OAuthDialog(context, OAUTH_URL, OAUTH_CALLBACK_URL, new WebViewCallback() {
             @Override

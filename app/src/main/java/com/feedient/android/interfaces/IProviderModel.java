@@ -11,6 +11,6 @@ public interface IProviderModel {
     public String getIcon();
     public String getName();
 
-    public void popup(Context context, final String accessToken, IAddProviderCallback callback);
+    public void popup(final String accessToken, IAddProviderCallback callback);
     public List<ProviderAction> getActions();
 }

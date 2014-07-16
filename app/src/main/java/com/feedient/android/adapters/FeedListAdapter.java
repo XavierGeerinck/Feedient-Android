@@ -3,6 +3,7 @@ package com.feedient.android.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.text.Html;
 import android.text.TextUtils;
@@ -17,12 +18,14 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.IconButton;
+import android.widget.IconTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.feedient.android.R;
 import com.feedient.android.interfaces.IProviderModel;
+import com.feedient.android.models.json.UserProvider;
 import com.feedient.android.models.json.schema.FeedPost;
 import com.feedient.android.models.json.schema.entities.ExtendedLinkEntity;
 import com.feedient.android.models.json.schema.entities.ExtendedVideoEntity;
@@ -31,6 +34,8 @@ import com.feedient.android.models.json.schema.entities.LinkEntity;
 import com.feedient.android.models.json.schema.entities.MentionEntity;
 import com.feedient.android.models.providers.ProviderAction;
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -43,6 +48,7 @@ public class FeedListAdapter extends BaseAdapter {
     private final LayoutInflater inflater;
     private final List<FeedPost> feedItems;
     private final HashMap<String, IProviderModel> providers;
+    private final List<UserProvider> userProviders;
     private int lastPosition = -1;
 
     // ViewHolder
@@ -50,21 +56,27 @@ public class FeedListAdapter extends BaseAdapter {
         // Header
         ImageView imgThumbnailUser;
         TextView txtUserPostedBy;
+        TextView txtUserPostedByFormatted;
         TextView txtDatePosted;
 
         // Content
         TextView txtMessage;
+
+        // UserProvider name and social icon
+        IconTextView imgUserProviderIcon;
+        TextView txtUserProviderName;
 
         // Entities Container
         LinearLayout containerEntities;
         LinearLayout containerSocialActions;
     }
 
-    public FeedListAdapter(Activity activity, List<FeedPost> feedItems, HashMap<String, IProviderModel> providers) {
+    public FeedListAdapter(Activity activity, List<FeedPost> feedItems, List<UserProvider> userProviders, HashMap<String, IProviderModel> providers) {
         this.activity = activity;
         this.feedItems = feedItems;
         this.inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.providers = providers;
+        this.userProviders = userProviders;
     }
 
     @Override
@@ -94,11 +106,13 @@ public class FeedListAdapter extends BaseAdapter {
 
             viewHolder.imgThumbnailUser = (ImageView)convertView.findViewById(R.id.img_thumbnail_user);
             viewHolder.txtUserPostedBy  = (TextView)convertView.findViewById(R.id.txt_user_posted_by);
-            viewHolder.txtDatePosted    = (TextView)convertView.findViewById(R.id.txt_date_posted);
-            viewHolder.txtMessage       = (TextView)convertView.findViewById(R.id.txt_message);
+            viewHolder.txtUserPostedByFormatted = (TextView)convertView.findViewById(R.id.txt_user_formatted_name);
+            viewHolder.txtDatePosted = (TextView)convertView.findViewById(R.id.txt_date_posted);
+            viewHolder.txtMessage = (TextView)convertView.findViewById(R.id.txt_message);
+            viewHolder.imgUserProviderIcon = (IconTextView)convertView.findViewById(R.id.img_user_provider_icon);
+            viewHolder.txtUserProviderName = (TextView)convertView.findViewById(R.id.txt_provider_user_name);
             viewHolder.containerEntities = (LinearLayout)convertView.findViewById(R.id.layout_entities);
             viewHolder.containerSocialActions = (LinearLayout)convertView.findViewById(R.id.layout_social_actions);
-
 
             // Set tag to rowView
             convertView.setTag(viewHolder);
@@ -120,6 +134,21 @@ public class FeedListAdapter extends BaseAdapter {
 
         // User
         holder.txtUserPostedBy.setText(item.getUser().getName());
+        holder.txtUserPostedByFormatted.setText(item.getUser().getNameFormatted());
+
+        if (TextUtils.isEmpty(item.getUser().getNameFormatted())) {
+            holder.txtUserPostedByFormatted.setVisibility(View.GONE);
+        }
+
+        // Set UserProvider Icon + UserProvider Name
+        IProviderModel provider = providers.get(item.getProvider().getName());
+        UserProvider userProvider = getProviderById(item.getProvider().getId());
+
+        if (userProvider != null && provider != null) {
+            holder.imgUserProviderIcon.setText("{" + provider.getIcon() + "}");
+            holder.imgUserProviderIcon.setTextColor(Color.parseColor(provider.getTextColor()));
+            holder.txtUserProviderName.setText(userProvider.getProviderAccount().getFullName());
+        }
 
         // Load the image async
         if (!TextUtils.isEmpty(item.getUser().getImageLink())) {
@@ -336,5 +365,15 @@ public class FeedListAdapter extends BaseAdapter {
 
         // Async load image
         Picasso.with(activity).load(le.getThumbnail()).into(imgThumbnail);
+    }
+
+    private UserProvider getProviderById(String id) {
+        for (UserProvider up : userProviders) {
+            if (up.getId().equals(id)) {
+                return up;
+            }
+        }
+
+        return null;
     }
 }
