@@ -16,4 +16,7 @@
     <color name="drawer">#FEFEFE</color>
     <color name="drawer_item_icon">#626262</color>
     <color name="drawer_item_title">#626262</color>
+    <color name="dialog_compose_footer">#e0e0e0</color>
+    <color name="dialog_compose_attach_picture">#575757</color>
+    <color name="dialog_compose_send">#1ead91</color>
 </resources>

@@ -26,4 +26,6 @@
     <dimen name="drawer_item_icon">22sp</dimen>
     <dimen name="drawer_item_title">16sp</dimen>
     <dimen name="drawer_item_title_marg">15dp</dimen>
+    <dimen name="dialog_compose_attach_picture">16sp</dimen>
+    <dimen name="dialog_compose_send">16sp</dimen>
 </resources>
