@@ -39,10 +39,16 @@
     <dimen name="drawer_item_icon_marg_left_right">12dp</dimen>
 
     <!-- Dialog Compose -->
-    <dimen name="dialog_compose_attach_picture">20sp</dimen>
-    <dimen name="dialog_compose_send">20sp</dimen>
-    <dimen name="dialog_compose_remaining_count_icon">20sp</dimen>
+    <dimen name="dialog_compose_attach_picture">24sp</dimen>
+    <dimen name="dialog_compose_send">24sp</dimen>
+    <dimen name="dialog_compose_remaining_count_icon">18sp</dimen>
     <dimen name="dialog_compose_remaining_count">16sp</dimen>
+    <dimen name="dialog_compose_header_pad_left_right">12dp</dimen>
+    <dimen name="dialog_compose_header_pad_top_bot">8dp</dimen>
+    <dimen name="dialog_compose_footer_pad_left_right">20dp</dimen>
+    <dimen name="dialog_compose_footer_pad_top_bot">16dp</dimen>
+    <dimen name="dialog_compose_message_pad">6dp</dimen>
+    <dimen name="dialog_compose_select_providers">20sp</dimen>
 
     <!-- Dialog Grid -->
     <dimen name="dialog_grid_title_pad_top_bot">15dp</dimen>
@@ -52,9 +58,4 @@
     <dimen name="dialog_grid_column_width">60dp</dimen>
     <dimen name="dialog_grid_vertical_spacing">10dp</dimen>
     <dimen name="dialog_grid_horizontal_spacing">10dp</dimen>
-    <dimen name="dialog_compose_header_pad_left_right">8dp</dimen>
-    <dimen name="dialog_compose_header_pad_top_bot">8dp</dimen>
-    <dimen name="dialog_compose_footer_pad_left_right">8dp</dimen>
-    <dimen name="dialog_compose_footer_pad_top_bot">8dp</dimen>
-    <dimen name="dialog_compose_message_pad">8dp</dimen>
 </resources>

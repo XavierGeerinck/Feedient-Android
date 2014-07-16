@@ -23,11 +23,8 @@ public class ComposeDialog extends Dialog {
     private Context context;
     private LayoutInflater inflater;
 
-    private static final int paddingLeftAndRight = 0;
-    private static final int paddingTopAndBot = 0;
-
-    // Android components
-    static final FrameLayout.LayoutParams FILL = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+    private static final int paddingLeftAndRight = 10;
+    private static final int paddingTopAndBot = 10;
 
     public ComposeDialog(Context context) {
         super(context);
@@ -41,16 +38,7 @@ public class ComposeDialog extends Dialog {
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-        View v = inflater.inflate(R.layout.dialog_compose, null);
-
-
-        Display display = getWindow().getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-
-        final float scale = getContext().getResources().getDisplayMetrics().density;
-
-        addContentView(v, new LinearLayout.LayoutParams(size.x - ((int) (paddingLeftAndRight * scale + 0.5f)), size.y - ((int) (paddingTopAndBot * scale + 0.5f))));
+        setContentView(R.layout.dialog_compose);
+        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
     }
 }
