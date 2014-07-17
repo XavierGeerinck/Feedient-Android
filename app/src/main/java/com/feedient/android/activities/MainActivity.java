@@ -263,21 +263,8 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
     }
 
     private void onClickCompose() {
-        ComposeDialog dialog = new ComposeDialog(this);
+        ComposeDialog dialog = new ComposeDialog(this, mMainModel.getUserProviders(), mMainModel.getProviders());
         dialog.show();
-//
-//        GridView gridView = (GridView)customView.findViewById(R.id.gridview);
-//        gridView.setAdapter(new GridItemAdapter(this, items));
-//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-//                // call the OAuth popup
-//                mMainModel.addUserProvider(items.get(position).getProviderModel());
-//
-//                // Close the other dialog
-//                pickProviderDialog.dismiss();
-//            }
-//        });
     }
 
     /**

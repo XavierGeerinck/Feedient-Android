@@ -7,6 +7,7 @@
     android:background="@drawable/dialog_compose"
     android:layout_margin="10dp">
 
+    <!-- Header Container -->
     <RelativeLayout
         android:id="@+id/container_header"
         android:layout_alignParentTop="true"
@@ -27,6 +28,7 @@
 
         <!-- Select Providers Icon -->
         <IconTextView
+            android:id="@+id/btn_select_user_providers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/dialog_compose_icon_select_provider"
@@ -125,7 +127,7 @@
             android:background="@android:color/transparent"
             android:textSize="@dimen/dialog_compose_txt_message"
             android:textColor="@color/dialog_compose_txt_message"
-            android:hint="Write something ..."/>
+            android:text="Write something ..."/>
     </LinearLayout>
 
 </RelativeLayout>
