@@ -26,7 +26,7 @@
     <color name="drawer_item_icon">#626262</color>
     <color name="drawer_item_title">#626262</color>
 
-    <color name="dialog_compose_footer">#e0e0e0</color>
+    <color name="dialog_compose_footer">#11000000</color>
     <color name="dialog_compose_attach_picture">#575757</color>
     <color name="dialog_compose_send">#1ead91</color>
 
@@ -35,4 +35,5 @@
     <!-- Grid Dialog -->
     <color name="dialog_grid_title_color">#FFFFFF</color>
     <color name="dialog_grid_title_background">#1EAD91</color>
+    <color name="dialog_compose_txt_message">#222222</color>
 </resources>

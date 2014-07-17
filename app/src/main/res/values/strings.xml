@@ -20,7 +20,7 @@
     <string name="drawer_logout_icon">{fa-sign-out}</string>
     <string name="drawer_logout_title">Sign out</string>
     <string name="feed_item_action_comment">{fa-comment}</string>
-    <string name="dialog_compose_icon_select_provider">{fa-chevron-down}</string>
+    <string name="dialog_compose_icon_select_provider">{fa-caret-down}</string>
     <string name="dialog_compose_icon_attach_picture">{fa-camera}</string>
     <string name="dialog_compose_icon_send">{fa-send}</string>
 
