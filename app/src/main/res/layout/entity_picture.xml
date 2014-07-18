@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!-- Picture Entity -->
-<com.feedient.android.views.ResizableImageView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.feedient.core.views.ResizableImageView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/img_entity_picture"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

@@ -4,27 +4,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FFFFFF"
+    android:background="@android:color/transparent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog_compose"
     android:layout_margin="10dp">
 
     <!-- Header Container -->
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/container_header"
-        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:paddingLeft="@dimen/dialog_compose_header_pad_left_right"
         android:paddingRight="@dimen/dialog_compose_header_pad_left_right"
         android:paddingTop="@dimen/dialog_compose_header_pad_top_bot"
-        android:paddingBottom="@dimen/dialog_compose_header_pad_top_bot">
+        android:paddingBottom="@dimen/dialog_compose_header_pad_top_bot"
+        android:orientation="horizontal">
+
+        <IconTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_select_user_provider_go_back_icon"
+            android:textSize="@dimen/dialog_select_user_provider_go_back_icon"
+            android:textColor="@color/dialog_select_user_provider_go_back_icon"
+            android:layout_gravity="center_vertical"/>
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Write something ..."
-            android:textSize="@dimen/dialog_compose_txt_message"
-            android:textColor="@color/dialog_compose_txt_message"/>
-    </RelativeLayout>
+            android:text="@string/dialog_select_user_provider_go_back"
+            android:textSize="@dimen/dialog_select_user_provider_go_back"
+            android:textColor="@color/dialog_select_user_provider_go_back"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
 
     <!-- Divider -->
     <ImageView
@@ -40,6 +54,8 @@
         android:id="@+id/container_user_providers"
         android:numColumns="3"
         android:stretchMode="columnWidth"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_below="@id/divider_header">
     </GridView>
+</RelativeLayout>
 </LinearLayout>

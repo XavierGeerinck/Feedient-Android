@@ -22,7 +22,7 @@
             android:background="#d3d6db">
         </ListView>
 
-        <com.feedient.android.views.FloatingActionButton
+        <com.feedient.core.views.FloatingActionButton
             android:layout_width="72dp"
             android:layout_height="72dp"
             android:id="@+id/btn_compose"

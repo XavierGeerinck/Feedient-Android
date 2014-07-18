@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog_compose"
+    android:layout_margin="10dp">
+
+    <!-- Header Container -->
+    <RelativeLayout
+        android:id="@+id/container_header"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingLeft="@dimen/dialog_compose_header_pad_left_right"
+        android:paddingRight="@dimen/dialog_compose_header_pad_left_right"
+        android:paddingTop="@dimen/dialog_compose_header_pad_top_bot"
+        android:paddingBottom="@dimen/dialog_compose_header_pad_top_bot">
+
+        <!-- Provider Selector Container -->
+        <LinearLayout
+            android:id="@+id/container_selected_providers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerVertical="true"/>
+
+        <!-- Select Providers Icon -->
+        <IconTextView
+            android:id="@+id/btn_select_user_providers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_compose_icon_select_provider"
+            android:layout_alignParentRight="true"
+            android:textSize="@dimen/dialog_compose_select_providers"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+
+    <!-- Divider -->
+    <ImageView
+        android:id="@+id/divider_header"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#11000000"
+        android:layout_below="@id/container_header"/>
+
+    <!-- Footer -->
+    <RelativeLayout
+        android:id="@+id/container_footer"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="@dimen/dialog_compose_footer_pad_left_right"
+        android:paddingRight="@dimen/dialog_compose_footer_pad_left_right"
+        android:paddingBottom="@dimen/dialog_compose_footer_pad_top_bot"
+        android:paddingTop="@dimen/dialog_compose_footer_pad_top_bot"
+        android:background="@drawable/dialog_compose_bot">
+
+        <!-- Attach Picture -->
+        <IconTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_compose_icon_attach_picture"
+            android:textColor="@color/dialog_compose_attach_picture"
+            android:textSize="@dimen/dialog_compose_attach_picture"/>
+
+        <!-- Send -->
+        <IconTextView
+            android:id="@+id/btn_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_compose_icon_send"
+            android:textSize="@dimen/dialog_compose_send"
+            android:textColor="@color/dialog_compose_send"
+            android:layout_alignParentRight="true"/>
+
+        <!-- Remaining Count -->
+        <RelativeLayout
+            android:id="@+id/container_remaining_count"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="20dp"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:layout_toLeftOf="@id/btn_send">
+
+            <IconTextView
+                android:id="@+id/img_remaining_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="{fa-twitter}"
+                android:textSize="@dimen/dialog_compose_remaining_count_icon"
+                android:layout_marginRight="4dp"
+                android:layout_gravity="center_vertical"/>
+
+            <TextView
+                android:id="@+id/txt_remaining_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/dialog_compose_remaining_count"
+                android:text="50"
+                android:layout_toRightOf="@id/img_remaining_icon"
+                android:layout_gravity="center_vertical"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <!-- Message composing -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/dialog_compose_message_pad_left_right"
+        android:paddingRight="@dimen/dialog_compose_message_pad_left_right"
+        android:paddingTop="@dimen/dialog_compose_message_pad_top_bot"
+        android:paddingBottom="@dimen/dialog_compose_message_pad_top_bot"
+        android:layout_below="@id/divider_header"
+        android:layout_above="@id/container_footer"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/txt_message"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:singleLine="false"
+            android:inputType="textMultiLine"
+            android:gravity="top|left"
+            android:background="@android:color/transparent"
+            android:textSize="@dimen/dialog_compose_txt_message"
+            android:textColor="@color/dialog_compose_txt_message"
+            android:text="Write something ..."/>
+    </LinearLayout>
+
+</RelativeLayout>

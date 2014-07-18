@@ -36,4 +36,6 @@
     <color name="dialog_grid_title_color">#FFFFFF</color>
     <color name="dialog_grid_title_background">#1EAD91</color>
     <color name="dialog_compose_txt_message">#222222</color>
+    <color name="dialog_select_user_provider_go_back">#222222</color>
+    <color name="dialog_select_user_provider_go_back_icon">#222222</color>
 </resources>

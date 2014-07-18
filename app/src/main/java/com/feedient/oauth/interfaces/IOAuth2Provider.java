@@ -1,8 +1,6 @@
 package com.feedient.oauth.interfaces;
 
-import android.content.Context;
-
-import com.feedient.android.interfaces.IAddProviderCallback;
+import com.feedient.core.interfaces.IAddProviderCallback;
 
 public interface IOAuth2Provider {
     public String getOauthUrl();

@@ -1,30 +1,22 @@
 package com.feedient.compose;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.Layout;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.webkit.WebView;
-import android.widget.FrameLayout;
+import android.view.animation.AnimationUtils;
 import android.widget.GridView;
-import android.widget.IconTextView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
 
-import com.feedient.android.R;
-import com.feedient.android.adapters.GridItemAdapter;
-import com.feedient.android.adapters.GridItemUserProviderAdapter;
-import com.feedient.android.interfaces.IProviderModel;
-import com.feedient.android.models.json.UserProvider;
+import com.feedient.core.R;
+import com.feedient.core.adapters.GridItemUserProviderAdapter;
+import com.feedient.core.interfaces.IProviderModel;
+import com.feedient.core.models.json.UserProvider;
 
 import java.util.HashMap;
 import java.util.List;
@@ -53,18 +45,55 @@ public class ComposeDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.dialog_compose);
+        // Set full screen + transparent
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        IconTextView btnSelectUserProviders = (IconTextView)findViewById(R.id.btn_select_user_providers);
-        btnSelectUserProviders.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ComposeDialog.this.setContentView(R.layout.dialog_select_user_provider);
-                GridView gridView = (GridView)ComposeDialog.this.findViewById(R.id.container_user_providers);
-                gridView.setAdapter(new GridItemUserProviderAdapter(context, userProviders, providers));
-            }
-        });
+        showCompose();
+    }
+
+    private void showCompose() {
+        // Set view
+        ComposeDialog.this.setContentView(R.layout.view_compose);
+
+        // Set content
+
+        // Bind listener
+        RelativeLayout containerHeader = (RelativeLayout)ComposeDialog.this.findViewById(R.id.container_header);
+        containerHeader.setOnClickListener(new OnClickSelectUserProviders());
+    }
+
+    private class OnClickSelectUserProviders implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            showSelectUserProviders();
+        }
+
+        private void showSelectUserProviders() {
+            // Create view + attach animation
+            View view = inflater.inflate(R.layout.dialog_select_user_provider, null);
+            view.startAnimation(AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left));
+
+            // Set view
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            layoutParams.setMargins(10, 10, 10, 10);
+            view.setLayoutParams(layoutParams);
+            ComposeDialog.this.setContentView(view);
+
+            // Set content
+            GridView gridView = (GridView)findViewById(R.id.container_user_providers);
+            gridView.setAdapter(new GridItemUserProviderAdapter(context, userProviders, providers));
+
+            // Bind listener
+            LinearLayout containerMessagePlaceholder = (LinearLayout)ComposeDialog.this.findViewById(R.id.container_header);
+            containerMessagePlaceholder.setOnClickListener(new OnClickHeader());
+        }
+    }
+
+    private class OnClickHeader implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            showCompose();
+        }
     }
 }

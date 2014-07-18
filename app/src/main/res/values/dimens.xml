@@ -59,5 +59,7 @@
     <dimen name="dialog_grid_column_width">60dp</dimen>
     <dimen name="dialog_grid_vertical_spacing">10dp</dimen>
     <dimen name="dialog_grid_horizontal_spacing">10dp</dimen>
-    <dimen name="dialog_compose_txt_message">14sp</dimen>
+    <dimen name="dialog_compose_txt_message">16sp</dimen>
+    <dimen name="dialog_select_user_provider_go_back">16sp</dimen>
+    <dimen name="dialog_select_user_provider_go_back_icon">20sp</dimen>
 </resources>
