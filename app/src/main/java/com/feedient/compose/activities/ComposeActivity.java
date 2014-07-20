@@ -3,15 +3,21 @@ package com.feedient.compose.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.GridView;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.IconTextView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.feedient.compose.adapters.UserProviderListAdapter;
 import com.feedient.core.R;
-import com.feedient.core.adapters.GridItemUserProviderAdapter;
 import com.feedient.compose.models.ComposeModel;
+import com.feedient.core.layout.FlowLayout;
 import com.feedient.core.models.json.UserProvider;
 
 import java.util.List;
@@ -20,7 +26,6 @@ import java.util.Observer;
 
 public class ComposeActivity extends Activity implements Observer {
     private ComposeModel composeModel;
-
     private LayoutInflater inflater;
 
     @Override
@@ -37,8 +42,34 @@ public class ComposeActivity extends Activity implements Observer {
 
     private void showCompose() {
         setContentView(R.layout.view_compose);
+
         RelativeLayout containerHeader = (RelativeLayout)findViewById(R.id.container_header);
         containerHeader.setOnClickListener(new OnClickSelectUserProviders());
+
+        FlowLayout containerSelectedProviders = (FlowLayout)findViewById(R.id.container_selected_providers);
+
+        // Load the selected user providers in the containerHeader
+        for (int i = 0; i < composeModel.getUserProviders().size(); i++) {
+            // If userprovider is selected
+            if (composeModel.getSelectedUserProviders().get(i)) {
+                UserProvider userProvider = composeModel.getUserProviders().get(i);
+
+                View v = inflater.inflate(R.layout.compose_selected_user_provider, null);
+
+                IconTextView providerIcon = (IconTextView) v.findViewById(R.id.img_user_provider_icon);
+                TextView providerUserName = (TextView) v.findViewById(R.id.txt_provider_user_name);
+
+                String providerName = userProvider.getProviderAccount().getName();
+                providerIcon.setText("{" + composeModel.getProviders().get(providerName).getIcon() + "}");
+                providerUserName.setText(userProvider.getProviderAccount().getUsername());
+
+                if (TextUtils.isEmpty(userProvider.getProviderAccount().getUsername())) {
+                    providerUserName.setText(userProvider.getProviderAccount().getFullName());
+                }
+
+                containerSelectedProviders.addView(v);
+            }
+        }
     }
 
     @Override
@@ -54,15 +85,27 @@ public class ComposeActivity extends Activity implements Observer {
 
         private void showSelectUserProviders() {
             // Create view + attach animation
-            View view = inflater.inflate(R.layout.dialog_select_user_provider, null);
+            View view = inflater.inflate(R.layout.view_select_user_provider, null);
 //            view.startAnimation(AnimationUtils.loadAnimation(ComposeActivity.this, android.R.anim.fade_in));
 
             // Set view
             ComposeActivity.this.setContentView(view);
 
             // Set content
-            GridView gridView = (GridView)findViewById(R.id.container_user_providers);
-            gridView.setAdapter(new GridItemUserProviderAdapter(ComposeActivity.this, composeModel.getUserProviders(), composeModel.getProviders()));
+            final ListView listView = (ListView)findViewById(R.id.container_user_providers);
+            listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+            listView.setAdapter(new UserProviderListAdapter(ComposeActivity.this, composeModel.getUserProviders(), composeModel.getProviders()));
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
+                    composeModel.setSelectedUserProviders(listView.getCheckedItemPositions());
+                }
+            });
+
+            // Set checked items
+            for (int i = 0; i < composeModel.getSelectedUserProviders().size(); i++) {
+                listView.setItemChecked(i, composeModel.getSelectedUserProviders().get(i));
+            }
 
             // Bind listener
             LinearLayout containerMessagePlaceholder = (LinearLayout)ComposeActivity.this.findViewById(R.id.container_header);

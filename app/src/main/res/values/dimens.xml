@@ -62,4 +62,10 @@
     <dimen name="dialog_compose_txt_message">16sp</dimen>
     <dimen name="dialog_select_user_provider_go_back">16sp</dimen>
     <dimen name="dialog_select_user_provider_go_back_icon">20sp</dimen>
+    <dimen name="compose_user_provider_pad_left_right">10dp</dimen>
+    <dimen name="compose_user_provider_pad_top_bot">6dp</dimen>
+    <dimen name="compose_user_provider_marg_left_right">5dp</dimen>
+    <dimen name="compose_user_provider_icon_marg">5dp</dimen>
+    <dimen name="flowlayout_horizontal_padding">10dp</dimen>
+    <dimen name="flowlayout_vertical_padding">10dp</dimen>
 </resources>

@@ -3,4 +3,6 @@
     <item android:drawable="@drawable/drawer_list_item_bg_normal" android:state_activated="false"/>
     <item android:drawable="@drawable/drawer_list_item_bg_pressed" android:state_pressed="true"/>
     <item android:drawable="@drawable/drawer_list_item_bg_pressed" android:state_activated="true"/>
+    <item android:drawable="@drawable/drawer_list_item_bg_pressed" android:state_checked="true"/>
+    <item android:drawable="@drawable/drawer_list_item_bg_pressed" android:state_selected="true"/>
 </selector>

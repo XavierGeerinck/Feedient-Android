@@ -1,6 +1,7 @@
-package com.feedient.core.adapters;
+package com.feedient.compose.adapters;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +16,13 @@ import com.feedient.core.models.json.UserProvider;
 import java.util.HashMap;
 import java.util.List;
 
-public class GridItemUserProviderAdapter extends BaseAdapter {
-    private final List<UserProvider> userProviders;
+public class UserProviderListAdapter extends BaseAdapter {
     private final Context context;
     private final LayoutInflater layoutInflater;
     private final HashMap<String, IProviderModel> providers;
+    private final List<UserProvider> userProviders;
 
-    public GridItemUserProviderAdapter(Context context, List<UserProvider> userProviders, HashMap<String, IProviderModel> providers) {
+    public UserProviderListAdapter(Context context, List<UserProvider> userProviders, HashMap<String, IProviderModel> providers) {
         this.context = context;
         this.userProviders = userProviders;
         this.layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -72,6 +73,10 @@ public class GridItemUserProviderAdapter extends BaseAdapter {
         if (up != null && provider != null) {
             viewHolder.iconProvider.setText("{" + provider.getIcon() + "}");
             viewHolder.username.setText(up.getProviderAccount().getUsername());
+
+            if (TextUtils.isEmpty(up.getProviderAccount().getUsername())) {
+                viewHolder.username.setText(up.getProviderAccount().getFullName());
+            }
         }
 
         return convertView;

@@ -20,7 +20,7 @@
     <!-- Drawer -->
     <color name="drawer_background">#FEFEFE</color>
     <color name="drawer_list_background">#FFFFFF</color>
-    <color name="drawer_list_background_pressed">#EEEEEE</color>
+    <color name="drawer_list_background_pressed">#221EAD91</color>
     <color name="drawer_list_item_title">#626262</color>
     <color name="drawer_list_divider">#000000</color>
     <color name="drawer_item_icon">#626262</color>
@@ -38,4 +38,8 @@
     <color name="dialog_compose_txt_message">#222222</color>
     <color name="dialog_select_user_provider_go_back">#222222</color>
     <color name="dialog_select_user_provider_go_back_icon">#222222</color>
+    <color name="composer_user_provider">#e0e0e0</color>
+    <color name="compose_user_provider_icon">#575757</color>
+    <color name="compose_user_provider_text">#575757</color>
+    <color name="dialog_select_user_provider_divider">#11000000</color>
 </resources>
