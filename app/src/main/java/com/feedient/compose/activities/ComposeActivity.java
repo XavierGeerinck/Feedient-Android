@@ -20,6 +20,7 @@ import com.feedient.compose.adapters.ImageGridAdapter;
 import com.feedient.compose.adapters.UserProviderListAdapter;
 import com.feedient.core.R;
 import com.feedient.compose.models.ComposeModel;
+import com.feedient.core.helpers.KeyboardHelper;
 import com.feedient.core.layout.FlowLayout;
 import com.feedient.core.models.json.UserProvider;
 
@@ -86,6 +87,9 @@ public class ComposeActivity extends Activity implements Observer {
     }
 
     private void _showSelectUserProviders() {
+        // Hide keyboard
+        KeyboardHelper.hideSoftKeyboard(ComposeActivity.this);
+
         // Create view + attach animation
         View view = inflater.inflate(R.layout.view_compose_select_user_provider, null);
 
@@ -119,6 +123,9 @@ public class ComposeActivity extends Activity implements Observer {
     }
 
     private void _showSelectImage() {
+        // Hide keyboard
+        KeyboardHelper.hideSoftKeyboard(ComposeActivity.this);
+
         // Create view + attach animation
         View view = inflater.inflate(R.layout.view_compose_select_image, null);
 
