@@ -50,6 +50,8 @@
             android:background="#11000000"
             android:layout_below="@id/container_header"/>
 
+
+
         <!-- Footer -->
         <RelativeLayout
             android:id="@+id/container_footer"
@@ -110,6 +112,35 @@
                     android:layout_toRightOf="@id/img_remaining_icon"
                     android:layout_gravity="center_vertical"/>
             </RelativeLayout>
+        </RelativeLayout>
+
+        <!-- Preview Selected Image -->
+        <RelativeLayout
+            android:id="@+id/container_selected_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_alignParentBottom="true">
+
+            <ImageView
+                android:id="@+id/img_selected_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:padding="5dp"
+                android:background="#eeeeee"/>
+
+            <IconTextView
+                android:id="@+id/btn_remove_selected_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="{fa-times-circle}"
+                android:gravity="bottom"
+                android:textSize="30sp"
+                android:textColor="#eee"
+                android:layout_centerInParent="true"/>
+
         </RelativeLayout>
 
         <!-- Message composing -->

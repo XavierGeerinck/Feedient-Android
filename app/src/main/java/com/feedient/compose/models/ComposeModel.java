@@ -30,6 +30,7 @@ public class ComposeModel extends Observable {
     private final List<UserProvider> userProviders;
     private final String accessToken;
     private SparseBooleanArray selectedUserProviders;
+    private String selectedCameraImage;
 
     public ComposeModel(Context context, String accessToken, List<UserProvider> userProviders) {
         this.context = context;
@@ -42,6 +43,7 @@ public class ComposeModel extends Observable {
         this.feedientService = new FeedientRestAdapter(context).getService();
         this.providers = ProviderHelper.getProviders(context, feedientService, accessToken);
         this.selectedUserProviders = new SparseBooleanArray();
+        this.selectedCameraImage = "";
     }
 
     private void _triggerObservers() {
@@ -78,5 +80,13 @@ public class ComposeModel extends Observable {
 
     public SparseBooleanArray getSelectedUserProviders() {
         return selectedUserProviders;
+    }
+
+    public String getSelectedCameraImage() {
+        return selectedCameraImage;
+    }
+
+    public void setSelectedCameraImage(String selectedCameraImage) {
+        this.selectedCameraImage = selectedCameraImage;
     }
 }

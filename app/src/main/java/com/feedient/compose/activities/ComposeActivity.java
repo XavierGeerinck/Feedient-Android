@@ -11,6 +11,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.IconTextView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -20,9 +21,11 @@ import com.feedient.compose.adapters.ImageGridAdapter;
 import com.feedient.compose.adapters.UserProviderListAdapter;
 import com.feedient.core.R;
 import com.feedient.compose.models.ComposeModel;
+import com.feedient.core.helpers.ImageLoaderHelper;
 import com.feedient.core.helpers.KeyboardHelper;
 import com.feedient.core.layout.FlowLayout;
 import com.feedient.core.models.json.UserProvider;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -55,11 +58,34 @@ public class ComposeActivity extends Activity implements Observer {
         containerHeader.setOnClickListener(new OnClickSelectUserProviders());
 
         // OnCamera click
-        IconTextView imgCamera = (IconTextView)findViewById(R.id.img_camera);
+        final IconTextView imgCamera = (IconTextView)findViewById(R.id.img_camera);
         imgCamera.setOnClickListener(new OnClickSelectImage());
 
         // Attach providers to header
         FlowLayout containerSelectedProviders = (FlowLayout)findViewById(R.id.container_selected_providers);
+
+        // If we selected an image, hide camera and show the image
+        if (!TextUtils.isEmpty(composeModel.getSelectedCameraImage())) {
+            imgCamera.setVisibility(View.GONE);
+
+            final RelativeLayout containerSelectedImage = (RelativeLayout)findViewById(R.id.container_selected_image);
+            ImageView previewSelectedImage = (ImageView)findViewById(R.id.img_selected_image);
+            IconTextView btnRemoveSelectedImage = (IconTextView)findViewById(R.id.btn_remove_selected_image);
+
+            containerSelectedImage.setVisibility(View.VISIBLE);
+            Picasso.with(getApplicationContext())
+                    .load(new File(composeModel.getSelectedCameraImage()))
+                    .resize(100, 100)
+                    .into(previewSelectedImage);
+
+            containerSelectedImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    containerSelectedImage.setVisibility(View.GONE);
+                    imgCamera.setVisibility(View.VISIBLE);
+                }
+            });
+        }
 
         Set<String> selectedUserProviderIds = composeModel.getSelectedUserProviderIds();
 
@@ -136,6 +162,13 @@ public class ComposeActivity extends Activity implements Observer {
         final GridView gridView = (GridView)findViewById(R.id.grid_images);
         gridView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         gridView.setAdapter(new ImageGridAdapter(ComposeActivity.this));
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
+                composeModel.setSelectedCameraImage(ImageLoaderHelper.getCameraImages(getApplicationContext()).get(pos));
+                _showCompose();
+            }
+        });
 
         // Bind listener
         LinearLayout containerMessagePlaceholder = (LinearLayout)ComposeActivity.this.findViewById(R.id.container_header);
