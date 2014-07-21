@@ -58,8 +58,8 @@ public class UserProviderListAdapter extends BaseAdapter {
 
             // Set up the ViewHolder
             viewHolder = new ViewHolderItem();
-            viewHolder.iconProvider = (IconTextView)convertView.findViewById(R.id.txt_provider_icon);
-            viewHolder.username = (TextView)convertView.findViewById(R.id.txt_username);
+            viewHolder.iconProvider = (IconTextView)convertView.findViewById(R.id.img_user_provider_icon);
+            viewHolder.username = (TextView)convertView.findViewById(R.id.txt_provider_user_name);
 
             // Store the holder
             convertView.setTag(viewHolder);
