@@ -25,6 +25,7 @@
     <string name="dialog_compose_icon_send">{fa-send}</string>
     <string name="dialog_select_user_provider_go_back">Go Back.</string>
     <string name="dialog_select_user_provider_go_back_icon">{fa-arrow-left}</string>
+    <string name="compose_message_hint">Write something ...</string>
 
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">

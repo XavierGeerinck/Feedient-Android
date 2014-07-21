@@ -2,6 +2,7 @@ package com.feedient.compose.activities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -17,12 +18,15 @@ import android.widget.TextView;
 import com.feedient.compose.adapters.UserProviderListAdapter;
 import com.feedient.core.R;
 import com.feedient.compose.models.ComposeModel;
+import com.feedient.core.data.AssetsPropertyReader;
 import com.feedient.core.layout.FlowLayout;
 import com.feedient.core.models.json.UserProvider;
 
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Properties;
+import java.util.Set;
 
 public class ComposeActivity extends Activity implements Observer {
     private ComposeModel composeModel;
@@ -48,10 +52,12 @@ public class ComposeActivity extends Activity implements Observer {
 
         FlowLayout containerSelectedProviders = (FlowLayout)findViewById(R.id.container_selected_providers);
 
+        Set<String> selectedUserProviderIds = composeModel.getSelectedUserProviderIds();
+
         // Load the selected user providers in the containerHeader
         for (int i = 0; i < composeModel.getUserProviders().size(); i++) {
             // If userprovider is selected
-            if (composeModel.getSelectedUserProviders().get(i)) {
+            if (selectedUserProviderIds.contains(composeModel.getUserProviders().get(i).getId())) {
                 UserProvider userProvider = composeModel.getUserProviders().get(i);
 
                 View v = inflater.inflate(R.layout.compose_selected_user_provider, null);
@@ -98,13 +104,18 @@ public class ComposeActivity extends Activity implements Observer {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
-                    composeModel.setSelectedUserProviders(listView.getCheckedItemPositions());
+                    composeModel.saveSelectedUserProviders(listView.getCheckedItemPositions());
                 }
             });
 
-            // Set checked items
-            for (int i = 0; i < composeModel.getSelectedUserProviders().size(); i++) {
-                listView.setItemChecked(i, composeModel.getSelectedUserProviders().get(i));
+            // Select items
+            Set<String> selectedUserProviderIds = composeModel.getSelectedUserProviderIds();
+
+            // Load the selected user providers in the containerHeader
+            for (int i = 0; i < composeModel.getUserProviders().size(); i++) {
+                if (selectedUserProviderIds.contains(composeModel.getUserProviders().get(i).getId())) {
+                    listView.setItemChecked(i, true);
+                }
             }
 
             // Bind listener

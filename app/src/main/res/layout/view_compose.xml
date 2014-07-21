@@ -77,7 +77,8 @@
                 android:text="@string/dialog_compose_icon_send"
                 android:textSize="@dimen/dialog_compose_send"
                 android:textColor="@color/dialog_compose_send"
-                android:layout_alignParentRight="true"/>
+                android:layout_alignParentRight="true"
+                android:enabled="false"/>
 
             <!-- Remaining Count -->
             <RelativeLayout
@@ -131,7 +132,7 @@
                 android:background="@android:color/transparent"
                 android:textSize="@dimen/dialog_compose_txt_message"
                 android:textColor="@color/dialog_compose_txt_message"
-                android:text="Write something ..."/>
+                android:hint="@string/compose_message_hint"/>
         </LinearLayout>
 
     </RelativeLayout>
