@@ -2,6 +2,7 @@ package com.feedient.compose.models;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 
 import com.feedient.core.adapters.FeedientRestAdapter;
@@ -19,14 +20,19 @@ import java.util.Observable;
 import java.util.Properties;
 import java.util.Set;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+import retrofit.mime.TypedFile;
+
 public class ComposeModel extends Observable {
     private SharedPreferences sharedPreferences;
     private AssetsPropertyReader assetsPropertyReader;
     private Properties properties;
     private Context context;
+    private FeedientService feedientService;
 
     private HashMap<String, IProviderModel> providers;
-    private FeedientService feedientService;
     private final List<UserProvider> userProviders;
     private final String accessToken;
     private SparseBooleanArray selectedUserProviders;
@@ -37,6 +43,7 @@ public class ComposeModel extends Observable {
         this.assetsPropertyReader = new AssetsPropertyReader(context);
         this.properties = assetsPropertyReader.getProperties("shared_preferences.properties");
         this.sharedPreferences = context.getSharedPreferences(properties.getProperty("prefs.name"), Context.MODE_PRIVATE);
+        this.feedientService = new FeedientRestAdapter(context).getService();
 
         this.userProviders = userProviders;
         this.accessToken = accessToken;
@@ -66,6 +73,37 @@ public class ComposeModel extends Observable {
         editor.apply();
     }
 
+    public void postMessage(String message) {
+        String providerIds = getSelectedProvidersAsCommaString();
+        feedientService.postMessage(getAccessToken(), providerIds, message, new Callback() {
+            @Override
+            public void success(Object o, Response response) {
+                Log.e("Feedient", "SUCCESS");
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.e("Feedient", retrofitError.getMessage());
+            }
+        });
+    }
+
+    public void postMessageWithPicture(String message, TypedFile picture) {
+        String providerIds = getSelectedProvidersAsCommaString();
+        Log.e("Feedient", providerIds);
+        feedientService.postMessageWithPicture(getAccessToken(), providerIds, message, picture, new Callback() {
+            @Override
+            public void success(Object o, Response response) {
+                Log.e("Feedient", "SUCCESS");
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.e("Feedient", retrofitError.getMessage());
+            }
+        });
+    }
+
     public HashMap<String, IProviderModel> getProviders() {
         return providers;
     }
@@ -88,5 +126,19 @@ public class ComposeModel extends Observable {
 
     public void setSelectedCameraImage(String selectedCameraImage) {
         this.selectedCameraImage = selectedCameraImage;
+    }
+
+    public String getSelectedProvidersAsCommaString() {
+        String result = "";
+
+        for (String userProviderId : getSelectedUserProviderIds()) {
+            result += userProviderId + ",";
+        }
+
+        return result;
+    }
+
+    public String getAccessToken() {
+        return sharedPreferences.getString(properties.getProperty("prefs.key.token"), "");
     }
 }

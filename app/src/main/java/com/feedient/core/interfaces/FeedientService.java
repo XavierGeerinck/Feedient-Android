@@ -13,6 +13,7 @@ import org.json.JSONArray;
 
 import retrofit.Callback;
 import retrofit.http.*;
+import retrofit.mime.TypedFile;
 import rx.Observable;
 
 import java.util.List;
@@ -119,4 +120,12 @@ public interface FeedientService {
     @POST("/provider/{userProviderId}/action/{actionMethod}")
     Observable<PerformAction> doActionYoutubeDislike(@Header("Bearer")String accessToken, @Path("userProviderId")String userProviderId, @Path("actionMethod")String actionMethod, @Field("media_id")String id);
 
+    // Send message
+    @FormUrlEncoded
+    @POST("/providers/message")
+    void postMessage(@Header("Bearer")String accessToken, @Field("providers")String providerIds, @Field("message")String message, Callback cb);
+
+    @Multipart
+    @POST("/providers/message")
+    void postMessageWithPicture(@Header("Bearer")String accessToken, @Part("providers")String providerIds, @Part("message")String message, @Part("picture")TypedFile picture, Callback cb);
 }

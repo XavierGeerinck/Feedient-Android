@@ -5,10 +5,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.IconTextView;
 import android.widget.ImageView;
@@ -33,6 +35,8 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
+
+import retrofit.mime.TypedFile;
 
 public class ComposeActivity extends Activity implements Observer {
     private ComposeModel composeModel;
@@ -60,6 +64,10 @@ public class ComposeActivity extends Activity implements Observer {
         // OnCamera click
         final IconTextView imgCamera = (IconTextView)findViewById(R.id.img_camera);
         imgCamera.setOnClickListener(new OnClickSelectImage());
+
+        // OnBtnSend click
+        IconTextView btnSend = (IconTextView)findViewById(R.id.btn_send);
+        btnSend.setOnClickListener(new OnClickSendMessage());
 
         // Attach providers to header
         FlowLayout containerSelectedProviders = (FlowLayout)findViewById(R.id.container_selected_providers);
@@ -198,6 +206,21 @@ public class ComposeActivity extends Activity implements Observer {
         @Override
         public void onClick(View view) {
             _showCompose();
+        }
+    }
+
+    private class OnClickSendMessage implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            Log.e("Feedient", "Sending message");
+            EditText txtMessage = (EditText)findViewById(R.id.txt_message);
+
+            if (!TextUtils.isEmpty(composeModel.getSelectedCameraImage())) {
+                TypedFile picture = new TypedFile("multipart/form-data", new File(composeModel.getSelectedCameraImage()));
+                composeModel.postMessageWithPicture(txtMessage.getText().toString(), picture);
+            } else {
+                composeModel.postMessage(txtMessage.getText().toString());
+            }
         }
     }
 }

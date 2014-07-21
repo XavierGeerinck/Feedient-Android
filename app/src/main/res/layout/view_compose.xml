@@ -82,7 +82,7 @@
                 android:textSize="@dimen/dialog_compose_send"
                 android:textColor="@color/dialog_compose_send"
                 android:layout_alignParentRight="true"
-                android:enabled="false"/>
+                android:enabled="true"/>
 
             <!-- Remaining Count -->
             <RelativeLayout
