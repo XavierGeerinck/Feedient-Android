@@ -84,34 +84,34 @@
                 android:layout_alignParentRight="true"
                 android:enabled="true"/>
 
-            <!-- Remaining Count -->
-            <RelativeLayout
-                android:id="@+id/container_remaining_count"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginRight="20dp"
-                android:layout_centerVertical="true"
-                android:gravity="center_vertical"
-                android:layout_toLeftOf="@id/btn_send">
+            <!--&lt;!&ndash; Remaining Count &ndash;&gt;-->
+            <!--<RelativeLayout-->
+                <!--android:id="@+id/container_remaining_count"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginRight="20dp"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:gravity="center_vertical"-->
+                <!--android:layout_toLeftOf="@id/btn_send">-->
 
-                <IconTextView
-                    android:id="@+id/img_remaining_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="{fa-twitter}"
-                    android:textSize="@dimen/dialog_compose_remaining_count_icon"
-                    android:layout_marginRight="4dp"
-                    android:layout_gravity="center_vertical"/>
+                <!--<IconTextView-->
+                    <!--android:id="@+id/img_remaining_icon"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="{fa-twitter}"-->
+                    <!--android:textSize="@dimen/dialog_compose_remaining_count_icon"-->
+                    <!--android:layout_marginRight="4dp"-->
+                    <!--android:layout_gravity="center_vertical"/>-->
 
-                <TextView
-                    android:id="@+id/txt_remaining_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/dialog_compose_remaining_count"
-                    android:text="50"
-                    android:layout_toRightOf="@id/img_remaining_icon"
-                    android:layout_gravity="center_vertical"/>
-            </RelativeLayout>
+                <!--<TextView-->
+                    <!--android:id="@+id/txt_remaining_count"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textSize="@dimen/dialog_compose_remaining_count"-->
+                    <!--android:text="50"-->
+                    <!--android:layout_toRightOf="@id/img_remaining_icon"-->
+                    <!--android:layout_gravity="center_vertical"/>-->
+            <!--</RelativeLayout>-->
         </RelativeLayout>
 
         <!-- Preview Selected Image -->
