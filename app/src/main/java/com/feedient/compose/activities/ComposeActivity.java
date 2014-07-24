@@ -221,6 +221,8 @@ public class ComposeActivity extends Activity implements Observer {
             } else {
                 composeModel.postMessage(txtMessage.getText().toString());
             }
+
+            finish();
         }
     }
 }

@@ -80,7 +80,7 @@ public class ComposeModel extends Observable {
         feedientService.postMessage(getAccessToken(), providerIds, message, new Callback<PostMessage[]>() {
             @Override
             public void success(PostMessage[] postMessages, Response response) {
-                Log.e("Feedient", "SUCCESS");
+
             }
 
 
@@ -97,7 +97,7 @@ public class ComposeModel extends Observable {
         feedientService.postMessageWithPicture(getAccessToken(), providerIds, message, picture, new Callback<PostMessage[]>() {
             @Override
             public void success(PostMessage[] postMessages, Response response) {
-                Log.e("Feedient", "SUCCESS");
+
             }
 
             @Override
