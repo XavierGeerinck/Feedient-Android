@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,6 +96,26 @@ public class ComposeActivity extends Activity implements Observer {
                 }
             });
         }
+
+        // Listen on text changed
+        EditText message = (EditText)findViewById(R.id.txt_message);
+        message.setText(composeModel.getMessage());
+        message.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                composeModel.setMessage(editable.toString());
+            }
+        });
 
         Set<String> selectedUserProviderIds = composeModel.getSelectedUserProviderIds();
 
