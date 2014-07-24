@@ -4,6 +4,7 @@ import com.feedient.core.models.json.Account;
 import com.feedient.core.models.json.feed.FeedPostList;
 import com.feedient.core.models.json.response.Logout;
 import com.feedient.core.models.json.response.PerformAction;
+import com.feedient.core.models.json.response.PostMessage;
 import com.feedient.oauth.models.GetRequestToken;
 import com.feedient.core.models.json.response.RemoveUserProvider;
 import com.feedient.core.models.json.UserProvider;
@@ -123,9 +124,9 @@ public interface FeedientService {
     // Send message
     @FormUrlEncoded
     @POST("/providers/message")
-    void postMessage(@Header("Bearer")String accessToken, @Field("providers")String providerIds, @Field("message")String message, Callback cb);
+    void postMessage(@Header("Bearer")String accessToken, @Field("providers")String providerIds, @Field("message")String message, Callback<PostMessage[]> cb);
 
     @Multipart
     @POST("/providers/message")
-    void postMessageWithPicture(@Header("Bearer")String accessToken, @Part("providers")String providerIds, @Part("message")String message, @Part("picture")TypedFile picture, Callback cb);
+    void postMessageWithPicture(@Header("Bearer")String accessToken, @Part("providers")String providerIds, @Part("message")String message, @Part("picture")TypedFile picture, Callback<PostMessage[]> cb);
 }

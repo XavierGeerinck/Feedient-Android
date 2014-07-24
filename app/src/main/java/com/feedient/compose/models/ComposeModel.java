@@ -11,8 +11,10 @@ import com.feedient.core.helpers.ProviderHelper;
 import com.feedient.core.interfaces.FeedientService;
 import com.feedient.core.interfaces.IProviderModel;
 import com.feedient.core.models.json.UserProvider;
+import com.feedient.core.models.json.response.PostMessage;
 
-import java.util.ArrayList;
+import org.json.JSONArray;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -74,12 +76,13 @@ public class ComposeModel extends Observable {
     }
 
     public void postMessage(String message) {
-        String providerIds = getSelectedProvidersAsCommaString();
-        feedientService.postMessage(getAccessToken(), providerIds, message, new Callback() {
+        String providerIds = getSelectedProvidersAsCommaString().toString();
+        feedientService.postMessage(getAccessToken(), providerIds, message, new Callback<PostMessage[]>() {
             @Override
-            public void success(Object o, Response response) {
+            public void success(PostMessage[] postMessages, Response response) {
                 Log.e("Feedient", "SUCCESS");
             }
+
 
             @Override
             public void failure(RetrofitError retrofitError) {
@@ -89,11 +92,11 @@ public class ComposeModel extends Observable {
     }
 
     public void postMessageWithPicture(String message, TypedFile picture) {
-        String providerIds = getSelectedProvidersAsCommaString();
+        String providerIds = getSelectedProvidersAsCommaString().toString();
         Log.e("Feedient", providerIds);
-        feedientService.postMessageWithPicture(getAccessToken(), providerIds, message, picture, new Callback() {
+        feedientService.postMessageWithPicture(getAccessToken(), providerIds, message, picture, new Callback<PostMessage[]>() {
             @Override
-            public void success(Object o, Response response) {
+            public void success(PostMessage[] postMessages, Response response) {
                 Log.e("Feedient", "SUCCESS");
             }
 
@@ -128,14 +131,14 @@ public class ComposeModel extends Observable {
         this.selectedCameraImage = selectedCameraImage;
     }
 
-    public String getSelectedProvidersAsCommaString() {
-        String result = "";
+    public JSONArray getSelectedProvidersAsCommaString() {
+        JSONArray array = new JSONArray();
 
         for (String userProviderId : getSelectedUserProviderIds()) {
-            result += userProviderId + ",";
+            array.put(userProviderId);
         }
 
-        return result;
+        return array;
     }
 
     public String getAccessToken() {
