@@ -127,6 +127,6 @@ public interface FeedientService {
     void postMessage(@Header("Bearer")String accessToken, @Field("providers")String providerIds, @Field("message")String message, Callback<PostMessage[]> cb);
 
     @Multipart
-    @POST("/providers/message")
+    @POST("/providers/pictures")
     void postMessageWithPicture(@Header("Bearer")String accessToken, @Part("providers")String providerIds, @Part("message")String message, @Part("picture")TypedFile picture, Callback<PostMessage[]> cb);
 }
