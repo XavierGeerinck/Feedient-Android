@@ -226,12 +226,12 @@ public class FeedListAdapter extends BaseAdapter {
             View socialActionButtonView = inflater.inflate(R.layout.social_action_button, null);
 
             // Init Elements
-            IconButton button = (IconButton)socialActionButtonView.findViewById(R.id.btn_social_action);
+            final IconButton button = (IconButton)socialActionButtonView.findViewById(R.id.btn_social_action);
             button.setText(pa.getIcon());
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    pa.getCallback().handleOnClick(item);
+                    pa.getCallback().handleOnClick(button, item);
                 }
             });
 

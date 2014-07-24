@@ -2,7 +2,10 @@ package com.feedient.core.models.providers;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.widget.IconButton;
 
+import com.feedient.core.R;
 import com.feedient.core.interfaces.FeedientService;
 import com.feedient.core.interfaces.IProviderModel;
 import com.feedient.core.interfaces.ISocialActionCallback;
@@ -45,19 +48,22 @@ public class YouTube implements IProviderModel, IOAuth2Provider {
     private void _initActions() {
         actions.add(new ProviderAction("like", "liked", "{fa-thumbs-up}", new ISocialActionCallback() {
             @Override
-            public void handleOnClick(FeedPost feedPost) {
+            public void handleOnClick(IconButton button, FeedPost feedPost) {
                 if (!feedPost.getContent().getActionsPerformed().isLiked()) {
                     _doActionLike(feedPost);
+                    button.setTextColor(Color.parseColor(TEXT_COLOR));
                 } else {
                     _doActionUnlike(feedPost);
+                    button.setTextColor(context.getResources().getColor(R.color.feed_item_action_social_icon));
                 }
             }
         }));
 
         actions.add(new ProviderAction("dislike", "disliked", "{fa-thumbs-down}", new ISocialActionCallback() {
             @Override
-            public void handleOnClick(FeedPost feedPost) {
+            public void handleOnClick(IconButton button, FeedPost feedPost) {
                 _doActionDislike(feedPost);
+                button.setTextColor(Color.parseColor(TEXT_COLOR));
             }
         }));
     }
