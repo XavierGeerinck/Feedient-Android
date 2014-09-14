@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.IconTextView;
 import android.widget.TextView;
 
-import com.feedient.core.R;
+import com.feedient.R;
 import com.feedient.core.interfaces.IProviderModel;
 import com.feedient.core.models.json.UserProvider;
 

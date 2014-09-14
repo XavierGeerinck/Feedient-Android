@@ -22,7 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.feedient.core.R;
+
 import com.feedient.core.interfaces.IProviderModel;
 import com.feedient.core.models.json.UserProvider;
 import com.feedient.core.models.json.schema.FeedPost;
@@ -32,6 +32,9 @@ import com.feedient.core.models.json.schema.entities.HashtagEntity;
 import com.feedient.core.models.json.schema.entities.LinkEntity;
 import com.feedient.core.models.json.schema.entities.MentionEntity;
 import com.feedient.core.models.providers.ProviderAction;
+
+import com.feedient.R;
+
 import com.squareup.picasso.Picasso;
 
 import java.net.MalformedURLException;

@@ -9,7 +9,7 @@
     <string name="choice_remove">Remove</string>
     <string name="choice_cancel">Cancel</string>
 
-    <string name="dialog_remove_user_provider_message">Are you sure you want to remove this userprovider?</string>
+    <string name="dialog_remove_user_provider_message">Are you sure you want to remove this provider?</string>
     <string name="dialog_remove_user_provider_title">Delete Confirmation</string>
     <string name="dialog_txt_choose_provider">Choose A Provider</string>
     <string name="dialog_sign_out_title">Sign out confirmation</string>
@@ -27,9 +27,16 @@
     <string name="dialog_select_user_provider_go_back_icon">{fa-arrow-left}</string>
     <string name="compose_message_hint">Write something ...</string>
 
+    <!-- Nav Drawer Panel Items -->
+    <string-array name="nav_drawer_panel_items">
+        <item>Feed</item>
+        <item>Inbox</item>
+        <item>Analytics</item>
+    </string-array>
+
     <!-- Nav Drawer Menu Items -->
-    <string-array name="nav_drawer_items">
-        <item>Add Provider</item>
-        <item>Log out</item>
+    <string-array name="nav_drawer_menu_items">
+        <item>Settings</item>
+        <item>Sign out</item>
     </string-array>
 </resources>

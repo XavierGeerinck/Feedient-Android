@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.feedient.core.R;
+import com.feedient.R;
 
 import android.content.Context;
 import android.content.res.TypedArray;

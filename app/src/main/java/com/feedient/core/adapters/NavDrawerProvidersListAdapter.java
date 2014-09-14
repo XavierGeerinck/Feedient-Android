@@ -9,10 +9,12 @@ import android.widget.BaseAdapter;
 import android.widget.IconTextView;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import com.feedient.core.R;
+
 import com.feedient.core.interfaces.IDrawerProviderItemCallback;
 import com.feedient.core.interfaces.IProviderModel;
 import com.feedient.core.models.json.UserProvider;
+import com.feedient.R;
+
 import com.joanzapata.android.iconify.Iconify;
 
 import java.util.HashMap;

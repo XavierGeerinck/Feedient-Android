@@ -1,14 +1,17 @@
 package com.feedient.core.interfaces;
 
-import com.feedient.core.models.json.Account;
 import com.feedient.core.models.json.feed.FeedPostList;
 import com.feedient.core.models.json.response.Logout;
 import com.feedient.core.models.json.response.PerformAction;
 import com.feedient.core.models.json.response.PostMessage;
+import com.feedient.core.pojo.Account;
+import com.feedient.core.pojo.Panel;
+import com.feedient.core.pojo.Workspace;
 import com.feedient.oauth.models.GetRequestToken;
 import com.feedient.core.models.json.response.RemoveUserProvider;
 import com.feedient.core.models.json.UserProvider;
 import com.feedient.core.models.json.UserSession;
+import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONArray;
 
@@ -19,9 +22,9 @@ import rx.Observable;
 
 import java.util.List;
 
-public interface FeedientService {
+public abstract interface FeedientService {
     @GET("/user")
-    Observable<Account> getAccount(@Header("Bearer")String accessToken);
+    Observable<AccountResponse> getAccount(@Header("Bearer")String accessToken);
 
     @FormUrlEncoded
     @POST("/user/authorize")
@@ -129,4 +132,12 @@ public interface FeedientService {
     @Multipart
     @POST("/providers/pictures")
     void postMessageWithPicture(@Header("Bearer")String accessToken, @Part("providers")String providerIds, @Part("message")String message, @Part("picture")TypedFile picture, Callback<PostMessage[]> cb);
+
+    public static class AccountResponse extends Account {
+        public List<AccountResponseWorkspace> workspaces;
+    }
+
+    public static class AccountResponseWorkspace extends Workspace {
+        public List<Panel> panels;
+    }
 }

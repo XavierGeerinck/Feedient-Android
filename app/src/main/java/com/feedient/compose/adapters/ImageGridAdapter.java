@@ -14,11 +14,13 @@ import android.widget.IconTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.feedient.core.R;
 import com.feedient.core.helpers.ImageLoaderHelper;
 import com.feedient.core.interfaces.IProviderModel;
 import com.feedient.core.layout.SquaredImageView;
 import com.feedient.core.models.json.UserProvider;
+
+import com.feedient.R;
+
 import com.squareup.picasso.Picasso;
 
 import java.io.File;

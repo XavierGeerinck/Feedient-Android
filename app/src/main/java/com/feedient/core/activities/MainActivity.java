@@ -20,7 +20,7 @@ import android.widget.GridView;
 import android.widget.ListView;
 
 import com.feedient.compose.activities.ComposeActivity;
-import com.feedient.core.R;
+
 import com.feedient.core.adapters.NavDrawerListAdapter;
 import com.feedient.core.adapters.FeedListAdapter;
 import com.feedient.core.adapters.GridItemAdapter;
@@ -31,9 +31,10 @@ import com.feedient.core.interfaces.IProviderModel;
 import com.feedient.core.listeners.LoadMoreListener;
 import com.feedient.core.models.GridItem;
 import com.feedient.core.models.MainModel;
-
 import com.feedient.core.models.json.UserProvider;
 import com.feedient.core.views.FloatingActionButton;
+
+import com.feedient.R;
 
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
@@ -78,7 +79,7 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         // Init observers
         mMainModel = new MainModel(this);
         mMainModel.addObserver(this);
-        mMainModel.loadUser();
+        //mMainModel.loadUser();
         mMainModel.loadFeeds();
 
         // Init the views
@@ -235,7 +236,7 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
 
     private void checkLoggedIn() {
         if (mMainModel.getAccessToken() == null || mMainModel.getAccessToken().equals("")) {
-            openLoginActivity();
+            this.openLoginActivity();
         }
     }
 

@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.feedient.core.R;
+import com.feedient.R;
 import com.feedient.core.models.GridItem;
 import com.joanzapata.android.iconify.Iconify;
 

@@ -8,11 +8,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import com.feedient.core.R;
 import com.feedient.core.adapters.FeedientRestAdapter;
 import com.feedient.core.data.AssetsPropertyReader;
 import com.feedient.core.interfaces.FeedientService;
 import com.feedient.core.models.json.UserSession;
+import com.feedient.panel.activities.PanelActivity;
+import com.feedient.R;
 
 import rx.functions.Action1;
 
@@ -71,7 +72,7 @@ public class LoginActivity extends Activity {
     }
 
     public void openViewAllFeedsActivity() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        Intent intent = new Intent(LoginActivity.this, PanelActivity.class);
         startActivity(intent);
         finish(); // close current intent
     }

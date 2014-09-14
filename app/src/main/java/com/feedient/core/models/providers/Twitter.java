@@ -6,7 +6,7 @@ import android.graphics.Color;
 import android.util.Log;
 import android.widget.IconButton;
 
-import com.feedient.core.R;
+import com.feedient.R;
 import com.feedient.core.interfaces.FeedientService;
 import com.feedient.core.interfaces.IProviderModel;
 import com.feedient.core.interfaces.ISocialActionCallback;

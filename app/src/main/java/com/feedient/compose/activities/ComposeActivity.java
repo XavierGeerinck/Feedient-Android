@@ -3,7 +3,6 @@ package com.feedient.compose.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -23,7 +22,7 @@ import android.widget.TextView;
 
 import com.feedient.compose.adapters.ImageGridAdapter;
 import com.feedient.compose.adapters.UserProviderListAdapter;
-import com.feedient.core.R;
+import com.feedient.R;
 import com.feedient.compose.models.ComposeModel;
 import com.feedient.core.helpers.ImageLoaderHelper;
 import com.feedient.core.helpers.KeyboardHelper;

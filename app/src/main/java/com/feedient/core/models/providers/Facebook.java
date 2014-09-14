@@ -5,13 +5,15 @@ import android.content.Context;
 import android.graphics.Color;
 import android.widget.IconButton;
 
-import com.feedient.core.R;
 import com.feedient.core.interfaces.FeedientService;
 import com.feedient.core.interfaces.IProviderModel;
 import com.feedient.core.interfaces.ISocialActionCallback;
 import com.feedient.core.models.json.UserProvider;
 import com.feedient.core.models.json.response.PerformAction;
 import com.feedient.core.models.json.schema.FeedPost;
+
+import com.feedient.R;
+
 import com.feedient.oauth.OAuthDialog;
 import com.feedient.core.interfaces.IAddProviderCallback;
 import com.feedient.oauth.interfaces.IOAuth2Provider;

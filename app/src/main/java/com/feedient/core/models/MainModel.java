@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
 
-import com.feedient.core.R;
+
 import com.feedient.core.adapters.FeedientRestAdapter;
 import com.feedient.core.data.AssetsPropertyReader;
 import com.feedient.core.helpers.ProviderHelper;
@@ -21,6 +21,7 @@ import com.feedient.core.models.json.request.OldFeedPost;
 import com.feedient.core.models.json.response.Logout;
 import com.feedient.core.models.json.response.RemoveUserProvider;
 import com.feedient.core.models.json.schema.FeedPost;
+import com.feedient.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -78,7 +79,7 @@ public class MainModel extends Observable {
     }
 
     private void initMenuItems() {
-        String[] navMenuTitles = context.getResources().getStringArray(R.array.nav_drawer_items);
+        String[] navMenuTitles = context.getResources().getStringArray(R.array.nav_drawer_menu_items);
         navDrawerItems = new ArrayList<NavDrawerItem>();
 
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], "{fa-plus}")); // Add provider
@@ -86,18 +87,18 @@ public class MainModel extends Observable {
     }
 
     public void loadUser() {
-        feedientService.getAccount(accessToken)
-            .subscribe(new Action1<Account>() {
-                @Override
-                public void call(Account account) {
-                    MainModel.this.account.setId(account.getId());
-                    MainModel.this.account.setEmail(account.getEmail());
-                    MainModel.this.account.setLanguage(account.getLanguage());
-                    MainModel.this.account.setRole(account.getRole());
-
-                    _triggerObservers();
-                }
-            });
+//        feedientService.getAccount(accessToken)
+//            .subscribe(new Action1<Account>() {
+//                @Override
+//                public void call(Account account) {
+//                    MainModel.this.account.setId(account.getId());
+//                    MainModel.this.account.setEmail(account.getEmail());
+//                    MainModel.this.account.setLanguage(account.getLanguage());
+//                    MainModel.this.account.setRole(account.getRole());
+//
+//                    _triggerObservers();
+//                }
+//            });
     }
 
     /**
