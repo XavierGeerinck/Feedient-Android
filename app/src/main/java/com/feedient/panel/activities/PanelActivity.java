@@ -85,7 +85,7 @@ public class PanelActivity extends Activity implements Observer, OnRefreshListen
         this.feedientService.getAccount(accessToken).subscribe(new Action1<FeedientService.AccountResponse>() {
             @Override
             public void call(FeedientService.AccountResponse accountResponse) {
-                Log.e("feedient", accountResponse.email);
+                Log.e("feedient", accountResponse.getEmail());
             }
         });
 

@@ -8,8 +8,8 @@ import com.feedient.core.adapters.FeedientRestAdapter;
 import com.feedient.core.data.AssetsPropertyReader;
 import com.feedient.core.interfaces.FeedientService;
 import com.feedient.core.models.NavDrawerItem;
-import com.feedient.core.models.json.Account;
 import com.feedient.core.models.json.response.Logout;
+import com.feedient.core.pojo.Account;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,19 +62,18 @@ public class PanelModel extends Observable {
     }
 
     public void loadUser() {
-//        this.feedientService.getAccount(this.accessToken)
-//            .subscribe(new Action1<Account>() {
-//                @Override
-//                public void call(Account account) {
-//                    PanelModel.this.account.setId(account.getId());
-//                    PanelModel.this.account.setEmail(account.getEmail());
-//                    PanelModel.this.account.setLanguage(account.getLanguage());
-//                    PanelModel.this.account.setRole(account.getRole());
-//
-//                    triggerObservers();
-//                }
-//            });
-        this.triggerObservers();
+        this.feedientService.getAccount(this.accessToken)
+            .subscribe(new Action1<Account>() {
+                    @Override
+                    public void call(Account account) {
+                        PanelModel.this.account.setId(account.getId());
+                        PanelModel.this.account.setEmail(account.getEmail());
+                        PanelModel.this.account.setLanguage(account.getLanguage());
+                        PanelModel.this.account.setRole(account.getRole());
+
+                        PanelModel.this.triggerObservers();
+                    }
+                });
     }
 
     /**

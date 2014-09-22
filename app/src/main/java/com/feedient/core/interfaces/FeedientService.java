@@ -11,7 +11,6 @@ import com.feedient.oauth.models.GetRequestToken;
 import com.feedient.core.models.json.response.RemoveUserProvider;
 import com.feedient.core.models.json.UserProvider;
 import com.feedient.core.models.json.UserSession;
-import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONArray;
 

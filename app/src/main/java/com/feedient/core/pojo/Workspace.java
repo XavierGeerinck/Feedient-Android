@@ -9,16 +9,16 @@ import java.util.List;
 
 public class Workspace implements Serializable {
     @SerializedName("name")
-    public String name;
+    private String name;
 
     @SerializedName("creator")
-    public String creator;
+    private String creator;
 
     @SerializedName("users")
-    public List<String> users;
+    private List<String> users;
 
     @SerializedName("date")
-    public Date date;
+    private Date date;
 
     public Workspace() {
         this.name = "";
@@ -26,4 +26,16 @@ public class Workspace implements Serializable {
         this.users = new ArrayList<String>();
         this.date = new Date();
     }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    public String getCreator() { return creator; }
+    public void setCreator(String creator) { this.creator = creator; }
+
+    public List<String> getUsers() { return users; }
+    public void setUsers(List<String> users) { this.users = users; }
+
+    public Date getDate() { return date; }
+    public void setDate(Date date) { this.date = date; }
 }
