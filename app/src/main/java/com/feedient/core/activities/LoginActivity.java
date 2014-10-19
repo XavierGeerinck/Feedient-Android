@@ -11,12 +11,14 @@ import android.widget.EditText;
 import com.feedient.core.R;
 import com.feedient.core.adapters.FeedientRestAdapter;
 import com.feedient.core.data.AssetsPropertyReader;
-import com.feedient.core.interfaces.FeedientService;
+import com.feedient.core.api.FeedientService;
 import com.feedient.core.models.json.UserSession;
 
-import rx.functions.Action1;
-
 import java.util.Properties;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class LoginActivity extends Activity {
     private SharedPreferences sharedPreferences;
@@ -55,19 +57,23 @@ public class LoginActivity extends Activity {
     }
 
     public void login(View view) {
-        feedientService.authorizeUser(email.getText().toString(), password.getText().toString())
-            .subscribe(new Action1<UserSession>() {
-                @Override
-                public void call(UserSession userSession) {
-                    // Save the accessToken and UID
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(properties.getProperty("prefs.key.token"), userSession.getToken());
-                    editor.putString(properties.getProperty("prefs.key.uid"), userSession.getUid());
-                    editor.apply();
+        feedientService.login(email.getText().toString(), password.getText().toString(), new Callback<FeedientService.LoginResponse>() {
+            @Override
+            public void success(FeedientService.LoginResponse loginResponse, Response response) {
+                // Save the accessToken and UID
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(properties.getProperty("prefs.key.token"), loginResponse.getToken());
+                editor.putString(properties.getProperty("prefs.key.uid"), loginResponse.getUid());
+                editor.apply();
 
-                    openViewAllFeedsActivity();
-                }
-            });
+                openViewAllFeedsActivity();
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+
+            }
+        });
     }
 
     public void openViewAllFeedsActivity() {

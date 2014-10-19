@@ -8,7 +8,7 @@ import android.util.SparseBooleanArray;
 import com.feedient.core.adapters.FeedientRestAdapter;
 import com.feedient.core.data.AssetsPropertyReader;
 import com.feedient.core.helpers.ProviderHelper;
-import com.feedient.core.interfaces.FeedientService;
+import com.feedient.core.api.FeedientService;
 import com.feedient.core.interfaces.IProviderModel;
 import com.feedient.core.models.json.UserProvider;
 import com.feedient.core.models.json.response.PostMessage;

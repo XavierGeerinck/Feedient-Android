@@ -9,7 +9,7 @@ import com.feedient.core.R;
 import com.feedient.core.adapters.FeedientRestAdapter;
 import com.feedient.core.data.AssetsPropertyReader;
 import com.feedient.core.helpers.ProviderHelper;
-import com.feedient.core.interfaces.FeedientService;
+import com.feedient.core.api.FeedientService;
 import com.feedient.core.interfaces.IAddProviderCallback;
 import com.feedient.core.interfaces.IProviderModel;
 import com.feedient.core.models.json.Account;
@@ -25,6 +25,9 @@ import com.feedient.core.models.json.schema.FeedPost;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import rx.functions.Action1;
 
 import java.util.*;
@@ -86,18 +89,22 @@ public class MainModel extends Observable {
     }
 
     public void loadUser() {
-        feedientService.getAccount(accessToken)
-            .subscribe(new Action1<Account>() {
-                @Override
-                public void call(Account account) {
-                    MainModel.this.account.setId(account.getId());
-                    MainModel.this.account.setEmail(account.getEmail());
-                    MainModel.this.account.setLanguage(account.getLanguage());
-                    MainModel.this.account.setRole(account.getRole());
+        feedientService.getAccount(accessToken, new Callback<FeedientService.LoginResponse>() {
+            @Override
+            public void success(FeedientService.LoginResponse loginResponse, Response response) {
+                MainModel.this.account.setId(account.getId());
+                MainModel.this.account.setEmail(account.getEmail());
+                MainModel.this.account.setLanguage(account.getLanguage());
+                MainModel.this.account.setRole(account.getRole());
 
-                    _triggerObservers();
-                }
-            });
+                _triggerObservers();
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+
+            }
+        });
     }
 
     /**

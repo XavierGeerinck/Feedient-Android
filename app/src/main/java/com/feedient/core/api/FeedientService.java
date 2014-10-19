@@ -1,5 +1,6 @@
-package com.feedient.core.interfaces;
+package com.feedient.core.api;
 
+import com.feedient.core.model.User;
 import com.feedient.core.models.json.Account;
 import com.feedient.core.models.json.feed.FeedPostList;
 import com.feedient.core.models.json.response.Logout;
@@ -8,7 +9,6 @@ import com.feedient.core.models.json.response.PostMessage;
 import com.feedient.oauth.models.GetRequestToken;
 import com.feedient.core.models.json.response.RemoveUserProvider;
 import com.feedient.core.models.json.UserProvider;
-import com.feedient.core.models.json.UserSession;
 
 import org.json.JSONArray;
 
@@ -21,11 +21,11 @@ import java.util.List;
 
 public interface FeedientService {
     @GET("/user")
-    Observable<Account> getAccount(@Header("Bearer")String accessToken);
+    public abstract void getAccount(@Header("Bearer")String paramAccessToken, Callback<LoginResponse> paramCallback);
 
     @FormUrlEncoded
     @POST("/user/authorize")
-    Observable<UserSession> authorizeUser(@Field("email")String email, @Field("password")String password);
+    public abstract void login(@Field("email")String paramEmail, @Field("password")String paramPassword, Callback<FeedientService.LoginResponse> paramCallback);
 
     @GET("/provider")
     Observable<List<UserProvider>> getProviders(@Header("Bearer")String accessToken);
@@ -129,4 +129,20 @@ public interface FeedientService {
     @Multipart
     @POST("/providers/pictures")
     void postMessageWithPicture(@Header("Bearer")String accessToken, @Part("providers")String providerIds, @Part("message")String message, @Part("picture")TypedFile picture, Callback<PostMessage[]> cb);
+
+    public class LoginResponse {
+        private String uid;
+        private String token;
+
+        public String getUid() {
+            return uid;
+        }
+
+        public String getToken() {
+            return token;
+        }
+    }
+
+    public class UserResponse extends User {
+    }
 }

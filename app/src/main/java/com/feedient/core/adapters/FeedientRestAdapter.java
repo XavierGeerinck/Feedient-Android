@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.feedient.core.adapters.gson.ISODateAdapter;
 import com.feedient.core.data.AssetsPropertyReader;
-import com.feedient.core.interfaces.FeedientService;
+import com.feedient.core.api.FeedientService;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
