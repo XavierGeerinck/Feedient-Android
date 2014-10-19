@@ -1,14 +1,19 @@
 package com.feedient.core.model;
 
 import com.feedient.core.models.json.UserProvider;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class User {
     private int id;
     private String email;
     private String language;
     private String role;
-    private Workspace[] workspaces;
-    private UserProvider[] userProviders;
+    private List<Workspace> workspaces;
+
+    @SerializedName("user_providers")
+    private List<UserProvider> userProviders;
 
     public User() {
     }
@@ -29,11 +34,11 @@ public class User {
         return role;
     }
 
-    public Workspace[] getWorkspaces() {
+    public List<Workspace> getWorkspaces() {
         return workspaces;
     }
 
-    public UserProvider[] getUserProviders() {
+    public List<UserProvider> getUserProviders() {
         return userProviders;
     }
 }

@@ -22,13 +22,13 @@
             android:background="#d3d6db">
         </ListView>
 
-        <com.feedient.core.views.FloatingActionButton
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:id="@+id/btn_compose"
-            android:layout_gravity="bottom|right"
-            android:layout_marginBottom="16dp"
-            android:layout_marginRight="16dp"/>
+        <!--<com.feedient.core.views.FloatingActionButton-->
+            <!--android:layout_width="72dp"-->
+            <!--android:layout_height="72dp"-->
+            <!--android:id="@+id/btn_compose"-->
+            <!--android:layout_gravity="bottom|right"-->
+            <!--android:layout_marginBottom="16dp"-->
+            <!--android:layout_marginRight="16dp"/>-->
     </uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>
 
     <!-- Drawer Content -->

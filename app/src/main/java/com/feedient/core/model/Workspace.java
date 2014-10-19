@@ -1,6 +1,7 @@
 package com.feedient.core.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class Workspace {
     private String id;
@@ -8,7 +9,7 @@ public class Workspace {
     private String creator;
     private Date dateAdded;
     private String[] users;
-    private Panel[] panels;
+    private List<Panel> panels;
 
     public Workspace() {
     }
@@ -33,7 +34,7 @@ public class Workspace {
         return users;
     }
 
-    public Panel[] getPanels() {
+    public List<Panel> getPanels() {
         return panels;
     }
 }

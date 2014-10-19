@@ -107,7 +107,7 @@ public class FeedListAdapter extends BaseAdapter {
             viewHolder.txtDatePosted = (TextView)convertView.findViewById(R.id.txt_date_posted);
             viewHolder.txtMessage = (TextView)convertView.findViewById(R.id.txt_message);
             viewHolder.imgUserProviderIcon = (IconTextView)convertView.findViewById(R.id.img_user_provider_icon);
-            viewHolder.txtUserProviderName = (TextView)convertView.findViewById(R.id.txt_provider_user_name);
+            viewHolder.txtUserProviderName = (TextView)convertView.findViewById(R.id.txt_panel_name);
             viewHolder.containerEntities = (LinearLayout)convertView.findViewById(R.id.layout_entities);
             viewHolder.containerSocialActions = (LinearLayout)convertView.findViewById(R.id.layout_social_actions);
 

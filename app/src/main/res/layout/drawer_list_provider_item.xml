@@ -7,7 +7,7 @@
 
     <!-- Drawer Item Icon -->
     <IconTextView
-        android:id="@+id/txt_provider_icon"
+        android:id="@+id/txt_panel_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -19,10 +19,10 @@
 
     <!-- Drawer Item Title -->
     <TextView
-        android:id="@+id/txt_provider_user_name"
+        android:id="@+id/txt_panel_name"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_toRightOf="@id/txt_provider_icon"
+        android:layout_toRightOf="@id/txt_panel_icon"
         android:minHeight="?android:attr/listPreferredItemHeightSmall"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
         android:textColor="@color/drawer_list_item_title"
@@ -31,7 +31,7 @@
 
     <!-- Provider Remove Button -->
     <ImageButton
-        android:id="@+id/img_btn_provider_remove"
+        android:id="@+id/img_btn_remove_panel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"

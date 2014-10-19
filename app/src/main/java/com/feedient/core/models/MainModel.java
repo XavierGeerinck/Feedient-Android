@@ -12,6 +12,7 @@ import com.feedient.core.helpers.ProviderHelper;
 import com.feedient.core.api.FeedientService;
 import com.feedient.core.interfaces.IAddProviderCallback;
 import com.feedient.core.interfaces.IProviderModel;
+import com.feedient.core.model.User;
 import com.feedient.core.models.json.Account;
 import com.feedient.core.models.json.UserProvider;
 import com.feedient.core.models.json.feed.BulkPagination;
@@ -35,13 +36,16 @@ import java.util.*;
 public class MainModel extends Observable {
     private Context context;
 
+    // New base
+    private User account;
+
+    // Old base
     private final long timerInterval;
     private int newNotifications;
     private List<FeedPost> feedPosts;
     private Map<String, BulkPagination> paginationKeys; // <userProviderId, since>
     private List<UserProvider> userProviders;
     private HashMap<String, IProviderModel> providers;
-    private Account account;
 
     private AssetsPropertyReader assetsPropertyReader;
     private Properties properties;
@@ -61,7 +65,6 @@ public class MainModel extends Observable {
         feedPosts = new ArrayList<FeedPost>();
         paginationKeys = new HashMap<String, BulkPagination>();
         userProviders = new ArrayList<UserProvider>();
-        account = new Account();
         newNotifications = 0;
 
         assetsPropertyReader = new AssetsPropertyReader(context);
@@ -89,13 +92,10 @@ public class MainModel extends Observable {
     }
 
     public void loadUser() {
-        feedientService.getAccount(accessToken, new Callback<FeedientService.LoginResponse>() {
+        feedientService.getAccount(accessToken, new Callback<FeedientService.UserResponse>() {
             @Override
-            public void success(FeedientService.LoginResponse loginResponse, Response response) {
-                MainModel.this.account.setId(account.getId());
-                MainModel.this.account.setEmail(account.getEmail());
-                MainModel.this.account.setLanguage(account.getLanguage());
-                MainModel.this.account.setRole(account.getRole());
+            public void success(FeedientService.UserResponse userResponse, Response response) {
+                MainModel.this.account = userResponse;
 
                 _triggerObservers();
             }
@@ -300,7 +300,7 @@ public class MainModel extends Observable {
         this.isRefreshing = isRefreshing;
     }
 
-    public Account getAccount() {
+    public User getAccount() {
         return account;
     }
 

@@ -21,7 +21,7 @@ import java.util.List;
 
 public interface FeedientService {
     @GET("/user")
-    public abstract void getAccount(@Header("Bearer")String paramAccessToken, Callback<LoginResponse> paramCallback);
+    public abstract void getAccount(@Header("Bearer")String paramAccessToken, Callback<UserResponse> paramCallback);
 
     @FormUrlEncoded
     @POST("/user/authorize")

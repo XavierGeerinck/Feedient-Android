@@ -3,7 +3,6 @@ package com.feedient.compose.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -32,7 +31,6 @@ import com.feedient.core.models.json.UserProvider;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -127,7 +125,7 @@ public class ComposeActivity extends Activity implements Observer {
                 View v = inflater.inflate(R.layout.frame_compose_selected_user_provider, null);
 
                 IconTextView providerIcon = (IconTextView) v.findViewById(R.id.img_user_provider_icon);
-                TextView providerUserName = (TextView) v.findViewById(R.id.txt_provider_user_name);
+                TextView providerUserName = (TextView) v.findViewById(R.id.txt_panel_name);
 
                 String providerName = userProvider.getProviderAccount().getName();
                 providerIcon.setText("{" + composeModel.getProviders().get(providerName).getIcon() + "}");

@@ -2,13 +2,16 @@ package com.feedient.core.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,20 +24,28 @@ import android.widget.ListView;
 
 import com.feedient.compose.activities.ComposeActivity;
 import com.feedient.core.R;
+import com.feedient.core.adapters.FeedientRestAdapter;
 import com.feedient.core.adapters.NavDrawerListAdapter;
 import com.feedient.core.adapters.FeedListAdapter;
 import com.feedient.core.adapters.GridItemAdapter;
-import com.feedient.core.adapters.NavDrawerProvidersListAdapter;
-import com.feedient.core.interfaces.IDrawerProviderItemCallback;
+import com.feedient.core.adapters.PanelsAdapter;
+import com.feedient.core.api.FeedientService;
+import com.feedient.core.data.AssetsPropertyReader;
+import com.feedient.core.interfaces.IDrawerPanelItemCallback;
 import com.feedient.core.interfaces.ILoadMoreListener;
 import com.feedient.core.interfaces.IProviderModel;
 import com.feedient.core.listeners.LoadMoreListener;
+import com.feedient.core.model.Panel;
 import com.feedient.core.models.GridItem;
 import com.feedient.core.models.MainModel;
 
+import com.feedient.core.models.NavDrawerItem;
 import com.feedient.core.models.json.UserProvider;
 import com.feedient.core.views.FloatingActionButton;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
@@ -44,19 +55,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Properties;
 
-public class MainActivity extends Activity implements Observer, OnRefreshListener {
+public class MainActivity extends Activity {
     // Drawer variables
     private NavDrawerListAdapter mNavDrawerListAdapter;
-    private NavDrawerProvidersListAdapter mNavDrawerProvidersListAdapter;
+    private PanelsAdapter mPanelsAdapter;
     private DrawerLayout mDrawerLayout;
     private ListView mNavDrawerList;
-    private ListView mNavDrawerProvidersList;
+    private ListView mPanelsList;
     private ActionBarDrawerToggle mDrawerToggle;
 
     // Feed variables
     private FeedListAdapter mFeedListAdapter;
-    private MainModel mMainModel;
+    //private MainModel mMainModel;
     private PullToRefreshLayout mPullToRefreshLayout;
     private ListView mFeedPostsList;
     private FloatingActionButton mBtnCompose;
@@ -64,6 +76,13 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
     // App title
     private CharSequence mTitle;
     private CharSequence mDrawerTitle;
+
+    private AssetsPropertyReader assetsPropertyReader;
+    private Properties properties;
+    private Properties configProperties;
+    private SharedPreferences sharedPreferences;
+    private FeedientService feedientService;
+    private String accessToken;
 
     /**
      * Called when the activity is first created.
@@ -75,59 +94,64 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
 
         mTitle = mDrawerTitle = getTitle();
 
-        // Init observers
-        mMainModel = new MainModel(this);
-        mMainModel.addObserver(this);
-        mMainModel.loadUser();
-        mMainModel.loadFeeds();
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
 
-        // Init the views
+        // Views
         mFeedPostsList          = (ListView)findViewById(R.id.list);
         mDrawerLayout           = (DrawerLayout)findViewById(R.id.drawer_layout);
         mNavDrawerList          = (ListView)findViewById(R.id.drawer_list);
-        mNavDrawerProvidersList = (ListView)findViewById(R.id.drawer_provider_list);
-        mBtnCompose             = (FloatingActionButton)findViewById(R.id.btn_compose);
+        mPanelsList             = (ListView)findViewById(R.id.drawer_provider_list);
+        //mBtnCompose             = (FloatingActionButton)findViewById(R.id.btn_compose);
 
-        mBtnCompose.setColor(Color.WHITE);
-        mBtnCompose.setDrawable(R.drawable.ic_compose);
-        mBtnCompose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickCompose();
-            }
-        });
+        // Services
+        assetsPropertyReader = new AssetsPropertyReader(getApplicationContext());
+        properties = assetsPropertyReader.getProperties("shared_preferences.properties");
+        configProperties = assetsPropertyReader.getProperties("config.properties");
+        sharedPreferences = getApplicationContext().getSharedPreferences(properties.getProperty("prefs.name"), Context.MODE_PRIVATE);
+        feedientService = new FeedientRestAdapter(getApplicationContext()).getService();
 
-        // Fix margin top and bottom for list of cards
-        mFeedPostsList.addFooterView(new View(this), null, false);
-        mFeedPostsList.addHeaderView(new View(this), null, false);
+        // Variables
+        accessToken = sharedPreferences.getString(properties.getProperty("prefs.key.token"), "");
 
-        // Set the adapter for our feed
-        mFeedListAdapter = new FeedListAdapter(this, mMainModel.getFeedPosts(), mMainModel.getUserProviders(), mMainModel.getProviders());
-        mFeedPostsList.setAdapter(mFeedListAdapter);
-        mFeedPostsList.setOnScrollListener(new LoadMoreListener(new ILoadMoreListener() {
-            @Override
-            public void onScrollCompleted() {
-                if (!mMainModel.isLoadingOlderPosts()) {
-                    mMainModel.loadOlderPosts();
-                }
-            }
-        }));
+        // Default methods
+        loadData();
+
+        // Adapters
+        initDrawerMenuItems();
+
+        // Init the views
+
+//
+//        mBtnCompose.setColor(Color.WHITE);
+//        mBtnCompose.setDrawable(R.drawable.ic_compose);
+//        mBtnCompose.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onClickCompose();
+//            }
+//        });
+//
+//        // Fix margin top and bottom for list of cards
+//        mFeedPostsList.addFooterView(new View(this), null, false);
+//        mFeedPostsList.addHeaderView(new View(this), null, false);
+//
+//        // Set the adapter for our feed
+//        mFeedListAdapter = new FeedListAdapter(this, mMainModel.getFeedPosts(), mMainModel.getUserProviders(), mMainModel.getProviders());
+//        mFeedPostsList.setAdapter(mFeedListAdapter);
+//        mFeedPostsList.setOnScrollListener(new LoadMoreListener(new ILoadMoreListener() {
+//            @Override
+//            public void onScrollCompleted() {
+//                if (!mMainModel.isLoadingOlderPosts()) {
+//                    mMainModel.loadOlderPosts();
+//                }
+//            }
+//        }));
 
         // Set the adapter for our drawer list navigation items
-        mNavDrawerListAdapter = new NavDrawerListAdapter(getApplicationContext(), mMainModel.getNavDrawerItems());
-        mNavDrawerList.setAdapter(mNavDrawerListAdapter);
 
-        // Set the adapter for our drawer provider list items
-        mNavDrawerProvidersListAdapter = new NavDrawerProvidersListAdapter(getApplicationContext(), mMainModel.getUserProviders(), mMainModel.getProviders(), new IDrawerProviderItemCallback() {
-            @Override
-            public void onClickRemoveUserProvider(UserProvider up) {
-                MainActivity.this.onClickRemoveUserProvider(up);
-            }
-        });
-        mNavDrawerProvidersList.setAdapter(mNavDrawerProvidersListAdapter);
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 R.drawable.ic_navigation_drawer, // Toggle icon
@@ -146,16 +170,49 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         };
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-        mNavDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        //mNavDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-        mPullToRefreshLayout = (PullToRefreshLayout)findViewById(R.id.swipe_container);
-        ActionBarPullToRefresh.from(this)
-                .allChildrenArePullable()
-                .listener(this)
-                .setup(mPullToRefreshLayout);
+//        mPullToRefreshLayout = (PullToRefreshLayout)findViewById(R.id.swipe_container);
+//        ActionBarPullToRefresh.from(this)
+//                .allChildrenArePullable()
+//                .listener(this)
+//                .setup(mPullToRefreshLayout);
 
         // Start auto update
         //mMainModel.initAutoUpdateTimer();
+    }
+
+    private void initDrawerMenuItems() {
+        String[] navMenuTitles = getApplicationContext().getResources().getStringArray(R.array.nav_drawer_items);
+        ArrayList<NavDrawerItem> navDrawerItems = new ArrayList<NavDrawerItem>();
+
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], "{fa-plus}")); // Add provider
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], "{fa-sign-out}")); // Sign Out
+
+        mNavDrawerListAdapter = new NavDrawerListAdapter(getApplicationContext(), navDrawerItems);
+        mNavDrawerList.setAdapter(mNavDrawerListAdapter);
+    }
+
+    private void loadData() {
+        feedientService.getAccount(accessToken, new Callback<FeedientService.UserResponse>() {
+            @Override
+            public void success(FeedientService.UserResponse userResponse, Response response) {
+                // Set the adapter for our drawer provider list items
+                mPanelsAdapter = new PanelsAdapter(getApplicationContext(), userResponse.getWorkspaces().get(0).getPanels(), new IDrawerPanelItemCallback() {
+                    @Override
+                    public void onClickRemovePanel(Panel p) {
+                        MainActivity.this.onClickRemovePanel(p);
+                    }
+                });
+
+                mPanelsList.setAdapter(mPanelsAdapter);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+
+            }
+        });
     }
 
     @Override
@@ -211,33 +268,33 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
     }
 
 
-    @Override
-    public void onRefreshStarted(View view) {
-        mMainModel.loadNewPosts();
-    }
+//    @Override
+//    public void onRefreshStarted(View view) {
+//        mMainModel.loadNewPosts();
+//    }
 
 
-    @Override
-    public void update(Observable observable, Object o) {
-        // Notify our list that there are updates
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                checkLoggedIn();
+//    @Override
+//    public void update(Observable observable, Object o) {
+//        // Notify our list that there are updates
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                checkLoggedIn();
+//
+//                mFeedListAdapter.notifyDataSetChanged();
+//                mNavDrawerListAdapter.notifyDataSetChanged();
+//                mPanelsAdapter.notifyDataSetChanged();
+//                mPullToRefreshLayout.setRefreshing(mMainModel.isRefreshing());
+//            }
+//        });
+//    }
 
-                mFeedListAdapter.notifyDataSetChanged();
-                mNavDrawerListAdapter.notifyDataSetChanged();
-                mNavDrawerProvidersListAdapter.notifyDataSetChanged();
-                mPullToRefreshLayout.setRefreshing(mMainModel.isRefreshing());
-            }
-        });
-    }
-
-    private void checkLoggedIn() {
-        if (mMainModel.getAccessToken() == null || mMainModel.getAccessToken().equals("")) {
-            openLoginActivity();
-        }
-    }
+//    private void checkLoggedIn() {
+//        if (mMainModel.getAccessToken() == null || mMainModel.getAccessToken().equals("")) {
+//            openLoginActivity();
+//        }
+//    }
 
     private void openLoginActivity() {
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -245,20 +302,20 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
         finish(); // close current intent
     }
 
-    private void openComposeActivity() {
-        Intent intent = new Intent(MainActivity.this, ComposeActivity.class);
-        intent.putExtra("userProviders", (Serializable)mMainModel.getUserProviders());
-        intent.putExtra("accessToken", mMainModel.getAccessToken());
-        startActivity(intent);
-    }
+//    private void openComposeActivity() {
+//        Intent intent = new Intent(MainActivity.this, ComposeActivity.class);
+//        intent.putExtra("userProviders", (Serializable)mMainModel.getUserProviders());
+//        intent.putExtra("accessToken", mMainModel.getAccessToken());
+//        startActivity(intent);
+//    }
 
-    public void onClickRemoveUserProvider(final UserProvider up) {
+    public void onClickRemovePanel(final Panel p) {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.dialog_remove_user_provider_title)
                 .setMessage(R.string.dialog_remove_user_provider_message)
                 .setPositiveButton(R.string.choice_remove, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        mMainModel.removeUserProvider(up);
+                        //mMainModel.removeUserProvider(p);
                         //mNavDrawerListAdapter.remove(up);
                     }
                 })
@@ -270,81 +327,81 @@ public class MainActivity extends Activity implements Observer, OnRefreshListene
                 .show();
     }
 
-    private void onClickCompose() {
-//        ComposeDialog dialog = new ComposeDialog(this, mMainModel.getUserProviders(), mMainModel.getProviders());
-//        dialog.show();
+//    private void onClickCompose() {
+////        ComposeDialog dialog = new ComposeDialog(this, mMainModel.getUserProviders(), mMainModel.getProviders());
+////        dialog.show();
+//
+//        openComposeActivity();
+//    }
 
-        openComposeActivity();
-    }
+//    /**
+//     * DrawerItemListener -  OnItemClick in the drawer
+//     */
+//    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+//        @Override
+//        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//            executeAction(position);
+//        }
+//    }
 
-    /**
-     * DrawerItemListener -  OnItemClick in the drawer
-     */
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            executeAction(position);
-        }
-    }
+//    private void executeAction(int position) {
+//        View view = getWindow().getDecorView().getRootView();
+//
+//        switch (position) {
+//            // Add Provider
+//            case 0:
+//                actionAddUserProvider(view);
+//                break;
+//            // Logout
+//            case 1:
+//                actionLogout(view);
+//                break;
+//        }
+//    }
 
-    private void executeAction(int position) {
-        View view = getWindow().getDecorView().getRootView();
-
-        switch (position) {
-            // Add Provider
-            case 0:
-                actionAddUserProvider(view);
-                break;
-            // Logout
-            case 1:
-                actionLogout(view);
-                break;
-        }
-    }
-
-    public void actionAddUserProvider(View v) {
-        View customView = LayoutInflater.from(this).inflate(R.layout.dialog_grid, null);
-        final List<GridItem> items = new ArrayList<GridItem>();
-
-        for (IProviderModel provider : mMainModel.getProviders().values()) {
-            items.add(new GridItem(provider.getName(), provider));
-        }
-
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(customView);
-
-        final AlertDialog pickProviderDialog = builder.create();
-        pickProviderDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        pickProviderDialog.show();
-
-        GridView gridView = (GridView)customView.findViewById(R.id.gridview);
-        gridView.setAdapter(new GridItemAdapter(this, items));
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                // call the OAuth popup
-                mMainModel.addUserProvider(items.get(position).getProviderModel());
-
-                // Close the other dialog
-                pickProviderDialog.dismiss();
-            }
-        });
-    }
-
-    public void actionLogout(final View v) {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.dialog_sign_out_title)
-                .setMessage(R.string.dialog_sign_out_message)
-                .setPositiveButton(R.string.choice_confirm, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        mMainModel.logout();
-                    }
-                })
-                .setNegativeButton(R.string.choice_cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User cancelled the dialog
-                    }
-                })
-                .show();
-    }
+//    public void actionAddUserProvider(View v) {
+//        View customView = LayoutInflater.from(this).inflate(R.layout.dialog_grid, null);
+//        final List<GridItem> items = new ArrayList<GridItem>();
+//
+//        for (IProviderModel provider : mMainModel.getProviders().values()) {
+//            items.add(new GridItem(provider.getName(), provider));
+//        }
+//
+//        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setView(customView);
+//
+//        final AlertDialog pickProviderDialog = builder.create();
+//        pickProviderDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        pickProviderDialog.show();
+//
+//        GridView gridView = (GridView)customView.findViewById(R.id.gridview);
+//        gridView.setAdapter(new GridItemAdapter(this, items));
+//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+//                // call the OAuth popup
+//                mMainModel.addUserProvider(items.get(position).getProviderModel());
+//
+//                // Close the other dialog
+//                pickProviderDialog.dismiss();
+//            }
+//        });
+//    }
+//
+//    public void actionLogout(final View v) {
+//        new AlertDialog.Builder(this)
+//                .setTitle(R.string.dialog_sign_out_title)
+//                .setMessage(R.string.dialog_sign_out_message)
+//                .setPositiveButton(R.string.choice_confirm, new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        mMainModel.logout();
+//                    }
+//                })
+//                .setNegativeButton(R.string.choice_cancel, new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        // User cancelled the dialog
+//                    }
+//                })
+//                .show();
+//    }
 }
