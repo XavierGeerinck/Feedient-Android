@@ -17,10 +17,5 @@
 
     <style name="ActionBar.Feedient" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:background">@color/feedient_green</item>
-        <item name="android:height">@dimen/actionbar_height</item>
-    </style>
-
-    <style name="TitleColor" parent="@android:TextAppearance.Holo.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/actionbar_title</item>
     </style>
 </resources>

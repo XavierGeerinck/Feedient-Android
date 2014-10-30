@@ -1,6 +1,5 @@
 package com.feedient.core.model;
 
-import com.feedient.core.models.json.UserProvider;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;

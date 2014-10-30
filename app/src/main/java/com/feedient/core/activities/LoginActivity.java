@@ -12,7 +12,6 @@ import com.feedient.core.R;
 import com.feedient.core.adapters.FeedientRestAdapter;
 import com.feedient.core.data.AssetsPropertyReader;
 import com.feedient.core.api.FeedientService;
-import com.feedient.core.models.json.UserSession;
 
 import java.util.Properties;
 
