@@ -2,20 +2,20 @@
 
 <resources>
     <style name="Theme.Feedient" parent="@android:style/Theme.Holo.Light">
-        <item name="android:actionBarStyle">@style/ActionBar.Feedient</item>
+        <!--<item name="android:actionBarStyle">@style/ActionBar.Feedient</item>-->
         <item name="android:selectableItemBackground">@color/feedient_green</item>
-        <item name="ptrHeaderStyle">@style/Widget.Custom.PtrHeader.Feedient</item>
+        <!--<item name="ptrHeaderStyle">@style/Widget.Custom.PtrHeader.Feedient</item>-->
     </style>
 
-    <style name="Widget.Custom.PtrHeader.Feedient" parent="android:Widget">
-        <item name="ptrHeaderBackground">@color/feedient_green</item>
-        <item name="ptrHeaderHeight">56dp</item>
-        <item name="ptrProgressBarStyle">inside</item>
-        <item name="ptrPullText">Swipe down to refresh</item>
-        <item name="ptrRefreshingText">Refreshing...</item>
-    </style>
+    <!--<style name="Widget.Custom.PtrHeader.Feedient" parent="android:Widget">-->
+        <!--<item name="ptrHeaderBackground">@color/feedient_green</item>-->
+        <!--<item name="ptrHeaderHeight">56dp</item>-->
+        <!--<item name="ptrProgressBarStyle">inside</item>-->
+        <!--<item name="ptrPullText">Swipe down to refresh</item>-->
+        <!--<item name="ptrRefreshingText">Refreshing...</item>-->
+    <!--</style>-->
 
-    <style name="ActionBar.Feedient" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/feedient_green</item>
-    </style>
+    <!--<style name="ActionBar.Feedient" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">-->
+        <!--<item name="android:background">@color/feedient_green</item>-->
+    <!--</style>-->
 </resources>

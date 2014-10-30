@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.feedient.core.R;
@@ -16,11 +16,10 @@ import com.feedient.core.data.AssetsPropertyReader;
 import java.util.Properties;
 
 public class MainActivity extends Activity {
-    // Drawer variables
+    // Navigation Drawer
+    private String[] mDrawerItems;
     private DrawerLayout mDrawerLayout;
-    private ListView mNavDrawerList;
-    private ListView mPanelsList;
-    private ActionBarDrawerToggle mDrawerToggle;
+    private ListView mDrawerList;
 
     // App title
     private CharSequence mTitle;
@@ -39,17 +38,24 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_main); // @todo: When loading, set a loading icon
+        setContentView(R.layout.activity_main); // @todo: When loading, set a loading icon
 
-        mTitle = mDrawerTitle = getTitle();
+        // Load main variables
+        init();
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+        // Set drawer
+        mDrawerItems = getResources().getStringArray(R.array.drawer_items_array);
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView)findViewById(R.id.left_drawer);
 
-        // Views
-        mDrawerLayout           = (DrawerLayout)findViewById(R.id.drawer_layout);
-        //mBtnCompose             = (FloatingActionButton)findViewById(R.id.btn_compose);
+        // Set the adapter for the list view
+        //mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mDrawerItems));
 
+        // Set the list's click listener
+        //mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+    }
+
+    private void init() {
         // Services
         assetsPropertyReader = new AssetsPropertyReader(getApplicationContext());
         properties = assetsPropertyReader.getProperties("shared_preferences.properties");
@@ -59,17 +65,5 @@ public class MainActivity extends Activity {
 
         // Variables
         accessToken = sharedPreferences.getString(properties.getProperty("prefs.key.token"), "");
-
-    }
-
-    private void initDrawerMenuItems() {
-//        String[] navMenuTitles = getApplicationContext().getResources().getStringArray(R.array.nav_drawer_items);
-//        ArrayList<NavDrawerItem> navDrawerItems = new ArrayList<NavDrawerItem>();
-//
-//        navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], "{fa-plus}")); // Add provider
-//        navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], "{fa-sign-out}")); // Sign Out
-//
-//        mNavDrawerListAdapter = new NavDrawerListAdapter(getApplicationContext(), navDrawerItems);
-//        mNavDrawerList.setAdapter(mNavDrawerListAdapter);
     }
 }
